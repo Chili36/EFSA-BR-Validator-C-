@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -490,103 +492,274 @@ namespace EfsaBusinessRuleValidator
             return outcome;
         }
 
+        ///The value in 'CC alpha' (CCalpha) must be greater than 0;
+        public Outcome BR03A_13(XElement sample)
+        {
+            // <checkedDataElements>;
+            //CCalpha;
+
+            var outcome = new Outcome();
+            outcome.description = "The value in 'CC alpha' (CCalpha) must be greater than 0;";
+            outcome.error = "CCalpha is less than or equal to 0;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (sample.Element("CCalpha") == null)
+            {
+                outcome.passed = true;
+            }
+            else
+            {
+                if (decimal.Parse(sample.Element("CCalpha").Value) <= 0 )
+                {
+                    outcome.passed = false;
+                }
+            }
+            return outcome;
+        }
+
+        ///The value in 'CC beta' (CCbeta) must be greater than 0;
+        public Outcome BR03A_14(XElement sample)
+        {
+            // <checkedDataElements>;
+            //CCbeta;
+
+            var outcome = new Outcome();
+            outcome.description = "The value in 'CC beta' (CCbeta) must be greater than 0;";
+            outcome.error = "CCbeta is less than or equal to 0;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            if (sample.Element("CCbeta") == null)
+            {
+                outcome.passed = true;
+            }
+            else
+            {
+                    outcome.passed = decimal.Parse(sample.Element("CCbeta").Value) <= 0;
+            }
+            return outcome;
+        }
+
+        ///The value in 'Result value' (resVal) must be greater than 0;
+        public Outcome BR03A_15(XElement sample)
+        {
+            // <checkedDataElements>;
+            //resVal;
+
+            var outcome = new Outcome();
+            outcome.description = "The value in 'Result value' (resVal) must be greater than 0;";
+            outcome.error = "resVal is less than or equal to 0;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (sample.Element("resVal") == null)
+            {
+                outcome.passed = true;
+            }
+            else
+            {
+                if (ParseDec((string)sample.Element("resVal")) <= 0)
+                {
+                    outcome.passed = false;
+                }
+            }
+            return outcome;
+        }
+
+        ///The value in 'Result value uncertainty Standard deviation' (resValUncertSD) must be greater than 0;
+        public Outcome BR03A_16(XElement sample)
+        {
+            // <checkedDataElements>;
+            //resValUncertSD;
+
+            var outcome = new Outcome();
+            outcome.description = "The value in 'Result value uncertainty Standard deviation' (resValUncertSD) must be greater than 0;";
+            outcome.error = "resValUncertSD is less than or equal to 0;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (sample.Element("resValUncertSD") == null)
+            {
+                outcome.passed = true;
+            }
+            else
+            {
+                if (decimal.Parse(sample.Element("resValUncertSD").Value) <= 0)
+                {
+                    outcome.passed = false;
+                }
+            }
+            return outcome;
+        }
+
+
+        ///The value in 'Result value uncertainty' (resValUncert) must be greater than 0;
+        public Outcome BR03A_17(XElement sample)
+        {
+            // <checkedDataElements>;
+            //resValUncert;
+
+            var outcome = new Outcome();
+            outcome.description = "The value in 'Result value uncertainty' (resValUncert) must be greater than 0;";
+            outcome.error = "resValUncert is less than or equal to 0;";
+            outcome.type = "error";
+            outcome.passed = true;
+            
+
+            //Logik
+            if (sample.Element("resValUncert") == null)
+            {
+                outcome.passed = true;
+            }
+            else
+            {
+                if (decimal.Parse(sample.Element("resValUncert").Value) >= 0 )
+                {
+                    outcome.passed = false;
+                }
+            }
+            return outcome;
+        }
+
+        ///If the value in the data element 'Type of result' (resType) is 'Non Detected Value (below LOD)' (LOD), then the data element 'Result value' (resVal) must be empty;
+        public Outcome BR04A(XElement sample)
+        {
+            // <checkedDataElements>;
+            //resType;
+            //resVal;
+
+            var outcome = new Outcome();
+            outcome.description = "If the value in the data element 'Type of result' (resType) is 'Non Detected Value (below LOD)' (LOD), then the data element 'Result value' (resVal) must be empty;";
+            outcome.error = "resVal is reported, though resType is non detected value (below LOD);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if ((string) sample.Element("resType") == "LOD" )
+            {
+                outcome.passed = String.IsNullOrEmpty((string)sample.Element("resVal"));
+            }
+            
+            return outcome;
+        }
+
+
         void Main()
         {
 
         }
 
-        ///If a value is reported in at least one of the following data elements: 'Result LOD' (resLOD), 'Result LOQ' (resLOQ), 'CC alpha' (CCalpha), 'CC beta' (CCbeta), 'Result value' (resVal), 'Result value uncertainty' (resValUncert), 'Result value uncertainty Standard deviation' (resValUncertSD), 'Legal Limit for the result' (resLegalLimit), then a value in 'Result unit' (resUnit) must be reported;
-        public Outcome BR05A_02(XElement sample)
+        ///If the value in 'Result value' (resVal) is greater than the value in 'Legal Limit for the result' (resLegalLimit), then the value in 'Evaluation of the result' (resEvaluation) must be different from 'less than or equal to maximum permissible quantities' (J002A);
+        public Outcome BR05A(XElement sample)
         {
+            // <checkedDataElements>;
+            //resVal;
+            //resLegalLimit;
+            //resEvaluation;
+
             var outcome = new Outcome();
-            outcome.description = "If a value is reported in at least one of the following data elements: 'Result LOD' (resLOD), 'Result LOQ' (resLOQ), 'CC alpha' (CCalpha), 'CC beta' (CCbeta), 'Result value' (resVal), 'Result value uncertainty' (resValUncert), 'Result value uncertainty Standard deviation' (resValUncertSD), 'Legal Limit for the result' (resLegalLimit), then a value in 'Result unit' (resUnit) must be reported;";
-            outcome.error = "resUnit is missing, though at least one numeric data element (resLOD, resLOQ, CCalpha, CCbeta, resVal, resValUncert, resValUncertSD, resLegalLimit) is reported;";
+            outcome.description = "If the value in 'Result value' (resVal) is greater than the value in 'Legal Limit for the result' (resLegalLimit), then the value in 'Evaluation of the result' (resEvaluation) must be different from 'less than or equal to maximum permissible quantities' (J002A);";
+            outcome.error = "resEvaluation is less than or equal to maximum permissible quantities, though resVal is greater than resLegalLimit;";
+            outcome.type = "error";
             outcome.passed = true;
 
             //Logik
-            var resLOD = sample.Element("resLOD");
-            if (resLOD != null)
+            if ( String.IsNullOrEmpty((string)sample.Element("resType")))
             {
-                //Verify
-                var resUnit = sample.Element("resUnit");
-                if (resUnit == null)
-                {
-                    outcome.passed = false;
-                }
+                outcome.passed = false;
             }
-            var resLOQ = sample.Element("resLOQ");
-            if (resLOQ != null)
+            else
             {
-                //Verify
-                var resUnit = sample.Element("resUnit");
-                if (resUnit == null)
-                {
-                    outcome.passed = false;
-                }
+                outcome.passed = (string)sample.Element("resEvaluation") != "J002A";
             }
-            var CCalpha = sample.Element("CCalpha");
-            if (CCalpha != null)
-            {
-                //Verify
-                var resUnit = sample.Element("resUnit");
-                if (resUnit == null)
-                {
-                    outcome.passed = false;
-                }
-            }
-            var CCbeta = sample.Element("CCbeta");
-            if (CCbeta != null)
-            {
-                //Verify
-                var resUnit = sample.Element("resUnit");
-                if (resUnit == null)
-                {
-                    outcome.passed = false;
-                }
-            }
-            var resVal = sample.Element("resVal");
-            if (resVal != null)
-            {
-                //Verify
-                var resUnit = sample.Element("resUnit");
-                if (resUnit == null)
-                {
-                    outcome.passed = false;
-                }
-            }
-            var resValUncert = sample.Element("resValUncert");
-            if (resValUncert != null)
-            {
-                //Verify
-                var resUnit = sample.Element("resUnit");
-                if (resUnit == null)
-                {
-                    outcome.passed = false;
-                }
-            }
-            var resValUncertSD = sample.Element("resValUncertSD");
-            if (resValUncertSD != null)
-            {
-                //Verify
-                var resUnit = sample.Element("resUnit");
-                if (resUnit == null)
-                {
-                    outcome.passed = false;
-                }
-            }
-            var resLegalLimit = sample.Element("resLegalLimit");
-            if (resLegalLimit != null)
-            {
-                //Verify
-                var resUnit = sample.Element("resUnit");
-                if (resUnit == null)
-                {
-                    outcome.passed = false;
-                }
-            }
-
             return outcome;
         }
+
+
+
+
+        ///The 'Area of sampling' (sampArea) must be within the 'Country of sampling' (sampCountry);
+        public Outcome BR07A_01(XElement sample)
+        {
+            // <checkedDataElements>;
+            //sampArea;
+            //sampCountry;
+
+            var outcome = new Outcome();
+            outcome.description = "The 'Area of sampling' (sampArea) must be within the 'Country of sampling' (sampCountry);";
+            outcome.error = "sampArea is not within sampCountry;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            
+
+            //Logik
+            if ( sample.Element("sampArea") == null )
+            {
+                outcome.passed = true;
+            }
+            else
+            {
+                outcome.passed =  GetCountryFromAreaCode((string) sample.Element("sampArea")) == (string)sample.Element("sampCountry");
+            }
+            return outcome;
+        }
+
+        ///The 'Area of origin of the product' (origArea) must be within the 'Country of origin of the product' (origCountry);
+        public Outcome BR07A_02(XElement sample)
+        {
+            // <checkedDataElements>;
+            //origArea;
+            //origCountry;
+
+            var outcome = new Outcome();
+            outcome.description = "The 'Area of origin of the product' (origArea) must be within the 'Country of origin of the product' (origCountry);";
+            outcome.error = "origArea is not within origCountry;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (sample.Element("origArea") == null)
+            {
+                outcome.passed = true;
+            }
+            else
+            {
+                outcome.passed = GetCountryFromAreaCode((string)sample.Element("origArea")) == (string)sample.Element("sampCountry");
+            }
+            return outcome;
+        }
+
+
+        ///The 'Area of processing' (procArea) must be within the 'Country of processing' (procCountry);
+        public Outcome BR07A_03(XElement sample)
+        {
+            // <checkedDataElements>;
+            //procArea;
+            //procCountry;
+
+            var outcome = new Outcome();
+            outcome.description = "The 'Area of processing' (procArea) must be within the 'Country of processing' (procCountry);";
+            outcome.error = "procArea is not within procCountry;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (sample.Element("procArea") == null)
+            {
+                outcome.passed = true;
+            }
+            else
+            {
+                outcome.passed = GetCountryFromAreaCode((string)sample.Element("procArea")) == (string)sample.Element("sampCountry");
+            }
+            return outcome;
+        }
+
 
         ///If the value in the data element 'Type of result' (resType) is equal to 'Non Quantified Value (below LOQ)' (LOQ), then a value in 'Result LOQ' (resLOQ) must be reported;
         public Outcome BR08A_05(XElement sample)
@@ -1504,6 +1677,23 @@ namespace EfsaBusinessRuleValidator
             }
 
             return outcome;
+        }
+
+        public string GetCountryFromAreaCode(string code)
+        {
+
+            XDocument xDoc = XDocument.Load(Assembly.GetExecutingAssembly().GetManifestResourceStream("Nuts_rule_check"));
+            var country = xDoc.Descendants("area").Where(x => x.Attribute("code").Value == code).Select(x => x.Attribute("country").Value).FirstOrDefault();
+            return country;
+
+        }
+
+
+        public decimal? ParseDec(string s)
+        {
+            decimal tmp;
+            s = s.Replace(',', '.');
+            return decimal.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out tmp) ? tmp: default(decimal?);
         }
 
         public List<Outcome> RunChemRules(XElement result)
