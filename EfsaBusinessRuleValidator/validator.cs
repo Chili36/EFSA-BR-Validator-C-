@@ -835,6 +835,12 @@ namespace EfsaBusinessRuleValidator
             var str_manad = (string)sample.Element("analysisM");
             var str_ar = (string)sample.Element("analysisM");
 
+            if (str_dag == null || str_manad == null || str_ar == null)
+            {
+                outcome.passed = false;
+                return outcome;
+            }
+
             if (str_manad.Length == 1)
             {
                 str_manad = "0" + str_manad;
@@ -1676,6 +1682,139 @@ namespace EfsaBusinessRuleValidator
                 outcome.passed = sample.Element("prodComm") != null && (sample.Element("prodComm").Value == "purchase" || sample.Element("prodComm").Value == "consume");
             }
 
+            return outcome;
+        }
+        /// <summary>
+        /// SSD2
+        /// </summary>
+        /// <param name="sample"></param>
+        /// <returns></returns>
+        public Outcome GBR3a(XElement sample)
+        {
+            // <checkedDataElements>;
+            //sampId;
+            //sampEventId;
+            //repCountry;
+            //sampCountry;
+            //sampArea;
+            //repYear;
+            //sampY;
+            //sampM;
+            //sampD;
+            //sampSize;
+            //sampUnitSize;
+            //sampInfo;
+            //sampMatType;
+            //sampMatCode;
+            //sampMatText;
+            //origCountry;
+            //origArea;
+            //origFishAreaCode;
+            //origFishAreaText;
+            //procCountry;
+            //procArea;
+            //sampMatInfo;
+
+            var outcome = new Outcome();
+            outcome.description = "If a value is reported in at least one of the following data elements: 'Reporting country' (repCountry), 'Country of sampling' (sampCountry), 'Area of sampling' (sampArea), 'Reporting year' (repYear), 'Year of sampling' (sampY), 'Month of sampling' (sampM), 'Day of sampling' (sampD), 'Sample taken size' (sampSize), 'Sample taken size unit' (sampUnitSize), 'Additional Sample taken information' (sampInfo), 'Type of matrix' (sampMatType), 'Coded description of the matrix of the sample taken' (sampMatCode), 'Text description of the matrix of the sample taken' (sampMatText), 'Country of origin of the sample taken' (origCountry), 'Area of origin of the sample taken' (origArea), 'Area of origin for fisheries or aquaculture activities code of the sample taken' (origFishAreaCode), 'Area of origin for fisheries or aquaculture activities text of the sample taken' (origFishAreaText), 'Country of processing of the sample taken' (procCountry), 'Area of processing of the sample taken' (procArea), 'Additional information on the matrix sampled' (sampMatInfo), then a 'Sample taken identification code' (sampId) must be reported;";
+            outcome.error = "sampId is missing, though at least one descriptor for the sample taken or the matrix sampled (sections D, E) or the sampEventId is reported;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (sample.Element("sampId") != null || sample.Element("sampEventId") != null || sample.Element("repCountry") != null || sample.Element("sampCountry") != null || sample.Element("sampArea") != null || sample.Element("repYear") != null || sample.Element("sampY") != null || sample.Element("sampM") != null || sample.Element("sampD") != null || sample.Element("sampSize") != null || sample.Element("sampUnitSize") != null || sample.Element("sampInfo") != null || sample.Element("sampMatType") != null || sample.Element("sampMatCode") != null || sample.Element("sampMatText") != null || sample.Element("origCountry") != null || sample.Element("origArea") != null || sample.Element("origFishAreaCode") != null || sample.Element("origFishAreaText") != null || sample.Element("procCountry") != null || sample.Element("procArea") != null || sample.Element("sampMatInfo") != null)
+            {
+                outcome.passed = sample.Element("sampId") != null;
+            }
+            else
+            {
+                outcome.passed = false;
+            }
+            return outcome;
+        }
+        ///If a value is reported in at least one of the following data elements: 'Sample analysis reference time' (sampAnRefTime), 'Year of analysis' (analysisY), 'Month of analysis' (analysisM), 'Day of analysis' (analysisD), 'Additional information on the sample analysed' (sampAnInfo), 'Coded description of the analysed matrix' (anMatCode), 'Text description of the matrix analysed' (anMatText), 'Additional information on the analysed matrix ' (anMatInfo), then a 'Sample analysed identification code' (sampAnId) must be reported;
+        public Outcome GBR4a(XElement sample)
+        {
+            // <checkedDataElements>;
+            //sampAnId;
+            //sampAnRefTime;
+            //analysisY;
+            //analysisM;
+            //analysisD;
+            //sampAnInfo;
+            //anMatCode;
+            //anMatText;
+            //anMatInfo;
+
+            var outcome = new Outcome();
+            outcome.description = "If a value is reported in at least one of the following data elements: 'Sample analysis reference time' (sampAnRefTime), 'Year of analysis' (analysisY), 'Month of analysis' (analysisM), 'Day of analysis' (analysisD), 'Additional information on the sample analysed' (sampAnInfo), 'Coded description of the analysed matrix' (anMatCode), 'Text description of the matrix analysed' (anMatText), 'Additional information on the analysed matrix ' (anMatInfo), then a 'Sample analysed identification code' (sampAnId) must be reported;";
+            outcome.error = "sampAnId is missing, though at least one descriptor for the sample analysed or the matrix analysed (sections F, G) or the sampId is reported;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (sample.Element("sampAnId") != null || sample.Element("sampAnRefTime") != null || sample.Element("analysisY") != null || sample.Element("analysisM") != null || sample.Element("analysisD") != null || sample.Element("sampAnInfo") != null || sample.Element("anMatCode") != null || sample.Element("anMatText") != null || sample.Element("anMatInfo") != null)
+            {
+                outcome.passed = sample.Element("sampAnId") != null;
+            }
+            else
+            {
+                outcome.passed = false;
+            }
+            return outcome;
+        }
+
+        ///If a value is reported in at least one of the following data elements: 'Sample analysed portion size' (anPortSize), 'Sample analysed portion size unit' (anPortSizeUnit), 'Additional information on the sample analysed portion  (anPortInfo), then a 'Sample analysed identification code' (sampAnId) and 'Sample analysed portion sequence' (anPortSeq) must be reported;
+        public Outcome GBR5a(XElement sample)
+        {
+            // <checkedDataElements>;
+            //sampAnId;
+            //anPortSeq;
+            //anPortSize;
+            //anPortSizeUnit;
+            //anPortInfo;
+
+            var outcome = new Outcome();
+            outcome.description = "If a value is reported in at least one of the following data elements: 'Sample analysed portion size' (anPortSize), 'Sample analysed portion size unit' (anPortSizeUnit), 'Additional information on the sample analysed portion  (anPortInfo), then a 'Sample analysed identification code' (sampAnId) and 'Sample analysed portion sequence' (anPortSeq) must be reported;";
+            outcome.error = "sampAnId or anPortSeq is missing, though at least one descriptor for the sample analysed portion (section H) is reported;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (sample.Element("sampAnId") != null || sample.Element("anPortSeq") != null || sample.Element("anPortSize") != null || sample.Element("anPortSizeUnit") != null || sample.Element("anPortInfo") != null)
+            {
+                outcome.passed = sample.Element("sampAnId") != null;
+            }
+            else
+            {
+                outcome.passed = false;
+            }
+            return outcome;
+        }
+        ///If a value is reported in at least one of the following descriptor data elements: 'Coded description of the isolate' (isolParamCode), 'Text description of the isolate' (isolParamText), 'Additional information on the isolate' (isolInfo), then a 'Isolate identification' (isolId) must be reported;
+        public Outcome GBR6a(XElement sample)
+        {
+            // <checkedDataElements>;
+            //isolId;
+            //isolParamCode;
+            //isolParamText;
+            //isolInfo;
+
+            var outcome = new Outcome();
+            outcome.description = "If a value is reported in at least one of the following descriptor data elements: 'Coded description of the isolate' (isolParamCode), 'Text description of the isolate' (isolParamText), 'Additional information on the isolate' (isolInfo), then a 'Isolate identification' (isolId) must be reported;";
+            outcome.error = "isolId is missing, though at least one descriptor for the isolate (section I) is reported;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (sample.Element("isolId") != null || sample.Element("isolParamCode") != null || sample.Element("isolParamText") != null || sample.Element("isolInfo") != null)
+            {
+                outcome.passed = sample.Element("isolId") != null;
+            }
+            else
+            {
+                outcome.passed = true;
+            }
             return outcome;
         }
 

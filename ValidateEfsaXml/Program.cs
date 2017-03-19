@@ -12,9 +12,21 @@ namespace ValidateEfsaXml
     {
         static void Main(string[] args)
         {
+            var xmlfil = "";
 
-            //Boilerplate for file
-            var xmlfil = @"C:\Dev\rapport (2)_wf2.xml"; //<---- Ange sökväg till xml-file här.
+            if (args.Length > 0)
+            {
+                xmlfil = args[0];
+            }
+
+            if (!System.IO.File.Exists(xmlfil))
+            {
+                Console.WriteLine("Sökvägen till en testfil måste anges.");
+                Console.ReadLine();
+            }
+
+            
+
             var xml = XDocument.Load(xmlfil);
             var samples = XDocument.Load(@xmlfil).Descendants("result"); //Använder Workflow 2
             var tests = new List<Outcome>();
@@ -24,6 +36,12 @@ namespace ValidateEfsaXml
 
             var br01a = validator.BR01A(el);
             Console.WriteLine("BRO1A {0}", br01a.passed ? "PASSED": "FAILED");
+            if (br01a.passed == false)
+            {
+                Console.WriteLine(el.ToString());
+
+            }
+
             var br02a_01 = validator.BR02A_01(el);
             Console.WriteLine("BR02A_01 {0}", br02a_01.passed ? "PASSED" : "FAILED");
             var br02a_02 = validator.BR02A_02(el);
