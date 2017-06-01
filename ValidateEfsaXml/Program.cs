@@ -12,7 +12,10 @@ namespace ValidateEfsaXml
     {
         static void Main(string[] args)
         {
-            var xmlfil = "";
+
+
+
+            var xmlfil = @"C:\Users\dafo\Downloads\Pesticidrapport_20170601-232958.xml";
 
             if (args.Length > 0)
             {
@@ -25,24 +28,41 @@ namespace ValidateEfsaXml
                 Console.ReadLine();
             }
 
-            
+
 
             var xml = XDocument.Load(xmlfil);
             var samples = XDocument.Load(@xmlfil).Descendants("result"); //Använder Workflow 2
             var tests = new List<Outcome>();
             var validator = new Validator();
-            var el = samples.First();
 
+            foreach (var el in samples)
+            {
+                Validate(validator, el);
+            }
+           
+
+            
+
+            Console.ReadLine();
+
+        }
+
+        private static void Validate(Validator validator, XElement el)
+        {
+            var fel = new List<BusinessRuleError>();
 
             var br01a = validator.BR01A(el);
-            Console.WriteLine("BRO1A {0}", br01a.passed ? "PASSED": "FAILED");
+            Console.WriteLine("BRO1A {0}", br01a.passed ? "PASSED" : "FAILED");
             if (br01a.passed == false)
             {
                 Console.WriteLine(el.ToString());
 
             }
-
             var br02a_01 = validator.BR02A_01(el);
+             if (br02a_01.passed) {
+                fel.Add(new BusinessRuleError { El = el, outcome = br02a_01 });
+            } 
+
             Console.WriteLine("BR02A_01 {0}", br02a_01.passed ? "PASSED" : "FAILED");
             var br02a_02 = validator.BR02A_02(el);
             Console.WriteLine("BR02A_02 {0}", br02a_02.passed ? "PASSED" : "FAILED");
@@ -116,7 +136,7 @@ namespace ValidateEfsaXml
             var pest01 = validator.PEST01(el);
 
 
-            /*
+
             Console.WriteLine("PEST01 {0}", pest01.passed ? "PASSED" : "FAILED");
             var pest02 = validator.PEST02(el);
             Console.WriteLine("PEST02 {0}", pest02.passed ? "PASSED" : "FAILED");
@@ -182,10 +202,6 @@ namespace ValidateEfsaXml
             Console.WriteLine("CHEM07 {0}", chem07.passed ? "PASSED" : "FAILED");
             var chem08 = validator.CHEM08(el);
             Console.WriteLine("CHEM08 {0}", chem08.passed ? "PASSED" : "FAILED");
-            */
-
-            Console.ReadLine();
-
         }
     }
 }

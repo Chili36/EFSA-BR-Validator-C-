@@ -856,6 +856,8 @@ namespace EfsaBusinessRuleValidator
             if (analysisDate > DateTime.Now)
             {
                 outcome.passed = false;
+
+                Console.WriteLine("Analysisdate is {0}", analysisDate.ToString());
             }
 
             return outcome;
@@ -953,7 +955,7 @@ namespace EfsaBusinessRuleValidator
             //Logik
             if (sample.Element("resEvaluation").Value == "J003A" || sample.Element("resEvaluation").Value == "J031A")
             {
-                outcome.passed = decimal.Parse(sample.Element("resVal").Value.Replace(",", ".")) > decimal.Parse(sample.Element("resLegalLimit").Value.Replace(",", "."));
+                outcome.passed = decimal.Parse(sample.Element("resVal").Value.Replace(".", ",")) > decimal.Parse(sample.Element("resLegalLimit").Value.Replace(".", ","));
             }
             return outcome;
         }
