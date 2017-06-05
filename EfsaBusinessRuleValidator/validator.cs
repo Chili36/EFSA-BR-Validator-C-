@@ -21,6 +21,8 @@ namespace EfsaBusinessRuleValidator
         public Outcome BR01A(XElement sample)
         {
             var outcome = new Outcome();
+            outcome.name= "BR01A";
+    
             if (sample.Element("paramCode").Value != "RF-XXXX-XXX-XXX")
             {
                 var list = new List<XElement>();
@@ -43,6 +45,8 @@ namespace EfsaBusinessRuleValidator
         public Outcome BR02A_01(XElement sample)
         {
             var outcome = new Outcome();
+            var name = "BR02A_01";
+
             outcome.description = "If the value in 'Day of analysis' (analysisD) is reported, then a value in 'Month of analysis' (analysisM) must be reported;";
             outcome.error = "analysisM is missing, though analysisD is reported;";
 
@@ -68,6 +72,7 @@ namespace EfsaBusinessRuleValidator
         public Outcome BR02A_02(XElement sample)
         {
             var outcome = new Outcome();
+            outcome.name = "BR02A_02";
             outcome.description = "If a value is reported in at least one of the following data elements: 'Result LOD' (resLOD), 'Result LOQ' (resLOQ), 'CC alpha' (CCalpha), 'CC beta' (CCbeta), 'Result value' (resVal), 'Result value uncertainty' (resValUncert), 'Result value uncertainty Standard deviation' (resValUncertSD), 'Legal Limit for the result' (resLegalLimit), then a value in 'Result unit' (resUnit) must be reported;";
             outcome.error = "resUnit is missing, though at least one numeric data element (resLOD, resLOQ, CCalpha, CCbeta, resVal, resValUncert, resValUncertSD, resLegalLimit) is reported;";
 
@@ -100,6 +105,7 @@ namespace EfsaBusinessRuleValidator
         public Outcome BR02A_03(XElement sample)
         {
             var outcome = new Outcome();
+            outcome.name = "BR02A_03";
             outcome.description = "If the value in 'Day of production' (prodD) is reported, then a value in 'Month of Production' (prodM) must be reported;";
             outcome.error = "prodM is missing, though prodD is reported;";
             outcome.passed = true;
@@ -123,6 +129,8 @@ namespace EfsaBusinessRuleValidator
         public Outcome BR02A_04(XElement sample)
         {
             var outcome = new Outcome();
+
+            outcome.name = "BR02A_04";
             outcome.description = "If the value in 'Day of expiry' (expiryD) is reported, then a value in 'Month of expiry' (expiryM) must be reported;";
             outcome.error = "expiryM is missing, though expiryD is reported;";
             outcome.passed = true;
@@ -149,6 +157,7 @@ namespace EfsaBusinessRuleValidator
         public Outcome BR02A_05(XElement sample)
         {
             var outcome = new Outcome();
+            outcome.name = "BR02A_05";
             outcome.description = "If the value in 'Day of sampling' (sampD) is reported, then a value in 'Month of sampling' (sampM) must be reported;";
             outcome.error = "sampM is missing, though sampD is reported;";
             outcome.passed = true;
@@ -870,6 +879,7 @@ namespace EfsaBusinessRuleValidator
         public Outcome PEST01(XElement sample)
         {
             var outcome = new Outcome();
+            outcome.name = "PEST01";
             outcome.description = "A value in the data element 'Laboratory' (labCode) must be reported;";
             outcome.error = "labCode is missing, though mandatory;";
             outcome.passed = true;
@@ -885,6 +895,7 @@ namespace EfsaBusinessRuleValidator
         public Outcome PEST02(XElement sample)
         {
             var outcome = new Outcome();
+            outcome.name = "PEST02";
             outcome.description = "A value in the data element 'Result LOQ' (resLOQ) must be reported;";
             outcome.error = "resLOQ is missing, though mandatory;";
             outcome.passed = true;
@@ -900,6 +911,7 @@ namespace EfsaBusinessRuleValidator
         public Outcome PEST03(XElement sample)
         {
             var outcome = new Outcome();
+            outcome.name = "PEST03";
             outcome.description = "A value in the data element 'Evaluation of the result' (resEvaluation) must be reported;";
             outcome.error = "resEvaluation is missing, though mandatory;";
             outcome.passed = true;
@@ -916,6 +928,7 @@ namespace EfsaBusinessRuleValidator
         public Outcome PEST04(XElement sample)
         {
             var outcome = new Outcome();
+            outcome.name = "PEST04";
             outcome.description = "A value in the data element 'Method of production' (prodProdMeth) must be reported;";
             outcome.error = "prodProdMeth is missing, though mandatory;";
             outcome.passed = true;
@@ -932,6 +945,7 @@ namespace EfsaBusinessRuleValidator
         public Outcome PEST05(XElement sample)
         {
             var outcome = new Outcome();
+            outcome.name = "PEST05";
             outcome.description = "If the value in the data element 'Evaluation of the result' (resEvaluation) is equal to 'greater than maximum permissible quantities' (J003A), or 'Compliant due to measurement uncertainty' (J031A), then the value in 'Type of result' (resType) must be equal to 'VAL';";
             outcome.error = "resType is different from VAL, though resEvaluation is greater than maximum permissible quantities or compliant due to measurement uncertainty;";
             outcome.passed = true;
@@ -948,6 +962,7 @@ namespace EfsaBusinessRuleValidator
         public Outcome PEST06(XElement sample)
         {
             var outcome = new Outcome();
+            outcome.name = "PEST06";
             outcome.description = "If the value in the data element 'Evaluation of the result' (resEvaluation) is equal to 'greater than maximum permissible quantities' (J003A), or 'Compliant due to measurement uncertainty' (J031A), then the value in 'Result value' (resVal) must be greater than 'Legal Limit for the result' (resLegalLimit);";
             outcome.error = "resVal is less than resLegalLimit, though resEvaluation is greater than maximum permissible quantities, or compliant due to measurement uncertainty;";
             outcome.passed = true;
@@ -979,6 +994,7 @@ namespace EfsaBusinessRuleValidator
 
 
             var outcome = new Outcome();
+            outcome.name = "PEST07";
             outcome.description = "If the value in the data element 'Product code' (prodCode) is 'Food for infants and young children' (PX100000A), or 'Baby food for infants and young childern' (PX100001A), or 'Processed cereal-based baby foods (e.g. cereal and pastas to be reconstituted with milk or other liquids)' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A), then the value in the data element 'Product treatment' (prodTreat) must be equal to 'Processed' (T100A);";
             outcome.error = "prodTreat is not processed, though prodCode is a baby food;";
             outcome.passed = true;
@@ -999,6 +1015,7 @@ namespace EfsaBusinessRuleValidator
             //prodTreat;
 
             var outcome = new Outcome();
+            outcome.name = "PEST08";
             outcome.description = "If the value in the data element 'Product code' (prodCode) is 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A), then the value in the data element 'Product treatment' (prodTreat) must be equal to 'Dehydration' (T131A), or 'Churning' (T134A), or 'Milk pasteurisation' (T150A), or 'Unprocessed' (T999A);";
             outcome.error = "prodTreat is not dehydration, churning, milk pasteurisation, or unprocessed, though prodCode is milk of animal origin;";
             outcome.passed = true;
@@ -1036,6 +1053,7 @@ namespace EfsaBusinessRuleValidator
             //prodTreat;
 
             var outcome = new Outcome();
+            outcome.name = "PEST09";
             outcome.description = "If the value in the data element 'Product treatment' (prodTreat) is 'Milk pasteurisation' (T150A), then the value in the data element 'Product code' (prodCode) must be equal to 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A);";
             outcome.error = "prodCode is not milk of animal origin, though prodTreat is milk pasteurisation;";
             outcome.passed = true;
@@ -1069,6 +1087,7 @@ namespace EfsaBusinessRuleValidator
 
 
             var outcome = new Outcome();
+            outcome.name = "PEST10";
             outcome.description = "If the value in the data element 'Product code' (prodCode) is 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A), and the value in the data element 'Expression of result' (exprRes) is 'Whole weight' (B001A), and the value in 'Percentage of fat in the original sample' (fatPerc) is not reported, then EFSA will assume a fat content equal to 4%;";
             outcome.error = "WARNING: fat percentage in milk of animal origin on whole weight basis is not reported; EFSA will assume a fat content equal to 4%;";
             outcome.type = "warning";
@@ -1106,6 +1125,7 @@ namespace EfsaBusinessRuleValidator
             //resVal;
 
             var outcome = new Outcome();
+            outcome.name = "PEST11";
             outcome.description = "If the value in the data element 'Type of result' (resType) is 'Qualitative Value (Binary)' (BIN), then the data element 'Result value' (resVal) must be empty;";
             outcome.error = "resVal is reported, though resType is qualitative value (binary);";
             outcome.type = "error";
@@ -1127,6 +1147,7 @@ namespace EfsaBusinessRuleValidator
             //prodCode;
 
             var outcome = new Outcome();
+            outcome.name = "PEST12";
             outcome.description = "If the value in the data element 'Programme legal  reference' (progLegalRef) is 'Samples of food products falling under Directive 2006/125/EC or 2006/141/EC' (N028A), then the value in the data element 'Product code' (prodCode) must be 'Food for infants and young children' (PX100000A), or 'Baby food for infants and young childern' (PX100001A), or 'Processed cereal-based baby foods (e.g. cereal and pastas to be reconstituted with milk or other liquids)' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A);";
             outcome.error = "prodCode is not a baby food, though progLegalRef is samples of food products falling under Directive 2006/125/EC;";
             outcome.type = "error";
@@ -1155,6 +1176,7 @@ namespace EfsaBusinessRuleValidator
             //prodCode;
 
             var outcome = new Outcome();
+            outcome.name = "PEST13";
             outcome.description = "If the value in the data element 'Product code' (prodCode) is 'Food for infants and young children' (PX100000A), or 'Baby food for infants and young childern' (PX100001A), or 'Processed cereal-based baby foods (e.g. cereal and pastas to be reconstituted with milk or other liquids)' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A), then the value in the data element 'Programme legal  reference' (progLegalRef) must be 'Samples of food products falling under Directive 2006/125/EC or 2006/141/EC' (N028A);";
             outcome.error = "progLegalRef is not samples of food products falling under Directive 2006/125/EC, though prodCode is a baby food;";
             outcome.type = "error";
@@ -1184,6 +1206,7 @@ namespace EfsaBusinessRuleValidator
             //fatPerc;
 
             var outcome = new Outcome();
+            outcome.name = "PEST14";
             outcome.description = "If the value in the data element 'Expression of result' (exprRes) is 'Fat weight' (B003A), then a value in the data element 'Percentage of fat in the original sample' (fatPerc) must be reported;";
             outcome.error = "fatPerc is missing, though exprRes is fat weight;";
             outcome.type = "error";
@@ -1206,6 +1229,7 @@ namespace EfsaBusinessRuleValidator
             //prodCode;
 
             var outcome = new Outcome();
+            outcome.name = "PEST15";
             outcome.description = "If the value in the data element 'Expression of result' (exprRes) is 'Reconstituted product' (B007A), then the value in the data element 'Product code' (prodCode) should be 'Food for infants and young children' (PX100000A), or 'Baby food for infants and young childern' (PX100001A), or 'Processed cereal-based baby foods (e.g. cereal and pastas to be reconstituted with milk or other liquids)' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A);";
             outcome.error = "WARNING: prodCode is not a baby food, though exprRes is reconstituted product;";
             outcome.type = "warning";
@@ -1234,6 +1258,7 @@ namespace EfsaBusinessRuleValidator
             //prodCode;
 
             var outcome = new Outcome();
+            outcome.name = "PEST16";
             outcome.description = "If the value in the data element 'Product code' (prodCode) is 'Food for infants and young children' (PX100000A), or 'Baby food for infants and young childern' (PX100001A), or 'Processed cereal-based baby foods (e.g. cereal and pastas to be reconstituted with milk or other liquids)' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A), then the value in the data element 'Expression of result' (exprRes) should be 'Reconstituted product' (B007A);";
             outcome.error = "WARNING: exprRes is not reconstituted product, though prodCode is a baby food. Please verify that the sample taken is ready-for-consumption and does not require reconstitution/dilution before consumption;";
             outcome.type = "warning";
@@ -1266,6 +1291,7 @@ namespace EfsaBusinessRuleValidator
             //prodCode;
 
             var outcome = new Outcome();
+            outcome.name = "PEST17";
             outcome.description = "If the value in the data element 'Expression of result' (exprRes) is 'Fat weight' (B003A), then the value in the data element 'Product code' (prodCode) must be 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A), or 'Bird eggs' (P1030000A), or 'Eggs Chicken' (P1030010A), or 'Eggs Duck' (P1030020A), or 'Eggs Goose' (P1030030A), or 'Eggs Quail' (P1030040A), or 'Eggs Others' (P1030990A);";
             outcome.error = "prodCode is not milk of animal origin or egg samples, though exprRes is fat weight;";
             outcome.type = "error";
@@ -1318,6 +1344,7 @@ namespace EfsaBusinessRuleValidator
             //prodCode;
 
             var outcome = new Outcome();
+            outcome.name = "PEST18";
             outcome.description = "If the value in the data element 'Product code' (prodCode) is 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A), or 'Bird eggs' (P1030000A), or 'Eggs Chicken' (P1030010A), or 'Eggs Duck' (P1030020A), or 'Eggs Goose' (P1030030A), or 'Eggs Quail' (P1030040A), or 'Eggs Others' (P1030990A), then the value in the data element 'Expression of result' (exprRes) should be 'Fat weight' (B003A);";
             outcome.error = "exprRes is not fat weight, though prodCode is milk of animal origin or egg samples;";
             outcome.type = "warning";
@@ -1358,6 +1385,7 @@ namespace EfsaBusinessRuleValidator
             //fatPerc;
 
             var outcome = new Outcome();
+            outcome.name = "PEST19";
             outcome.description = "If the value in the data element 'Product code' (prodCode) is ''Bird eggs' (P1030000A), or 'Eggs Chicken' (P1030010A), or 'Eggs Duck' (P1030020A), or 'Eggs Goose' (P1030030A), or 'Eggs Quail' (P1030040A), or 'Eggs Others' (P1030990A), and the value in the data element 'Expression of result' (exprRes) is 'Whole weight' (B001A), and the value in 'Percentage of fat in the original sample' (fatPerc) is not reported, then EFSA will assume a fat content equal to 10%;";
             outcome.error = "WARNING: fat percentage in egg samples on whole weight basis is not reported; EFSA will assume a fat content equal to 10%;";
             outcome.type = "warning";
@@ -1385,6 +1413,7 @@ namespace EfsaBusinessRuleValidator
             //prodTreat;
 
             var outcome = new Outcome();
+            outcome.name = "PEST20";
             outcome.description = "The value in the data element 'Product Treatment Code' (prodTreat) should be 'Processed' (T100A), or 'Peeling (inedible peel)' (T101A), or 'Peeling (edible peel)' (T102A), or 'Juicing' (T103A), or 'Oil production (Not Specified)' (T104A), or 'Milling (Not Specified)' (T110A), or 'Milling - unprocessed flour' (T111A), or 'Milling - refined flour' (T112A), or  'Milling - bran production' (T113A), or 'Polishing' (T114A), or Sugar production (Not Specified)' (T116A), or 'Canning' (T120A), or Preserving' (T121A), or 'Production of alcoholic beverages (Not Specified)' (T122A), or 'Wine production (Not Specified)' (T123A), or 'Wine production - white wine' (T124A), or 'Wine production - red wine cold process' (T125A), 'Cooking in water' (T128A), or 'Cooking in oil (Frying)' (T129A), or 'Cooking in air (Baking)' (T130A), or 'Dehydration' (T131A), or 'Fermentation' (T132A), or 'Churning' (T134A), or 'Concentration' (T136A), 'Wet-milling' (T148A), or 'Milk pasteurisation' (T150A), or 'Unprocessed' (T999A), or 'Freezing' (T998A);";
             outcome.error = "WARNING: prodTreat is not among those recommended in EFSA guidance;";
             outcome.type = "warning";
@@ -1431,6 +1460,7 @@ namespace EfsaBusinessRuleValidator
             //prodTreat;
 
             var outcome = new Outcome();
+            outcome.name = "PEST21";
             outcome.description = "The value in the data element 'Product treatment' (prodTreat) must be different from 'Unknown' (T899A);";
             outcome.error = "prodTreat is unknown;";
             outcome.type = "error";
@@ -1447,6 +1477,7 @@ namespace EfsaBusinessRuleValidator
             //exprRes;
 
             var outcome = new Outcome();
+            outcome.name = "PEST22";
             outcome.description = "The value in the data element 'Expression of result' (exprRes) must be equal to 'Whole weight' (B001A);";
             outcome.error = "exprRes is different from whole weight;";
             outcome.type = "error";
@@ -1464,6 +1495,7 @@ namespace EfsaBusinessRuleValidator
             //resUnit;
 
             var outcome = new Outcome();
+            outcome.name = "PEST23";
             outcome.description = "The value in the data element 'Result unit' (resUnit) must be equal to 'Milligram per kilogram' (G061A);";
             outcome.error = "resUnit is not reported in milligram per kilogram;";
             outcome.type = "error";
@@ -1481,6 +1513,7 @@ namespace EfsaBusinessRuleValidator
             //resLegalLimitType;
 
             var outcome = new Outcome();
+            outcome.name = "PEST24";
             outcome.description = "The value in the data element 'Type of legal limit' (resLegalLimitType) should be equal to 'Maximum Residue Level (MRL)' (W002A), or 'National or local limit' (W990A);";
             outcome.error = "WARNING: resLegalLimitType is different from MRL and national or local limit;";
             outcome.type = "warning";
@@ -1498,6 +1531,7 @@ namespace EfsaBusinessRuleValidator
             //labAccred;
 
             var outcome = new Outcome();
+            outcome.name = "PEST25";
             outcome.description = "The value in the data element 'Laboratory accreditation' (labAccred) must be equal to 'Accredited' (L001A), or 'None' (L003A);";
             outcome.error = "labAccred is not accredited or none;";
             outcome.type = "error";
@@ -1510,6 +1544,183 @@ namespace EfsaBusinessRuleValidator
             return outcome;
         }
 
+        ///The value in the data element 'Parameter code' (paramCode) should be different from 'Not in list' (RF-XXXX-XXX-XXX);
+        public Outcome PEST26(XElement sample)
+        {
+            // <checkedDataElements>;
+            var paramCode = sample.Element("paramCode").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST26";
+            outcome.description = "The value in the data element 'Parameter code' (paramCode) should be different from 'Not in list' (RF-XXXX-XXX-XXX);";
+            outcome.error = "paramCode should be different from 'not in list'. Please contact catalogue@efsa.europa.eu to add the missing term;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (paramCode == "RF-XXXX-XXX-XXX")
+            {
+                outcome.passed = false;
+            }
+            return outcome;
+        }
+
+        ///If the value in the data element 'Programme type' (progType) is equal to 'Official (National) programme' (K005A), then the value in 'Programme legal reference' (progLegalRef) can only be equal to 'Regulation (EC) No 396/2005 (amended)' (N027A), or 'Commission Directive (EC) No 125/2006/EC and 2006/141/EC' (N028A), or 'Council Directive (EC) No 23/1996 (amended)' (N247A), or 'Regulation (EC) No 882/2004 (amended)' (N018A), and the value in 'Sampling strategy' (progSampStrategy) can only be equal to 'Objective sampling' (ST10A), or 'Selective sampling' (ST20A), or 'Suspect sampling' (ST30A);
+        public Outcome PEST_sampInfo005(XElement sample)
+        {
+            var progType = sample.Element("progType").Value;
+            var progLegalRef = sample.Element("progLegalRef").Value;
+            var progSampStrategy = sample.Element("progSampStrategy").Value; 
+           
+
+            var outcome = new Outcome();
+            outcome.name = "PEST_sampInfo005";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'Official (National) programme' (K005A), then the value in 'Programme legal reference' (progLegalRef) can only be equal to 'Regulation (EC) No 396/2005 (amended)' (N027A), or 'Commission Directive (EC) No 125/2006/EC and 2006/141/EC' (N028A), or 'Council Directive (EC) No 23/1996 (amended)' (N247A), or 'Regulation (EC) No 882/2004 (amended)' (N018A), and the value in 'Sampling strategy' (progSampStrategy) can only be equal to 'Objective sampling' (ST10A), or 'Selective sampling' (ST20A), or 'Suspect sampling' (ST30A);";
+            outcome.error = "The combination of codes for progType, progLegalRef and progSampStrategy is not valid;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progType == "K005A")
+            {
+                var list = new List<string>();
+                list.Add("N027A");
+                list.Add("N028A");
+                list.Add("N247A");
+                list.Add("N018A");
+
+                var list2 = new List<string>();
+                list2.Add("ST10A");
+                list2.Add("ST20A");
+                list2.Add("ST30A");
+
+                if (!list.Contains(progLegalRef))
+                {
+                    outcome.passed = false;
+                }
+
+            
+                if (list2.Contains(progSampStrategy))
+                {
+                    outcome.passed = false;
+                }
+            }
+            return outcome;
+        }
+
+        ///If the value in the data element 'Programme type' (progType) is equal to 'Official (EU) programme' (K009A), then the value in 'Programme legal reference' (progLegalRef) can only be equal to 'Regulation (EC) No 396/2005 (amended)' (N027A), or 'Commission Directive (EC) No 125/2006/EC and 2006/141/EC' (N028A), and the value in 'Sampling strategy' (progSampStrategy) can only be equal to 'Objective sampling' (ST10A), or 'Selective sampling' (ST20A);
+        public Outcome PEST_sampInfo009(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var progLegalRef = sample.Element("progLegalRef").Value;
+            var progSampStrategy = sample.Element("progSampStrategy").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST_sampInfo009";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'Official (EU) programme' (K009A), then the value in 'Programme legal reference' (progLegalRef) can only be equal to 'Regulation (EC) No 396/2005 (amended)' (N027A), or 'Commission Directive (EC) No 125/2006/EC and 2006/141/EC' (N028A), and the value in 'Sampling strategy' (progSampStrategy) can only be equal to 'Objective sampling' (ST10A), or 'Selective sampling' (ST20A);";
+            outcome.error = "The combination of codes for progType, progLegalRef and progSampStrategy is not valid;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progType == "K009A")
+            {
+                var list = new List<string>();
+                list.Add("N027A");
+                list.Add("N028A");
+
+                var list2 = new List<string>();
+                list2.Add("ST10A");
+                list2.Add("ST20A");
+
+                if (!list.Contains(progLegalRef))
+                {
+                    outcome.passed = false;
+                }
+                if (list2.Contains(progSampStrategy))
+                {
+                    outcome.passed = false;
+                }
+            }
+            return outcome;
+        }
+
+
+        ///If the value in the data element 'Programme type' (progType) is equal to 'Official (National and EU) programme' (K018A), then the value in 'Programme legal reference' (progLegalRef) can only be equal to 'Regulation (EC) No 396/2005 (amended)' (N027A), or 'Commission Directive (EC) No 125/2006/EC and 2006/141/EC' (N028A), or 'Council Directive (EC) No 23/1996 (amended)' (N247A), or 'Regulation (EC) No 882/2004 (amended)' (N018A), and the value in 'Sampling strategy' (progSampStrategy) can only be equal to 'Objective sampling' (ST10A), or 'Selective sampling' (ST20A);
+        public Outcome PEST_sampInfo018(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var progLegalRef = sample.Element("progLegalRef").Value;
+            var progSampStrategy = sample.Element("progSampStrategy").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST_sampInfo018";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'Official (National and EU) programme' (K018A), then the value in 'Programme legal reference' (progLegalRef) can only be equal to 'Regulation (EC) No 396/2005 (amended)' (N027A), or 'Commission Directive (EC) No 125/2006/EC and 2006/141/EC' (N028A), or 'Council Directive (EC) No 23/1996 (amended)' (N247A), or 'Regulation (EC) No 882/2004 (amended)' (N018A), and the value in 'Sampling strategy' (progSampStrategy) can only be equal to 'Objective sampling' (ST10A), or 'Selective sampling' (ST20A);";
+            outcome.error = "The combination of codes for progType, progLegalRef and progSampStrategy is not valid;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            if (progType == "K018A")
+            {
+                var list = new List<string>();
+                list.Add("N027A");
+                list.Add("N028A");
+                list.Add("N247A");
+                list.Add("N018A");
+
+                var list2 = new List<string>();
+                list.Add("ST10A");
+                list.Add("ST20A");
+
+                if (!list.Contains(progLegalRef))
+                {
+                    outcome.passed = false;
+                }
+                if (list2.Contains(progSampStrategy))
+                {
+                    outcome.passed = false;
+                }
+            }
+            return outcome;
+        }
+
+        ///If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), then the value in 'Programme legal reference' (progLegalRef) can only be equal to 'Regulation (EC) No 396/2005 (amended)' (N027A), and the value in 'Sampling strategy' (progSampStrategy) can only be equal to 'Suspect sampling' (ST30A);
+        public Outcome PEST_sampInfo019(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var progLegalRef = sample.Element("progLegalRef").Value;
+            var progSampStrategy = sample.Element("progSampStrategy").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST_sampInfo019";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), then the value in 'Programme legal reference' (progLegalRef) can only be equal to 'Regulation (EC) No 396/2005 (amended)' (N027A), and the value in 'Sampling strategy' (progSampStrategy) can only be equal to 'Suspect sampling' (ST30A);";
+            outcome.error = "The combination of codes for progType, progLegalRef and progSampStrategy is not valid;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progType == "K019A")
+            {
+                var list = new List<string>();
+                list.Add("N027A");
+                
+                var list2 = new List<string>();
+                list.Add("ST30A");
+
+                if (!list.Contains(progLegalRef))
+                {
+                    outcome.passed = false;
+                }
+                if (list2.Contains(progSampStrategy))
+                {
+                    outcome.passed = false;
+                }
+            }
+            return outcome;
+        }
 
         ///A value in the data element 'Expression of result' (exprRes) must be reported;
         public Outcome CHEM01(XElement sample)
@@ -1869,6 +2080,8 @@ namespace EfsaBusinessRuleValidator
         public string description { get; set; }
         public string error { get; set; }
         public string type { get; set; }
+        public string name { get; set; }
+        public string version { get; set; }
     }
 
 }
