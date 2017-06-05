@@ -1742,8 +1742,599 @@ namespace EfsaBusinessRuleValidator
             }
             return outcome;
         }
+        ///If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), then the value in (origCountry) can only be equal to 'China' (CN), or 'Dominican Republic' (DO), or 'Egypt' (EG), or 'Kenya' (KE), or 'Cambodia' (KH), or 'Thailand' (TH), or 'Turkey' (TR), or 'Viet Nam' (VN);
+        public Outcome PEST669_1(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var origCountry = sample.Element("origCountry").Value;
 
-        ///A value in the data element 'EFSA Product Code' (EFSAProdCode) must be reported;
+            var outcome = new Outcome();
+            outcome.name = "PEST669_1";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), then the value in (origCountry) can only be equal to 'China' (CN), or 'Dominican Republic' (DO), or 'Egypt' (EG), or 'Kenya' (KE), or 'Cambodia' (KH), or 'Thailand' (TH), or 'Turkey' (TR), or 'Viet Nam' (VN);";
+            outcome.error = "origCountry is not a valid country code when progType reported is EU increased control programme on imported food (Reg 669/2009);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progType == "K019A")
+            {
+                var list = new List<string>();
+                list.Add("CN");
+                list.Add("DO");
+                list.Add("EG");
+                list.Add("KE");
+                list.Add("KH");
+                list.Add("TH");
+                list.Add("TR");
+                list.Add("VN");
+
+                if (!list.Contains(origCountry))
+                {
+                    outcome.passed = false;
+                }
+            }
+           
+            return outcome;
+        }
+        ///If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'China' (CN), then the value in 'Product code' (prodCode) can only be equal to 'Broccoli' (P0241010A), or 'Teas' (P0610000A), and the value in 'Product treatment' (prodTreat) can only be equal to 'Unprocessed' (T999A);
+        public Outcome PEST669_CN(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var origCountry = sample.Element("origCountry").Value;
+            var prodCode = sample.Element("prodCode").Value;
+            var prodTreat = sample.Element("prodTreat").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST669_CN";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'China' (CN), then the value in 'Product code' (prodCode) can only be equal to 'Broccoli' (P0241010A), or 'Teas' (P0610000A), and the value in 'Product treatment' (prodTreat) can only be equal to 'Unprocessed' (T999A);";
+            outcome.error = "The combination of codes for origCountry, prodCode and prodTreat is not valid for progType reported as EU increased control programme on imported food (Reg 669/2009);";
+            outcome.type = "error";
+            outcome.passed = true;
+            outcome.lastupdate = "2017-03-15";
+
+
+
+            //Logik
+
+           if (progType == "K019A" && origCountry == "CN")
+            {
+                var produktkoder = new List<string>();
+                produktkoder.Add("P0241010A");
+                produktkoder.Add("P0610000A");
+
+                if (!produktkoder.Contains(prodCode))
+                {
+                    outcome.passed = false;
+                }
+                if (prodTreat != "T999A")
+                {
+                    outcome.passed = false;
+                }
+            }
+
+            return outcome;
+        }
+
+        ///If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Dominican Republic' (DO), then the value in 'Product code' (prodCode) can only be equal to 'Aubergines/egg plants'  (P0231030A), or 'Courgettes' (P0232030A), or 'Sweet peppers/bell peppers' (P0231020A), or 'Beans (with pods)' (P0260010A), and the value in 'Product treatment' (prodTreat) can only be equal to 'Unprocessed' (T999A), or 'Freezing' (T998A);
+        public Outcome PEST669_DO(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var origCountry = sample.Element("origCountry").Value;
+            var prodCode = sample.Element("prodCode").Value;
+            var prodTreat = sample.Element("prodTreat").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST669_DO";
+            outcome.lastupdate = "2017-03-15";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Dominican Republic' (DO), then the value in 'Product code' (prodCode) can only be equal to 'Aubergines/egg plants'  (P0231030A), or 'Courgettes' (P0232030A), or 'Sweet peppers/bell peppers' (P0231020A), or 'Beans (with pods)' (P0260010A), and the value in 'Product treatment' (prodTreat) can only be equal to 'Unprocessed' (T999A), or 'Freezing' (T998A);";
+            outcome.error = "The combination of codes for origCountry, prodCode and prodTreat is not valid for progType reported as EU increased control programme on imported food (Reg 669/2009);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progType == "K019A" && origCountry == "DO")
+            {
+                var produktkoder = new List<string>();
+                produktkoder.Add("P0231030A");
+                produktkoder.Add("P0232030A");
+                produktkoder.Add("P0231020A");
+                produktkoder.Add("P0260010A");
+
+                var tillstand = new List<string>();
+                tillstand.Add("T999A");
+                tillstand.Add("T998A");
+
+                if (!produktkoder.Contains(prodCode))
+                {
+                    outcome.passed = false;
+                }
+               
+                if (tillstand.Contains(prodTreat))
+                {
+                    outcome.passed = false;
+                }
+
+            }
+            return outcome;
+        }
+
+
+        public Outcome PEST669_DO_a(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var origCountry = sample.Element("origCountry").Value;
+            var prodCode = sample.Element("prodCode").Value;
+            var prodText = sample.Element("prodText").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST669_DO_a";
+            outcome.lastupdate = "2017-03-15";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Dominican Republic' (DO), and the value in 'Product code' (prodCode) is 'Sweet peppers/bell peppers' (P0231020A), then the value in 'Product text' (prodText) mus contain the string 'Sweet/bell peppers' or 'Chili peppers';";
+            outcome.error = "prodText doesn't contain the appropriate string when prodCode is peppers and progType is reported as EU increased control programme on imported food (Reg 669/2009);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progType == "K019A" && origCountry == "DO" && prodCode == "P0231020A")
+            {
+                outcome.passed = (prodText.Contains("Sweet/bell peppers") || prodText.Contains("Chili peppers"));
+            }
+            return outcome;
+        }
+
+        ///If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Egypt' (EG), then the value in 'Product code' (prodCode) can only be equal to 'Sweet peppers/bell peppers' (P0231020A), or 'Strawberries'  (P0152000A), and the value in 'Product treatment' (prodTreat) can only be equal to 'Unprocessed' (T999A), or 'Freezing' (T998A);
+        public Outcome PEST669_EG(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var origCountry = sample.Element("origCountry").Value;
+            var prodCode = sample.Element("prodCode").Value;
+            var prodTreat = sample.Element("prodTreat").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST669_EG";
+            outcome.lastupdate = "2016-07-15";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Egypt' (EG), then the value in 'Product code' (prodCode) can only be equal to 'Sweet peppers/bell peppers' (P0231020A), or 'Strawberries'  (P0152000A), and the value in 'Product treatment' (prodTreat) can only be equal to 'Unprocessed' (T999A), or 'Freezing' (T998A);";
+            outcome.error = "The combination of codes for origCountry, prodCode and prodTreat is not valid for progType reported as EU increased control programme on imported food (Reg 669/2009);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progType == "K019A" && origCountry == "EG")
+            {
+                var produktkoder = new List<string>();
+                produktkoder.Add("P0231020A");
+                produktkoder.Add("P0152000A");
+                
+                var tillstand = new List<string>();
+                tillstand.Add("T999A");
+                tillstand.Add("T998A");
+
+                if (!produktkoder.Contains(prodCode))
+                {
+                    outcome.passed = false;
+                }
+
+                if (tillstand.Contains(prodTreat))
+                {
+                    outcome.passed = false;
+                }
+
+            }
+
+            return outcome;
+        }
+
+        ///If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Kenya' (KE), then the value in 'Product code' (prodCode) can only be equal to 'Peas (with pods)' (P0260030A), and the value in 'Product treatment' (prodTreat) can only be equal to 'Unprocessed' (T999A);
+        public Outcome PEST669_KE(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var origCountry = sample.Element("origCountry").Value;
+            var prodCode = sample.Element("prodCode").Value;
+            var prodTreat = sample.Element("prodTreat").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST669_KE";
+            outcome.lastupdate = "2016-07-15";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Kenya' (KE), then the value in 'Product code' (prodCode) can only be equal to 'Peas (with pods)' (P0260030A), and the value in 'Product treatment' (prodTreat) can only be equal to 'Unprocessed' (T999A);";
+            outcome.error = "The combination of codes for origCountry, prodCode and prodTreat is not valid for progType reported as EU increased control programme on imported food (Reg 669/2009);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progType == "K019A" && origCountry == "KE")
+            {
+                var produktkoder = new List<string>();
+                var tillstand = new List<string>();
+                tillstand.Add("T999A");
+                produktkoder.Add("P0260030A");
+                if (!produktkoder.Contains(prodCode))
+                {
+                    outcome.passed = false;
+                }
+                if (tillstand.Contains(prodTreat))
+                {
+                    outcome.passed = false;
+                }
+            }
+            return outcome;
+        }
+        ///If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Egypt' (EG), and the value in 'Product code' (prodCode) is 'Sweet peppers/bell peppers' (P0231020A), then the value in 'Product text' (prodText) mus contain the string 'Sweet/bell peppers' or 'Chili peppers';
+        public Outcome PEST669_EG_a(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var origCountry = sample.Element("origCountry").Value;
+            var prodCode = sample.Element("prodCode").Value;
+            var prodText = sample.Element("prodText").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST669_EG_a";
+            outcome.lastupdate = "2017-03-15";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Egypt' (EG), and the value in 'Product code' (prodCode) is 'Sweet peppers/bell peppers' (P0231020A), then the value in 'Product text' (prodText) mus contain the string 'Sweet/bell peppers' or 'Chili peppers';";
+            outcome.error = "prodText doesn't contain the appropriate string when prodCode is peppers and progType is reported as EU increased control programme on imported food (Reg 669/2009);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progType == "K019A" && origCountry == "EG" && prodCode == "P0231020A")
+            {
+                outcome.passed = (prodText.Contains("Sweet/bell peppers") || prodText.Contains("Chili peppers"));
+            }
+            return outcome;
+        }
+
+        ///If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Kenya' (KE), then the value in 'Product code' (prodCode) can only be equal to 'Peas (with pods)' (P0260030A), and the value in 'Product treatment' (prodTreat) can only be equal to 'Unprocessed' (T999A);
+
+        ///If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Cambodia' (KH), then the value in 'Product code' (prodCode) can only be equal to 'Aubergines/egg plants' (P0231030A), or 'Celery leaves' (P0256030A), or 'Beans (with pods)' (P0260010A), and the value in 'Product treatment' (prodTreat) can only be equal to 'Unprocessed' (T999A), or 'Freezing' (T998A);
+        public Outcome PEST669_KH(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var origCountry = sample.Element("origCountry").Value;
+            var prodCode = sample.Element("prodCode").Value;
+            var prodTreat = sample.Element("prodTreat").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST669_KH";
+            outcome.lastupdate = "2016-07-15";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Cambodia' (KH), then the value in 'Product code' (prodCode) can only be equal to 'Aubergines/egg plants' (P0231030A), or 'Celery leaves' (P0256030A), or 'Beans (with pods)' (P0260010A), and the value in 'Product treatment' (prodTreat) can only be equal to 'Unprocessed' (T999A), or 'Freezing' (T998A);";
+            outcome.error = "The combination of codes for origCountry, prodCode and prodTreat is not valid for progType reported as EU increased control programme on imported food (Reg 669/2009);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progType == "K019A" && origCountry == "KH")
+            {
+                var prodCodes = new List<string>();
+                prodCodes.Add("P0231030A");
+                prodCodes.Add("P0260010A");
+                prodCodes.Add(" P0256030A");
+               
+                if (!prodCodes.Contains(prodCode))
+                {
+                    outcome.passed = false;
+                }
+                var prodTreats = new List<string>();
+                prodTreats.Add("T999A");
+                prodTreats.Add("T998A");
+                if (!prodTreats.Contains(prodTreat))
+                {
+                    outcome.passed = false;
+                }
+            }
+            return outcome;
+        }
+
+        ///If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Cambodia' (KH), and the value in 'Product code' (prodCode) is 'Celery leaves' (P0256030A), then the value in 'Product text' (prodText) mus contain the string 'Chinese celery leaves';
+        public Outcome PEST669_KH_a(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var origCountry = sample.Element("origCountry").Value;
+            var prodCode = sample.Element("prodCode").Value;
+            var prodText = sample.Element("prodText").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST669_KH_a";
+            outcome.lastupdate = "2017-03-15";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Cambodia' (KH), and the value in 'Product code' (prodCode) is 'Celery leaves' (P0256030A), then the value in 'Product text' (prodText) mus contain the string 'Chinese celery leaves';";
+            outcome.error = "prodText doesn't contain the appropriate string when prodCode is celery leaves and progType is reported as EU increased control programme on imported food (Reg 669/2009);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progType == "K019A" && origCountry == "KH" && prodCode == "P0256030A")
+            {
+                outcome.passed = prodText.Contains("Chinese celery leaves");
+            }
+            return outcome;
+        }
+
+        ///If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Thailand' (TH), then the value in 'Product code' (prodCode) can only be equal to 'Aubergines/egg plants' (P0231030A), or 'Sweet peppers/bell peppers' (P0231020A), or 'Beans (with pods)' (P0260010A), and the value in 'Product treatment' (prodTreat) can only be equal to 'Unprocessed' (T999A), or 'Freezing' (T998A);
+        public Outcome PEST669_TH(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var origCountry = sample.Element("origCountry").Value;
+            var prodCode = sample.Element("prodCode").Value;
+            var prodTreat = sample.Element("prodTreat").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST669_TH";
+            outcome.lastupdate = "2016-07-15";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Thailand' (TH), then the value in 'Product code' (prodCode) can only be equal to 'Aubergines/egg plants' (P0231030A), or 'Sweet peppers/bell peppers' (P0231020A), or 'Beans (with pods)' (P0260010A), and the value in 'Product treatment' (prodTreat) can only be equal to 'Unprocessed' (T999A), or 'Freezing' (T998A);";
+            outcome.error = "The combination of codes for origCountry, prodCode and prodTreat is not valid for progType reported as EU increased control programme on imported food (Reg 669/2009);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progType == "K019A" && origCountry == "TH")
+            {
+                var prodCodes = new List<string>();
+                prodCodes.Add("P0231030A");
+                prodCodes.Add("P0260010A");
+                prodCodes.Add("P0231020A");
+                if (!prodCodes.Contains(prodCode))
+                {
+                    outcome.passed = false;
+                }
+                var prodTreats = new List<string>();
+                prodTreats.Add("T999A");
+                prodTreats.Add("T998A");
+                if (!prodTreats.Contains(prodTreat))
+                {
+                    outcome.passed = false;
+                }
+
+            }
+            return outcome;
+        }
+
+        ///If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Thailand' (TH), and the value in 'Product code' (prodCode) is 'Sweet peppers/bell peppers' (P0231020A), then the value in 'Product text' (prodText) mus contain the string 'Chili peppers';
+        public Outcome PEST669_TH_a(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var origCountry = sample.Element("origCountry").Value;
+            var prodCode = sample.Element("prodCode").Value;
+            var prodText = sample.Element("prodText").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST669_TH_a";
+            outcome.lastupdate = "2017-03-15";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Thailand' (TH), and the value in 'Product code' (prodCode) is 'Sweet peppers/bell peppers' (P0231020A), then the value in 'Product text' (prodText) mus contain the string 'Chili peppers';";
+            outcome.error = "prodText doesn't contain the appropriate string when prodCode is peppers and progType is reported as EU increased control programme on imported food (Reg 669/2009);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progType == "K019A" && origCountry == "TH" && prodCode == "P0231020A")
+            {
+                outcome.passed = prodText.Contains("Chili peppers");
+            }
+            return outcome;
+        }
+
+
+        ///If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Thailand' (TR), then the value in 'Product code' (prodCode) can only be equal to 'Sweet peppers/bell peppers' (P0231020A), or 'Grape leaves and similar species' (P0253000A), or 'Lemons' (P0110030A), and the value in 'Product treatment' (prodTreat) can only be equal to 'Unprocessed' (T999A), or 'Freezing' (T998A), or 'Processed' (T100A), or 'Dehydration' (T131A);
+        public Outcome PEST669_TR(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var origCountry = sample.Element("origCountry").Value;
+            var prodCode = sample.Element("prodCode").Value;
+            var prodTreat = sample.Element("prodTreat").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST669_TR";
+            outcome.lastupdate = "2016-07-15";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Thailand' (TR), then the value in 'Product code' (prodCode) can only be equal to 'Sweet peppers/bell peppers' (P0231020A), or 'Grape leaves and similar species' (P0253000A), or 'Lemons' (P0110030A), and the value in 'Product treatment' (prodTreat) can only be equal to 'Unprocessed' (T999A), or 'Freezing' (T998A), or 'Processed' (T100A), or 'Dehydration' (T131A);";
+            outcome.error = "The combination of codes for origCountry, prodCode and prodTreat is not valid for progType reported as EU increased control programme on imported food (Reg 669/2009);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progType == "K019A" && origCountry == "TR")
+            {
+                var prodCodes = new List<string>();
+                prodCodes.Add("P0231020A");
+                prodCodes.Add("P0253000A");
+                prodCodes.Add("P0110030A");
+                if (!prodCodes.Contains(prodCode))
+                {
+                    outcome.passed = false;
+                }
+                var prodTreats = new List<string>();
+                prodTreats.Add("T999A");
+                prodTreats.Add("T998A");
+                prodTreats.Add("T100A");
+                prodTreats.Add("T131A");
+                if (!prodTreats.Contains(prodTreat))
+                {
+                    outcome.passed = false;
+                }
+            }
+            return outcome;
+        }
+
+        ///If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Thailand' (TR), and the value in 'Product code' (prodCode) is 'Sweet peppers/bell peppers' (P0231020A), then the value in 'Product text' (prodText) mus contain the string 'Sweet/bell peppers';
+        public Outcome PEST669_TR_a(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var origCountry = sample.Element("origCountry").Value;
+            var prodCode = sample.Element("prodCode").Value;
+            var prodText = sample.Element("prodText").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST669_TR_a";
+            outcome.lastupdate = "2017-03-15";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Thailand' (TR), and the value in 'Product code' (prodCode) is 'Sweet peppers/bell peppers' (P0231020A), then the value in 'Product text' (prodText) mus contain the string 'Sweet/bell peppers';";
+            outcome.error = "prodText doesn't contain the appropriate string when prodCode is peppers and progType is reported as EU increased control programme on imported food (Reg 669/2009);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progType == "K019A" && origCountry == "TR" && prodCode == "P0231020A")
+            {
+                outcome.passed = prodText.Contains("Sweet/bell peppers");
+            }
+            return outcome;
+        }
+
+        ///If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Viet Nam' (VN), then the value in 'Product code' (prodCode) can only be equal to 'Basil and edible flowers' (P0256080A), or 'Celery leaves'  (P0256030A), or 'Prickly pears/cactus fruits' (P0163040A), or 'Okra/lady’s fingers' (P0231040A), or 'Parsley' (P0256040A), or 'Sweet peppers/bell peppers' (P0231020A), and the value in 'Product treatment' (prodTreat) can only be equal to 'Unprocessed' (T999A);
+        public Outcome PEST669_VN(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var origCountry = sample.Element("origCountry").Value;
+            var prodCode = sample.Element("prodCode").Value;
+            var prodTreat = sample.Element("prodTreat").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST669_VN";
+            outcome.lastupdate = "2016-07-15";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Viet Nam' (VN), then the value in 'Product code' (prodCode) can only be equal to 'Basil and edible flowers' (P0256080A), or 'Celery leaves'  (P0256030A), or 'Prickly pears/cactus fruits' (P0163040A), or 'Okra/lady’s fingers' (P0231040A), or 'Parsley' (P0256040A), or 'Sweet peppers/bell peppers' (P0231020A), and the value in 'Product treatment' (prodTreat) can only be equal to 'Unprocessed' (T999A);";
+            outcome.error = "The combination of codes for origCountry, prodCode and prodTreat is not valid for progType reported as EU increased control programme on imported food (Reg 669/2009);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progType == "K019A" && origCountry == "VN")
+            {
+                var prodCodes = new List<string>();
+                prodCodes.Add("P0256080A");
+                prodCodes.Add("P0256030A");
+                prodCodes.Add("P0163040A");
+                prodCodes.Add("P0256080A");
+                prodCodes.Add("P0231040A");
+                prodCodes.Add("P0256040A");
+                prodCodes.Add("P0231020A");
+                if (!prodCodes.Contains(prodCode))
+                {
+                    outcome.passed = false;
+                }
+                var prodTreats = new List<string>();
+                prodTreats.Add("T999A");
+                if (!prodTreats.Contains(prodTreat))
+                {
+                    outcome.passed = false;
+
+                }
+            }
+            return outcome;
+        }
+
+        ///If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Viet Nam' (VN), and the value in 'Product code' (prodCode) is 'Basil and edible flowers' (P0256080A), then the value in 'Product text' (prodText) mus contain the string 'Basil' or 'Mint';
+        public Outcome PEST669_VN_a(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var origCountry = sample.Element("origCountry").Value;
+            var prodCode = sample.Element("prodCode").Value;
+            var prodText = sample.Element("prodText").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST669_VN_a";
+            outcome.lastupdate = "2017-03-15";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Viet Nam' (VN), and the value in 'Product code' (prodCode) is 'Basil and edible flowers' (P0256080A), then the value in 'Product text' (prodText) mus contain the string 'Basil' or 'Mint';";
+            outcome.error = "prodText doesn't contain the appropriate string when prodCode is peppers and progType is reported as EU increased control programme on imported food (Reg 669/2009);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progType == "K019A" && origCountry == "VN" && prodCode == "P0256080A")
+            {
+                outcome.passed = (prodText.Contains("Basil") || prodText.Contains("Mint"));
+
+            }
+            return outcome;
+        }
+
+        ///If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Viet Nam' (VN), and the value in 'Product code' (prodCode) is 'Celery leaves' (P0256030A), then the value in 'Product text' (prodText) mus contain the string 'Coriander leaves';
+        public Outcome PEST669_VN_b(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var origCountry = sample.Element("origCountry").Value;
+            var prodCode = sample.Element("prodCode").Value;
+            var prodText = sample.Element("prodText").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST669_VN_b";
+            outcome.lastupdate = "2017-03-15";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Viet Nam' (VN), and the value in 'Product code' (prodCode) is 'Celery leaves' (P0256030A), then the value in 'Product text' (prodText) mus contain the string 'Coriander leaves';";
+            outcome.error = "prodText doesn't contain the appropriate string when prodCode is peppers and progType is reported as EU increased control programme on imported food (Reg 669/2009);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progType == "K019A" && origCountry == "VN" && prodCode == "P0256030A")
+            {
+                outcome.passed = (prodText.Contains("Coriander leaves"));
+            }
+            return outcome;
+        }
+
+        ///If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Viet Nam' (VN), and the value in 'Product code' (prodCode) is 'Sweet peppers/bell peppers' (P0231020A), then the value in 'Product text' (prodText) mus contain the string 'Sweet/bell peppers' or 'Chili peppers';
+        public Outcome PEST669_VN_c(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progType = sample.Element("progType").Value;
+            var origCountry = sample.Element("origCountry").Value;
+            var prodCode = sample.Element("prodCode").Value;
+            var prodText = sample.Element("prodText").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "PEST669_VN_c";
+            outcome.lastupdate = "2017-03-15";
+            outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Viet Nam' (VN), and the value in 'Product code' (prodCode) is 'Sweet peppers/bell peppers' (P0231020A), then the value in 'Product text' (prodText) mus contain the string 'Sweet/bell peppers' or 'Chili peppers';";
+            outcome.error = "prodText doesn't contain the appropriate string when prodCode is peppers and progType is reported as EU increased control programme on imported food (Reg 669/2009);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progType == "K019A" && origCountry == "VN" && prodCode == "P0231020A")
+            {
+                outcome.passed = (prodText.Contains("Sweet/bell peppers") || prodText.Contains("Chili peppers"));
+            }
+            return outcome;
+        }
+
+        ///If the value in the data element 'Product code' (prodCode) is equal to 'Not in list' (XXXXXXA), or the value in the data element 'Parameter code' (paramCode) is equal to 'Not in list' (RF-XXXX-XXX-XXX), then the validation of the matrix tool is not possible;
+        public Outcome MTX_W06(XElement sample)
+        {
+            // <checkedDataElements>;
+            var prodCode = sample.Element("prodCode").Value;
+            var paramCode = sample.Element("paramCode").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "MTX_W06";
+            outcome.lastupdate = "2017-04-18";
+            outcome.description = "If the value in the data element 'Product code' (prodCode) is equal to 'Not in list' (XXXXXXA), or the value in the data element 'Parameter code' (paramCode) is equal to 'Not in list' (RF-XXXX-XXX-XXX), then the validation of the matrix tool is not possible;";
+            outcome.error = "WARNING: validation not possible (paramCode or prodCode are reported as Not in list);";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik
+            if (prodCode == "XXXXXXA" || paramCode == "RF-XXXX-XXX-XXX")
+            {
+                outcome.passed = false;
+
+            }
+            return outcome;
+        }
+
+
+        ///A value i
+        ///
+        /// n the data element 'EFSA Product Code' (EFSAProdCode) must be reported;
         public Outcome CHEM02(XElement sample)
         {
             // <checkedDataElements>;
@@ -2082,6 +2673,7 @@ namespace EfsaBusinessRuleValidator
         public string type { get; set; }
         public string name { get; set; }
         public string version { get; set; }
+        public string lastupdate { get; set; }
     }
 
 }
