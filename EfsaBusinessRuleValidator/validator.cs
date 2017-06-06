@@ -875,24 +875,31 @@ namespace EfsaBusinessRuleValidator
 
 
 
-        ///A value in the data element 'Laboratory' (labCode) must be reported;
+        ///If the value in the data element 'Product code' (prodCode) is equal to 'Honey and other apicultural products' (P1040000A) and a sample different from 'Honey' is analysed, then a value in the data element 'Product text' (prodText) should be reported;
         public Outcome PEST01(XElement sample)
         {
+            // <checkedDataElements>;
+            var prodCode = sample.Element("prodCode").Value;
+            var prodText = sample.Element("prodText").Value;
+
             var outcome = new Outcome();
             outcome.name = "PEST01";
-            outcome.description = "A value in the data element 'Laboratory' (labCode) must be reported;";
-            outcome.error = "labCode is missing, though mandatory;";
+            outcome.lastupdate = "2017-04-11";
+            outcome.description = "If the value in the data element 'Product code' (prodCode) is equal to 'Honey and other apicultural products' (P1040000A) and a sample different from 'Honey' is analysed, then a value in the data element 'Product text' (prodText) should be reported;";
+            outcome.error = "WARNING: when prodCode reported is honey and other apicultural products and the concerned sample is not honey at such (e.g. royal jelly, pollen, etc.), then prodText should be provided;";
+            outcome.type = "warning";
             outcome.passed = true;
 
             //Logik
-            if (sample.Element("labCode") == null)
+            if (prodCode == "P1040000A")
             {
-                outcome.passed = false;
+                outcome.passed = String.IsNullOrEmpty(prodText) == false;
             }
+           
             return outcome;
         }
         ///A value in the data element 'Result LOQ' (resLOQ) must be reported;
-        public Outcome PEST02(XElement sample)
+        public Outcome PEST02_OLD(XElement sample)
         {
             var outcome = new Outcome();
             outcome.name = "PEST02";
@@ -908,7 +915,7 @@ namespace EfsaBusinessRuleValidator
             return outcome;
         }
         ///A value in the data element 'Evaluation of the result' (resEvaluation) must be reported;
-        public Outcome PEST03(XElement sample)
+        public Outcome PEST03_OBSOLETE(XElement sample)
         {
             var outcome = new Outcome();
             outcome.name = "PEST03";
@@ -925,7 +932,7 @@ namespace EfsaBusinessRuleValidator
         }
 
         ///A value in the data element 'Method of production' (prodProdMeth) must be reported;
-        public Outcome PEST04(XElement sample)
+        public Outcome PEST04_OLD(XElement sample)
         {
             var outcome = new Outcome();
             outcome.name = "PEST04";
@@ -942,7 +949,7 @@ namespace EfsaBusinessRuleValidator
         }
 
         ///If the value in the data element 'Evaluation of the result' (resEvaluation) is equal to 'greater than maximum permissible quantities' (J003A), or 'Compliant due to measurement uncertainty' (J031A), then the value in 'Type of result' (resType) must be equal to 'VAL';
-        public Outcome PEST05(XElement sample)
+        public Outcome PEST05_OLD(XElement sample)
         {
             var outcome = new Outcome();
             outcome.name = "PEST05";
@@ -959,7 +966,7 @@ namespace EfsaBusinessRuleValidator
         }
 
         ///If the value in the data element 'Evaluation of the result' (resEvaluation) is equal to 'greater than maximum permissible quantities' (J003A), or 'Compliant due to measurement uncertainty' (J031A), then the value in 'Result value' (resVal) must be greater than 'Legal Limit for the result' (resLegalLimit);
-        public Outcome PEST06(XElement sample)
+        public Outcome PEST06_OLD(XElement sample)
         {
             var outcome = new Outcome();
             outcome.name = "PEST06";
@@ -975,9 +982,74 @@ namespace EfsaBusinessRuleValidator
             return outcome;
         }
 
+        ///If the value in the data element 'Product code' (prodCode) is 'Food for infants and young children' (PX100000A), or 'Baby foods other than processed cereal-based foods' (PX100001A), or 'Processed cereal-based foods for infants and young children' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A), then the value in the data element 'Product treatment' (prodTreat) must be equal to 'Processed' (T100A);
+        public Outcome PEST04(XElement sample)
+        {
+            // <checkedDataElements>;
+            var prodCode = (string)sample.Element("prodCode");
+            var prodTreat = (string)sample.Element("prodTreat");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST04";
+            outcome.lastupdate = "2016-04-25";
+            outcome.description = "If the value in the data element 'Product code' (prodCode) is 'Food for infants and young children' (PX100000A), or 'Baby foods other than processed cereal-based foods' (PX100001A), or 'Processed cereal-based foods for infants and young children' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A), then the value in the data element 'Product treatment' (prodTreat) must be equal to 'Processed' (T100A);";
+            outcome.error = "prodTreat is not processed, though prodCode is a baby food;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            var prodCodes = new List<string>();
+
+            prodCodes.Add("PX100000A");
+            prodCodes.Add("PX100001A");
+            prodCodes.Add("PX100003A");
+            prodCodes.Add("PX100004A");
+            prodCodes.Add("PX100005A");
+
+            if (prodCodes.Contains(prodCode))
+
+            {
+                outcome.passed = prodTreat == "T100A";
+            }
+            return outcome;
+        }
+        ///If the value in the data element 'Product code' (prodCode) is equal to 'Pulses (dry)' (P0300000A), or 'Beans (dry)' (P0300010A), or 'Lentils (dry)' (P0300020A), or 'Peas (dry)' (P0300030A), or 'Lupins (dry)' (P0300040A), or 'Other pulses (dry)' (P0300990A), then the value in the data element 'Product treatment' (prodTreat) can't be equal to 'Dehydration' (T131A);
+        public Outcome PEST07(XElement sample)
+        {
+            // <checkedDataElements>;
+            var prodCode = (string)sample.Element("prodCode");
+            var prodTreat = (string)sample.Element("prodTreat");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST07";
+            outcome.lastupdate = "2017-04-11";
+            outcome.description = "If the value in the data element 'Product code' (prodCode) is equal to 'Pulses (dry)' (P0300000A), or 'Beans (dry)' (P0300010A), or 'Lentils (dry)' (P0300020A), or 'Peas (dry)' (P0300030A), or 'Lupins (dry)' (P0300040A), or 'Other pulses (dry)' (P0300990A), then the value in the data element 'Product treatment' (prodTreat) can't be equal to 'Dehydration' (T131A);";
+            outcome.error = "prodTreat is dehydration, though this value is not allowed when prodCode belongs to the 'Pulses (dry seeds)' food group;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            var prodCodes = new List<string>();
+            prodCodes.Add("P0300000A");
+            prodCodes.Add("P0300010A");
+            prodCodes.Add("P0300020A");
+            prodCodes.Add("P0300030A");
+            prodCodes.Add("P0300040A");
+            prodCodes.Add("P0300990A");
+            if (prodCodes.Contains(prodCode))
+            {
+                var prodTreats = new List<string>();
+                prodTreats.Add("T131A");
+                if (prodTreats.Contains(prodTreat))
+                {
+                    outcome.passed = false;
+                }
+            }
+ 
+            return outcome;
+        }
 
         ///If the value in the data element 'Product code' (prodCode) is 'Food for infants and young children' (PX100000A), or 'Baby food for infants and young childern' (PX100001A), or 'Processed cereal-based baby foods (e.g. cereal and pastas to be reconstituted with milk or other liquids)' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A), then the value in the data element 'Product treatment' (prodTreat) must be equal to 'Processed' (T100A);
-        public Outcome PEST07(XElement sample)
+        public Outcome PEST07_OLD(XElement sample)
         {
             // <checkedDataElements>;
             //prodCode;
@@ -1007,8 +1079,83 @@ namespace EfsaBusinessRuleValidator
             return outcome;
         }
 
-        ///If the value in the data element 'Product code' (prodCode) is 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A), then the value in the data element 'Product treatment' (prodTreat) must be equal to 'Dehydration' (T131A), or 'Churning' (T134A), or 'Milk pasteurisation' (T150A), or 'Unprocessed' (T999A);
+        ///If the value in the data element 'Product code' (prodCode) is 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A), then the value in the data element 'Product treatment' (prodTreat) must be equal to 'Dehydration' (T131A), or 'Churning' (T134A), 'Churning - butter' (T152A), or 'Churning - cheese' (T153A), 'Churning - cream' (T154A), or 'Churning - yougurt' (T155A), or 'Milk pasteurisation' (T150A), or 'Freezing' (T998A), or 'Concentration' (T136A), or 'Unprocessed' (T999A);
+        public Outcome PEST05(XElement sample)
+        {
+            // <checkedDataElements>;
+            var prodCode = (string)sample.Element("prodCode");
+            var prodTreat = (string)sample.Element("prodTreat");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST05";
+            outcome.lastupdate = "2017-04-11";
+            outcome.description = "If the value in the data element 'Product code' (prodCode) is 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A), then the value in the data element 'Product treatment' (prodTreat) must be equal to 'Dehydration' (T131A), or 'Churning' (T134A), 'Churning - butter' (T152A), or 'Churning - cheese' (T153A), 'Churning - cream' (T154A), or 'Churning - yougurt' (T155A), or 'Milk pasteurisation' (T150A), or 'Freezing' (T998A), or 'Concentration' (T136A), or 'Unprocessed' (T999A);";
+            outcome.error = "prodTreat is not dehydration, churning, milk pasteurisation, freezing, concentration or unprocessed, though prodCode is milk of animal origin;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+
+
+            //Logik
+            var prodCodes = new List<string>();
+            prodCodes.Add("PX100000A");
+            prodCodes.Add("PX100001A");
+            prodCodes.Add("PX100003A");
+            prodCodes.Add("PX100004A");
+            prodCodes.Add("PX100005A");
+            if (prodCodes.Contains(prodCode))
+            {
+                var tillstand = new List<string>();
+                tillstand.Add("T131A");
+                tillstand.Add("T134A");
+                tillstand.Add("T136A");
+                tillstand.Add("T150A");
+                tillstand.Add("T152A");
+                tillstand.Add("T153A");
+                tillstand.Add("T154A");
+                tillstand.Add("T155A");
+                tillstand.Add("T998A");
+                tillstand.Add("T999A");
+                outcome.passed = tillstand.Contains(prodTreat);
+
+            }
+            return outcome;
+        }
+
+        ///If the value in the data element 'Programme legal reference' (progLegalRef) is 'Samples of food products falling under Directive 2006/125/EC or 2006/141/EC' (N028A), then the value in the data element 'Product code' (prodCode) must be 'Food for infants and young children' (PX100000A), or 'Baby foods other than processed cereal-based foods' (PX100001A), or 'Processed cereal-based foods for infants and young children' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A);
         public Outcome PEST08(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progLegalRef = (string)sample.Element("progLegalRef");
+            var prodCode = (string)sample.Element("prodCode");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST08";
+            outcome.lastupdate = "2016-04-06";
+            outcome.description = "If the value in the data element 'Programme legal reference' (progLegalRef) is 'Samples of food products falling under Directive 2006/125/EC or 2006/141/EC' (N028A), then the value in the data element 'Product code' (prodCode) must be 'Food for infants and young children' (PX100000A), or 'Baby foods other than processed cereal-based foods' (PX100001A), or 'Processed cereal-based foods for infants and young children' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A);";
+            outcome.error = "prodCode is not a baby food, though progLegalRef is samples of food products falling under Directive 2006/125/EC or 2006/141/EC;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (progLegalRef == "N028A")
+            {
+                var prodCodes = new List<string>();
+                prodCodes.Add("PX100000A");
+                prodCodes.Add("PX100001A");
+                prodCodes.Add("PX100003A");
+                prodCodes.Add("PX100004A");
+                prodCodes.Add("PX100005A");
+                if (!prodCodes.Contains(prodCode))
+                {
+                    outcome.passed = false;
+                }
+            }
+           
+            return outcome;
+        }
+        ///If the value in the data element 'Product code' (prodCode) is 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A), then the value in the data element 'Product treatment' (prodTreat) must be equal to 'Dehydration' (T131A), or 'Churning' (T134A), or 'Milk pasteurisation' (T150A), or 'Unprocessed' (T999A);
+        public Outcome PEST08_OBSOLETE(XElement sample)
         {
             // <checkedDataElements>;
             //prodCode;
@@ -1046,7 +1193,124 @@ namespace EfsaBusinessRuleValidator
         }
 
         ///If the value in the data element 'Product treatment' (prodTreat) is 'Milk pasteurisation' (T150A), then the value in the data element 'Product code' (prodCode) must be equal to 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A);
+        public Outcome PEST06(XElement sample)
+        {
+            // <checkedDataElements>;
+            var prodCode = (string)sample.Element("prodCode");
+            var prodTreat = (string)sample.Element("prodTreat");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST06";
+            outcome.lastupdate = "2016-04-25";
+            outcome.description = "If the value in the data element 'Product treatment' (prodTreat) is 'Milk pasteurisation' (T150A), then the value in the data element 'Product code' (prodCode) must be equal to 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A);";
+            outcome.error = "prodCode is not milk of animal origin, though prodTreat is milk pasteurisation;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (prodTreat == "T150A")
+            {
+                var produktkoder = new List<string>();
+                produktkoder.Add("P1020000A");
+                produktkoder.Add("P1020010A");
+                produktkoder.Add("P1020020A");
+                produktkoder.Add("P1020030A");
+                produktkoder.Add("P1020040A");
+                produktkoder.Add("P1020990A");
+                outcome.passed = produktkoder.Contains(prodCode);
+            }
+       
+            return outcome;
+        }
+
+        ///If the value in the data element 'Product code' (prodCode) is 'Food for infants and young children' (PX100000A), or 'Baby foods other than processed cereal-based foods' (PX100001A), or 'Processed cereal-based foods for infants and young children' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A), then the value in the data element 'Programme legal  reference' (progLegalRef) must be 'Samples of food products falling under Directive 2006/125/EC or 2006/141/EC' (N028A);
         public Outcome PEST09(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progLegalRef = (string)sample.Element("progLegalRef");
+            var prodCode = (string)sample.Element("prodCode");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST09";
+            outcome.lastupdate = "2016-04-06";
+            outcome.description = "If the value in the data element 'Product code' (prodCode) is 'Food for infants and young children' (PX100000A), or 'Baby foods other than processed cereal-based foods' (PX100001A), or 'Processed cereal-based foods for infants and young children' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A), then the value in the data element 'Programme legal  reference' (progLegalRef) must be 'Samples of food products falling under Directive 2006/125/EC or 2006/141/EC' (N028A);";
+            outcome.error = "progLegalRef is not samples of food products falling under Directive 2006/125/EC or 2006/141/EC, though prodCode is a baby food;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+           
+                var prodCodes = new List<string>();
+                prodCodes.Add("PX100000A");
+                prodCodes.Add("PX100001A");
+                prodCodes.Add("PX100003A");
+                prodCodes.Add("PX100004A");
+                prodCodes.Add("PX100005A");
+                if (prodCodes.Contains(prodCode))
+                {
+                    var progLegalRefs = new List<string>();
+                    progLegalRefs.Add("N028A");
+                    if (!progLegalRefs.Contains(progLegalRef))
+                    {
+                        outcome.passed = false;
+                    }                
+                }
+            return outcome;
+        }
+        ///The value in the data element 'Laboratory accreditation' (labAccred) must be equal to 'Accredited' (L001A), or 'None' (L003A);
+        public Outcome PEST10(XElement sample)
+        {
+            // <checkedDataElements>;
+            var labAccred = (string)sample.Element("labAccred");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST10";
+            outcome.lastupdate = "2016-04-25";
+            outcome.description = "The value in the data element 'Laboratory accreditation' (labAccred) must be equal to 'Accredited' (L001A), or 'None' (L003A);";
+            outcome.error = "labAccred is not accredited or none;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            var labAccreds = new List<string>();
+            labAccreds.Add("L001A");
+            labAccreds.Add("L003A");
+            if (!labAccreds.Contains(labAccred))
+            {
+                outcome.passed = false;
+            }
+            return outcome;
+        }
+
+       
+        ///The value in the data element 'Result unit' (resUnit) must be equal to 'Milligram per kilogram' (G061A);
+        public Outcome PEST11(XElement sample)
+        {
+            // <checkedDataElements>;
+            var resUnit = (string)sample.Element("resUnit");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST11";
+            outcome.lastupdate = "2016-04-25";
+            outcome.description = "The value in the data element 'Result unit' (resUnit) must be equal to 'Milligram per kilogram' (G061A);";
+            outcome.error = "resUnit is not reported in milligram per kilogram;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+           
+                var resUnits = new List<string>();
+                resUnits.Add("G061A");
+                if (!resUnits.Contains(resUnit))
+                {
+                    outcome.passed = false;
+                }
+
+            return outcome;
+        }
+
+        ///If the value in the data element 'Product treatment' (prodTreat) is 'Milk pasteurisation' (T150A), then the value in the data element 'Product code' (prodCode) must be equal to 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A);
+        public Outcome PEST09_OBSOLETE(XElement sample)
         {
             // <checkedDataElements>;
             //prodCode;
@@ -1076,8 +1340,394 @@ namespace EfsaBusinessRuleValidator
             return outcome;
         }
 
+        ///The value in the data element (exprRes) can only be equal to 'Whole weight' (B001A), or 'Fat basis' (B003A), or 'Reconstituted product' (B007A);
+        public Outcome PEST12(XElement sample)
+        {
+            // <checkedDataElements>;
+            var exprRes = (string)sample.Element("exprRes");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST12";
+            outcome.lastupdate = "2016-04-25";
+            outcome.description = "The value in the data element (exprRes) can only be equal to 'Whole weight' (B001A), or 'Fat basis' (B003A), or 'Reconstituted product' (B007A);";
+            outcome.error = "exprRes is not whole weight, or fat basis, or reconstituted product;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (!string.IsNullOrEmpty(exprRes))
+            { 
+                var exprRess = new List<string>();
+                exprRess.Add("B001A");
+                exprRess.Add("B003A");
+                exprRess.Add("B007A");
+                if (!exprRess.Contains(exprRes) )
+                {
+                    outcome.passed = false;
+                }
+            }
+            return outcome;
+        }
+        ///If the value in the data element 'Expression of result' (exprRes) is 'Reconstituted product' (B007A), then the value in the data element 'Product code' (prodCode) should be 'Food for infants and young children' (PX100000A), or 'Baby foods other than processed cereal-based foods' (PX100001A), or 'Processed cereal-based foods for infants and young children' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A);
+        public Outcome PEST13(XElement sample)
+        {
+            // <checkedDataElements>;
+            var exprRes = (string)sample.Element("exprRes");
+            var prodCode = (string)sample.Element("prodCode");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST13";
+            outcome.lastupdate = "2016-04-06";
+            outcome.description = "If the value in the data element 'Expression of result' (exprRes) is 'Reconstituted product' (B007A), then the value in the data element 'Product code' (prodCode) should be 'Food for infants and young children' (PX100000A), or 'Baby foods other than processed cereal-based foods' (PX100001A), or 'Processed cereal-based foods for infants and young children' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A);";
+            outcome.error = "WARNING: prodCode is not a baby food, though exprRes is reconstituted product;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            if (exprRes == "B007A")
+            {
+                var prodCodes = new List<string>();
+                prodCodes.Add("PX100000A");
+                prodCodes.Add("PX100001A");
+                prodCodes.Add("PX100003A");
+                prodCodes.Add("PX100004A");
+                prodCodes.Add("PX100005A");
+                if (!prodCodes.Contains(prodCode))
+                {
+                    outcome.passed = false;
+                }
+            }
+            
+            return outcome;
+        }
+        ///If the value in the data element 'Expression of result' (exprRes) is 'Fat weight' (B003A), then the value in the data element 'Product code' (prodCode) must be 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A), or 'Bird eggs' (P1030000A), or 'Eggs Chicken' (P1030010A), or 'Eggs Duck' (P1030020A), or 'Eggs Goose' (P1030030A), or 'Eggs Quail' (P1030040A), or 'Eggs Others' (P1030990A);
+        public Outcome PEST14(XElement sample)
+        {
+            // <checkedDataElements>;
+            var exprRes = (string)sample.Element("exprRes");
+            var prodCode = (string)sample.Element("prodCode");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST14";
+            outcome.lastupdate = "2016-04-06";
+            outcome.description = "If the value in the data element 'Expression of result' (exprRes) is 'Fat weight' (B003A), then the value in the data element 'Product code' (prodCode) must be 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A), or 'Bird eggs' (P1030000A), or 'Eggs Chicken' (P1030010A), or 'Eggs Duck' (P1030020A), or 'Eggs Goose' (P1030030A), or 'Eggs Quail' (P1030040A), or 'Eggs Others' (P1030990A);";
+            outcome.error = "prodCode is not milk of animal origin or egg samples, though exprRes is fat weight;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            if (exprRes == "B003A")
+            {
+                var prodCodes = new List<string>();
+                prodCodes.Add("P1020000A");
+                prodCodes.Add("P1020010A");
+                prodCodes.Add("P1020020A");
+                prodCodes.Add("P1020030A");
+                prodCodes.Add("P1020040A");
+                prodCodes.Add("P1020990A");
+                prodCodes.Add("P1030000A");
+                prodCodes.Add("P1030010A");
+                prodCodes.Add("P1030020A");
+                prodCodes.Add("P1030030A");
+                prodCodes.Add("P1030040A");
+                prodCodes.Add("P1030990A");
+                if (!prodCodes.Contains(prodCode))
+                {
+                    outcome.passed = false;
+                }
+            }
+         
+            return outcome;
+        }
+
         ///If the value in the data element 'Product code' (prodCode) is 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A), and the value in the data element 'Expression of result' (exprRes) is 'Whole weight' (B001A), and the value in 'Percentage of fat in the original sample' (fatPerc) is not reported, then EFSA will assume a fat content equal to 4%;
-        public Outcome PEST10(XElement sample)
+        public Outcome PEST15(XElement sample)
+        {
+            // <checkedDataElements>;
+            var prodCode = (string)sample.Element("prodCode");
+            var exprRes = (string)sample.Element("exprRes");
+            var fatPerc = (string)sample.Element("fatPerc");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST15";
+            outcome.lastupdate = "2016-04-25";
+            outcome.description = "If the value in the data element 'Product code' (prodCode) is 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A), and the value in the data element 'Expression of result' (exprRes) is 'Whole weight' (B001A), and the value in 'Percentage of fat in the original sample' (fatPerc) is not reported, then EFSA will assume a fat content equal to 4%;";
+            outcome.error = "WARNING: fat percentage in milk of animal origin on whole weight basis is not reported; EFSA will assume a fat content equal to 4%;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik (ignore null: no);
+                var prodCodes = new List<string>();
+                prodCodes.Add("P1020000A");
+                prodCodes.Add("P1020010A");
+                prodCodes.Add("P1020020A");
+                prodCodes.Add("P1020030A");
+                prodCodes.Add("P1020040A");
+                prodCodes.Add("P1020990A");
+                if (prodCodes.Contains(prodCode) && exprRes == "B001A")
+                {
+                    outcome.passed = String.IsNullOrEmpty(fatPerc) == false;
+
+                }
+            return outcome;
+        }
+
+        ///If the value in the data element 'Product code' (prodCode) is ''Bird eggs' (P1030000A), or 'Eggs Chicken' (P1030010A), or 'Eggs Duck' (P1030020A), or 'Eggs Goose' (P1030030A), or 'Eggs Quail' (P1030040A), or 'Eggs Others' (P1030990A), and the value in the data element 'Expression of result' (exprRes) is 'Whole weight' (B001A), and the value in 'Percentage of fat in the original sample' (fatPerc) is not reported, then EFSA will assume a fat content equal to 10%;
+        public Outcome PEST16(XElement sample)
+        {
+            // <checkedDataElements>;
+            var prodCode = (string)sample.Element("prodCode");
+            var exprRes = (string)sample.Element("exprRes");
+            var fatPerc = (string)sample.Element("fatPerc");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST16";
+            outcome.lastupdate = "2016-04-25";
+            outcome.description = "If the value in the data element 'Product code' (prodCode) is ''Bird eggs' (P1030000A), or 'Eggs Chicken' (P1030010A), or 'Eggs Duck' (P1030020A), or 'Eggs Goose' (P1030030A), or 'Eggs Quail' (P1030040A), or 'Eggs Others' (P1030990A), and the value in the data element 'Expression of result' (exprRes) is 'Whole weight' (B001A), and the value in 'Percentage of fat in the original sample' (fatPerc) is not reported, then EFSA will assume a fat content equal to 10%;";
+            outcome.error = "WARNING: fat percentage in egg samples on whole weight basis is not reported; EFSA will assume a fat content equal to 10%;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik (ignore null: no);
+             var prodCodes = new List<string>();
+                prodCodes.Add("P1030000A");
+                prodCodes.Add("P1030010A");
+                prodCodes.Add("P1030020A");
+                prodCodes.Add("P1030030A");
+                prodCodes.Add("P1030040A");
+                prodCodes.Add("P1030990A");
+                if (prodCodes.Contains(prodCode) && exprRes == "B001A")
+                {
+                    outcome.passed = String.IsNullOrEmpty(fatPerc) == false; ;
+                }
+            return outcome;
+        }
+
+        ///If the value in the data element 'Evaluation of the result' (resEvaluation) is equal to 'greater than maximum permissible quantities' (J003A), or 'Compliant due to measurement uncertainty' (J031A), then the value in 'Type of result' (resType) must be equal to 'VAL';
+        public Outcome PEST17(XElement sample)
+        {
+            // <checkedDataElements>;
+            var resEvaluation = (string)sample.Element("resEvaluation");
+            var resType = (string)sample.Element("resType");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST17";
+            outcome.lastupdate = "2016-04-25";
+            outcome.description = "If the value in the data element 'Evaluation of the result' (resEvaluation) is equal to 'greater than maximum permissible quantities' (J003A), or 'Compliant due to measurement uncertainty' (J031A), then the value in 'Type of result' (resType) must be equal to 'VAL';";
+            outcome.error = "resType is different from VAL, though resEvaluation is 'greater than maximum permissible quantities' or 'compliant due to measurement uncertainty';";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            var resEvaluations = new List<string>();
+            resEvaluations.Add("J003A");
+            resEvaluations.Add("J031A");
+            if (!resEvaluations.Contains(resEvaluation))
+            {
+                outcome.passed = resType == "VAL";
+            }
+            return outcome;
+        }
+
+        ///The value in the data element 'Type of legal limit' (resLegalLimitType) should be equal to 'Maximum Residue Level (MRL)' (W002A), or 'National or local limit' (W990A);
+        public Outcome PEST18(XElement sample)
+        {
+            // <checkedDataElements>;
+            var resLegalLimitType = (string)sample.Element("resLegalLimitType");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST18";
+            outcome.lastupdate = "2016-04-25";
+            outcome.description = "The value in the data element 'Type of legal limit' (resLegalLimitType) should be equal to 'Maximum Residue Level (MRL)' (W002A), or 'National or local limit' (W990A);";
+            outcome.error = "WARNING: resLegalLimitType is different from MRL and national or local limit;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+           
+                var resLegalLimitTypes = new List<string>();
+                resLegalLimitTypes.Add("W002A");
+                resLegalLimitTypes.Add("W990A");
+                if (!resLegalLimitTypes.Contains(resLegalLimitType))
+                {
+                    outcome.passed = false;
+                }
+
+            return outcome;
+        }
+        ///If the value in the data element 'Evaluation of the result' (resEvaluation) is equal to 'greater than maximum permissible quantities' (J003A), or 'Compliant due to measurement uncertainty' (J031A), then the value in 'Result value' (resVal) must be greater than 'Legal Limit for the result' (resLegalLimit);
+        public Outcome PEST19(XElement sample)
+        {
+            // <checkedDataElements>;
+            var resEvaluation = (string)sample.Element("resEvaluation");
+            var resVal = (string)sample.Element("resVal");
+            var resLegalLimit = (string)sample.Element("resLegalLimit");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST19";
+            outcome.lastupdate = "2016-04-25";
+            outcome.description = "If the value in the data element 'Evaluation of the result' (resEvaluation) is equal to 'greater than maximum permissible quantities' (J003A), or 'Compliant due to measurement uncertainty' (J031A), then the value in 'Result value' (resVal) must be greater than 'Legal Limit for the result' (resLegalLimit);";
+            outcome.error = "resVal is less than or equal to resLegalLimit, though resEvaluation is 'greater than maximum permissible quantities', or 'compliant due to measurement uncertainty';";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            var resEvaluations = new List<string>();
+            resEvaluations.Add("J003A");
+            resEvaluations.Add("J031A");
+            if (resEvaluations.Contains(resEvaluation))
+            {
+                outcome.passed = PD(resVal) > PD(resLegalLimit) ;
+            }
+          
+            return outcome;
+        }
+
+        ///If the value in the data element 'Type of result' (resType) is 'Qualitative Value (Binary)' (BIN), then the data element 'Result value' (resVal) must be empty;
+        public Outcome PEST20(XElement sample)
+        {
+            // <checkedDataElements>;
+            var resType = (string)sample.Element("resType");
+            var resVal = (string)sample.Element("resVal");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST20";
+            outcome.lastupdate = "2016-04-06";
+            outcome.description = "If the value in the data element 'Type of result' (resType) is 'Qualitative Value (Binary)' (BIN), then the data element 'Result value' (resVal) must be empty;";
+            outcome.error = "resVal is reported, though resType is qualitative value (binary);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik (ignore null: no);
+            if (resType == "BIN")
+            {
+                outcome.passed = string.IsNullOrEmpty(resVal);
+            }
+            
+            return outcome;
+        }
+        ///If the value in the data element 'Result type' (resType) is equal to 'Non Quantified Value (below LOQ)' (LOQ), then the value in the data element 'Result value' (resVal) should not be greater than the value in the data element 'Result LOQ' (resLOQ);
+        public Outcome PEST21(XElement sample)
+        {
+            // <checkedDataElements>;
+            var resType = (string)sample.Element("resType");
+            var resLOQ = (string)sample.Element("resLOQ");
+            var resVal = (string)sample.Element("resVal");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST21";
+            outcome.lastupdate = "2016-07-15";
+            outcome.description = "If the value in the data element 'Result type' (resType) is equal to 'Non Quantified Value (below LOQ)' (LOQ), then the value in the data element 'Result value' (resVal) should not be greater than the value in the data element 'Result LOQ' (resLOQ);";
+            outcome.error = "WARNING: resType is LOQ for a result that contains a value greater than the reported LOQ;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            if (resType == "LOQ")
+            {
+                outcome.passed = PD(resLOQ) > PD(resVal);
+            }
+            
+            return outcome;
+        }
+
+        ///If the value in the data element 'Result type' (resType) is equal to 'Numerical Value' (VAL), then the value in the data element 'Result LOQ' (resLOQ) should not be greater than the value in the data element 'Result value' (resVal) (if the result is a positive detection, the result value cannot be below the reported LOQ);
+        public Outcome PEST22(XElement sample)
+        {
+            // <checkedDataElements>;
+            var resType = (string)sample.Element("resType");
+            var resLOQ = (string)sample.Element("resLOQ");
+            var resVal = (string)sample.Element("resVal");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST22";
+            outcome.lastupdate = "2016-07-15";
+            outcome.description = "If the value in the data element 'Result type' (resType) is equal to 'Numerical Value' (VAL), then the value in the data element 'Result LOQ' (resLOQ) should not be greater than the value in the data element 'Result value' (resVal) (if the result is a positive detection, the result value cannot be below the reported LOQ);";
+            outcome.error = "WARNING: resType is VAL for a result that contains a value less than the reported LOQ;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            if (resType == "VAL")
+            {
+                outcome.passed = PD(resVal) > PD(resLOQ);
+            }
+           
+            return outcome;
+        }
+        ///If the value in the data element 'Type of parameter' (paramType) is different from 'Part of a sum' (P002A) and the value in the data element 'Result value' (resVal) is greater than or equal to the value in the data element 'Legal Limit for the result' (resLegalLimit), then the value in the data element 'Evaluation of the result' (resEvaluation) should be different from 'Result not evaluated' (J029A);
+        public Outcome PEST23(XElement sample)
+        {
+            // <checkedDataElements>;
+            var paramType = (string)sample.Element("paramType");
+            var resVal = (string)sample.Element("resVal");
+            var resLegalLimit = (string)sample.Element("resLegalLimit");
+            var resEvaluation = (string)sample.Element("resEvaluation");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST23";
+            outcome.lastupdate = "2016-07-15";
+            outcome.description = "If the value in the data element 'Type of parameter' (paramType) is different from 'Part of a sum' (P002A) and the value in the data element 'Result value' (resVal) is greater than or equal to the value in the data element 'Legal Limit for the result' (resLegalLimit), then the value in the data element 'Evaluation of the result' (resEvaluation) should be different from 'Result not evaluated' (J029A);";
+            outcome.error = "WARNING: where resVal greater than or equal to resLegalLimit, then the resEvaluation is not expected to be not evaluated;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            if (!String.IsNullOrEmpty(resVal))
+            { 
+                if (paramType != "P002A" && PD(resVal) > PD(resLegalLimit))
+                {
+                    outcome.passed = resEvaluation != "J029A";
+
+                }
+            }
+            return outcome;
+        }
+        ///If the value in the data element 'Result value recovery corrected' (resValRecCorr) is equal to 'Yes' (Y), then a value in the data element 'Result value recovery' (resValRec) should be reported;
+        public Outcome PEST24(XElement sample)
+        {
+            // <checkedDataElements>;
+            var resValRecCorr = (string)sample.Element("resValRecCorr");
+            var resValRec = (string)sample.Element("resValRec");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST24";
+            outcome.lastupdate = "2016-07-15";
+            outcome.description = "If the value in the data element 'Result value recovery corrected' (resValRecCorr) is equal to 'Yes' (Y), then a value in the data element 'Result value recovery' (resValRec) should be reported;";
+            outcome.error = "WARNING: resValRec is missing, though resValRecCorr is reported; if the result is corrected for recovery the corrected value should be reported (mean recovery out of 70-120%);";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik (ignore null: no);
+            if (resValRecCorr == "Y")
+            {
+                outcome.passed = string.IsNullOrEmpty(resValRecCorr) == false;
+            }
+            
+            return outcome;
+        }
+
+        ///The value in the data element 'Sampling year' (sampY) should be equal to 2016;
+        public Outcome PEST25(XElement sample)
+        {
+            // <checkedDataElements>;
+            var sampY = (string)sample.Element("sampY");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST25";
+            outcome.lastupdate = "2017-04-11";
+            outcome.description = "The value in the data element 'Sampling year' (sampY) should be equal to 2016;";
+            outcome.error = "sampY is different from 2016;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            outcome.passed = sampY == "2016";
+            return outcome;
+        }
+
+        ///If the value in the data element 'Product code' (prodCode) is 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A), and the value in the data element 'Expression of result' (exprRes) is 'Whole weight' (B001A), and the value in 'Percentage of fat in the original sample' (fatPerc) is not reported, then EFSA will assume a fat content equal to 4%;
+        public Outcome PEST10_OLD(XElement sample)
         {
             // <checkedDataElements>;
             //prodCode;
@@ -1118,7 +1768,7 @@ namespace EfsaBusinessRuleValidator
         }
 
         ///If the value in the data element 'Type of result' (resType) is 'Qualitative Value (Binary)' (BIN), then the data element 'Result value' (resVal) must be empty;
-        public Outcome PEST11(XElement sample)
+        public Outcome PEST11_OLD(XElement sample)
         {
             // <checkedDataElements>;
             //resType;
@@ -1140,7 +1790,7 @@ namespace EfsaBusinessRuleValidator
         }
 
         ///If the value in the data element 'Programme legal  reference' (progLegalRef) is 'Samples of food products falling under Directive 2006/125/EC or 2006/141/EC' (N028A), then the value in the data element 'Product code' (prodCode) must be 'Food for infants and young children' (PX100000A), or 'Baby food for infants and young childern' (PX100001A), or 'Processed cereal-based baby foods (e.g. cereal and pastas to be reconstituted with milk or other liquids)' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A);
-        public Outcome PEST12(XElement sample)
+        public Outcome PEST12_OBSOLETE(XElement sample)
         {
             // <checkedDataElements>;
             //progLegalRef;
@@ -1406,8 +2056,66 @@ namespace EfsaBusinessRuleValidator
 
             return outcome;
         }
+
+        ///The value in the data element 'Product Treatment Code' (prodTreat) should be 'Processed' (T100A), or 'Peeling (inedible peel)' (T101A), or 'Peeling (edible peel)' (T102A), or 'Juicing' (T103A), or 'Oil production (Not Specified)' (T104A), or 'Milling (Not Specified)' (T110A), or 'Milling - unprocessed flour' (T111A), or 'Milling - refined flour' (T112A), or  'Milling - bran production' (T113A), or 'Polishing' (T114A), or Sugar production (Not Specified)' (T116A), or 'Canning' (T120A), or Preserving' (T121A), or 'Production of alcoholic beverages (Not Specified)' (T122A), or 'Wine production (Not Specified)' (T123A), or 'Wine production - white wine' (T124A), or 'Wine production - red wine cold process' (T125A), 'Cooking in water' (T128A), or 'Cooking in oil (Frying)' (T129A), or 'Cooking in air (Baking)' (T130A), or 'Dehydration' (T131A), or 'Fermentation' (T132A), or 'Churning' (T134A), or 'Concentration' (T136A), 'Wet-milling' (T148A), or 'Milk pasteurisation' (T150A), or 'Churning - butter' (T152A), or 'Churning - cheese' (T153A), 'Churning - cream' (T154A), or 'Churning - yougurt' (T155A), or 'Unprocessed' (T999A), or 'Freezing' (T998A);
+        public Outcome PEST03(XElement sample)
+        {
+            // <checkedDataElements>;
+            var prodTreat = (string)sample.Element("prodTreat");
+
+            var outcome = new Outcome();
+            outcome.name = "PEST03";
+            outcome.lastupdate = "2017-04-11";
+            outcome.description = "The value in the data element 'Product Treatment Code' (prodTreat) should be 'Processed' (T100A), or 'Peeling (inedible peel)' (T101A), or 'Peeling (edible peel)' (T102A), or 'Juicing' (T103A), or 'Oil production (Not Specified)' (T104A), or 'Milling (Not Specified)' (T110A), or 'Milling - unprocessed flour' (T111A), or 'Milling - refined flour' (T112A), or  'Milling - bran production' (T113A), or 'Polishing' (T114A), or Sugar production (Not Specified)' (T116A), or 'Canning' (T120A), or Preserving' (T121A), or 'Production of alcoholic beverages (Not Specified)' (T122A), or 'Wine production (Not Specified)' (T123A), or 'Wine production - white wine' (T124A), or 'Wine production - red wine cold process' (T125A), 'Cooking in water' (T128A), or 'Cooking in oil (Frying)' (T129A), or 'Cooking in air (Baking)' (T130A), or 'Dehydration' (T131A), or 'Fermentation' (T132A), or 'Churning' (T134A), or 'Concentration' (T136A), 'Wet-milling' (T148A), or 'Milk pasteurisation' (T150A), or 'Churning - butter' (T152A), or 'Churning - cheese' (T153A), 'Churning - cream' (T154A), or 'Churning - yougurt' (T155A), or 'Unprocessed' (T999A), or 'Freezing' (T998A);";
+            outcome.error = "WARNING: prodTreat is not among those recommended in EFSA guidance;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik
+            if (!string.IsNullOrEmpty(prodTreat))
+            {
+                var tillstand = new List<string>();
+                tillstand.Add("T100A");
+                tillstand.Add("T101A");
+                tillstand.Add("T102A");
+                tillstand.Add("T103A");
+                tillstand.Add("T104A");
+                tillstand.Add("T110A");
+                tillstand.Add("T111A");
+                tillstand.Add("T112A");
+                tillstand.Add("T113A");
+                tillstand.Add("T114A");
+                tillstand.Add("T116A");
+                tillstand.Add("T120A");
+                tillstand.Add("T121A");
+                tillstand.Add("T122A");
+                tillstand.Add("T123A");
+                tillstand.Add("T124A");
+                tillstand.Add("T125A");
+                tillstand.Add("T128A");
+                tillstand.Add("T129A");
+                tillstand.Add("T130A");
+                tillstand.Add("T131A");
+                tillstand.Add("T132A");
+                tillstand.Add("T134A");
+                tillstand.Add("T136A");
+                tillstand.Add("T148A");
+                tillstand.Add("T150A");
+                tillstand.Add("T152A");
+                tillstand.Add("T153A");
+                tillstand.Add("T154A");
+                tillstand.Add("T155A");
+                tillstand.Add("T999A");
+                tillstand.Add("T998A");
+
+                outcome.passed = tillstand.Contains(prodTreat);
+
+            }
+            return outcome;
+        }
+
         ///The value in the data element 'Product Treatment Code' (prodTreat) should be 'Processed' (T100A), or 'Peeling (inedible peel)' (T101A), or 'Peeling (edible peel)' (T102A), or 'Juicing' (T103A), or 'Oil production (Not Specified)' (T104A), or 'Milling (Not Specified)' (T110A), or 'Milling - unprocessed flour' (T111A), or 'Milling - refined flour' (T112A), or  'Milling - bran production' (T113A), or 'Polishing' (T114A), or Sugar production (Not Specified)' (T116A), or 'Canning' (T120A), or Preserving' (T121A), or 'Production of alcoholic beverages (Not Specified)' (T122A), or 'Wine production (Not Specified)' (T123A), or 'Wine production - white wine' (T124A), or 'Wine production - red wine cold process' (T125A), 'Cooking in water' (T128A), or 'Cooking in oil (Frying)' (T129A), or 'Cooking in air (Baking)' (T130A), or 'Dehydration' (T131A), or 'Fermentation' (T132A), or 'Churning' (T134A), or 'Concentration' (T136A), 'Wet-milling' (T148A), or 'Milk pasteurisation' (T150A), or 'Unprocessed' (T999A), or 'Freezing' (T998A);
-        public Outcome PEST20(XElement sample)
+        public Outcome PEST20_OLD(XElement sample)
         {
             // <checkedDataElements>;
             //prodTreat;
@@ -1454,19 +2162,21 @@ namespace EfsaBusinessRuleValidator
         }
 
         ///The value in the data element 'Product treatment' (prodTreat) must be different from 'Unknown' (T899A);
-        public Outcome PEST21(XElement sample)
+        public Outcome PEST02(XElement sample)
         {
             // <checkedDataElements>;
             //prodTreat;
 
+            var prodtreat = (string)sample.Element("prodTreat");
+
             var outcome = new Outcome();
-            outcome.name = "PEST21";
+            outcome.name = "PEST02";
             outcome.description = "The value in the data element 'Product treatment' (prodTreat) must be different from 'Unknown' (T899A);";
             outcome.error = "prodTreat is unknown;";
             outcome.type = "error";
             outcome.passed = true;
 
-            outcome.passed = sample.Element("prodTreat").Value != "T899A";
+            outcome.passed = prodtreat != "T899A";
 
             return outcome;
         }
@@ -2332,6 +3042,95 @@ namespace EfsaBusinessRuleValidator
         }
 
 
+        ///If the value in the data element 'Result type' (resType) is equal to 'Numerical value' (VAL), and the value in the data element 'Product treatment' (prodTreat) is equal to 'Unprocessed' (T999A), or 'Freezing' (T998A), and the MRL has not changed during the year, and the value in 'Result value' (resVal) is greater than the MRL, then the value in the data element 'Result evaluation' (resEvaluation) must be different from 'Less than or equal to maximum permissible quantities' (J002A);
+        public Outcome MRL_01(XElement sample)
+        {
+            // <checkedDataElements>;
+            var prodCode = sample.Element("prodCode").Value;
+            var paramCode = sample.Element("paramCode").Value;
+            var resType = sample.Element("resType").Value;
+            var prodTreat = sample.Element("prodTreat").Value;
+            var resVal = sample.Element("resVal").Value;
+            var resEvaluation = sample.Element("resEvaluation").Value;
+            var legalLimit = (string) sample.Element("resLegalLimit");
+
+            var outcome = new Outcome();
+            outcome.name = "MRL_01";
+            outcome.lastupdate = "2017-04-28";
+            outcome.description = "If the value in the data element 'Result type' (resType) is equal to 'Numerical value' (VAL), and the value in the data element 'Product treatment' (prodTreat) is equal to 'Unprocessed' (T999A), or 'Freezing' (T998A), and the MRL has not changed during the year, and the value in 'Result value' (resVal) is greater than the MRL, then the value in the data element 'Result evaluation' (resEvaluation) must be different from 'Less than or equal to maximum permissible quantities' (J002A);";
+            outcome.error = "result evaluation is incorrect; result value exceeds the result legal limit;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            
+
+            //Logik
+            if (resType == "VAL" && (prodTreat  == "T999A" || prodTreat == "T998A") && decimal.Parse(resVal.Replace(".",",") ) >= decimal.Parse(legalLimit.Replace(".",",")))
+            {
+                outcome.passed = resEvaluation != "J002A";
+
+            }
+            return outcome;
+        }
+
+        ///If the value in the data element 'Result type' (resType) is equal to 'Numerical value' (VAL), and the value in the data element 'Product treatment' (prodTreat) is equal to 'Unprocessed' (T999A), or 'Freezing' (T998A), and the MRL has not changed during the year, and the value in 'Result value' (resVal) is less than or equal to the MRL, then the value in the data element 'Result evaluation' (resEvaluation) must be different from 'Greater than maximum permissible quantities' (J003A) and 'Compliant due to measurement uncertainty' (J031A);
+        public Outcome MRL_02(XElement sample)
+        {
+            // <checkedDataElements>;
+            var prodCode = (string)sample.Element("prodCode");
+            var paramCode = (string)sample.Element("paramCode");
+            var resType = (string)sample.Element("resType");
+            var prodTreat = (string)sample.Element("prodTreat");
+            var resVal = (string)sample.Element("resVal");
+            var resEvaluation = (string)sample.Element("resEvaluation");
+            var legalLimit = (string)sample.Element("resLegalLimit");
+
+            var outcome = new Outcome();
+            outcome.name = "MRL_02";
+            outcome.lastupdate = "2017-04-28";
+            outcome.description = "If the value in the data element 'Result type' (resType) is equal to 'Numerical value' (VAL), and the value in the data element 'Product treatment' (prodTreat) is equal to 'Unprocessed' (T999A), or 'Freezing' (T998A), and the MRL has not changed during the year, and the value in 'Result value' (resVal) is less than or equal to the MRL, then the value in the data element 'Result evaluation' (resEvaluation) must be different from 'Greater than maximum permissible quantities' (J003A) and 'Compliant due to measurement uncertainty' (J031A);";
+            outcome.error = "result evaluation is incorrect; result value is equal or below the result legal limit;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            //Logik
+            if (resType == "VAL" && (prodTreat == "T999A" || prodTreat == "T998A") && decimal.Parse(resVal.Replace(".", ",")) <= decimal.Parse(legalLimit.Replace(".", ",")))
+            {
+                outcome.passed = (resEvaluation != "(J003A" && resEvaluation != "J031A");
+
+            }
+            return outcome;
+        }
+
+
+        ///If the value in the data element 'Result type' (resType) is equal to 'Numerical value' (VAL), and the value in the data element 'Product treatment' (prodTreat) is equal to 'Unprocessed' (T999A), or 'Freezing' (T998A), and the MRL has changed during the year, then a value in the data element 'Result legal limit' (resLegalLimit) must be reported;
+        public Outcome MRL_03(XElement sample)
+        {
+            // <checkedDataElements>;
+            var prodCode = (string)sample.Element("prodCode");
+            var paramCode = (string)sample.Element("paramCode");
+            var resType = (string)sample.Element("resType");
+            var prodTreat = (string)sample.Element("prodTreat");
+            var resLegalLimit = (string)sample.Element("resLegalLimit");
+
+            var outcome = new Outcome();
+            outcome.name = "MRL_03";
+            outcome.lastupdate = "2017-04-28";
+            outcome.description = "If the value in the data element 'Result type' (resType) is equal to 'Numerical value' (VAL), and the value in the data element 'Product treatment' (prodTreat) is equal to 'Unprocessed' (T999A), or 'Freezing' (T998A), and the MRL has changed during the year, then a value in the data element 'Result legal limit' (resLegalLimit) must be reported;";
+            outcome.error = "resLegalLimit is missing, though it is mandatory to be reported when the MRL changed during 2016;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+            if (resType == "VAL" && (prodTreat == "T999A" || prodTreat == "T998A"))
+            {
+                outcome.passed = String.IsNullOrEmpty(resLegalLimit) == false;
+
+            }
+            return outcome;
+        }
+
         ///A value i
         ///
         /// n the data element 'EFSA Product Code' (EFSAProdCode) must be reported;
@@ -2663,7 +3462,21 @@ namespace EfsaBusinessRuleValidator
             //Om sann (count överstiger 1) returnera false)
             return list.GroupBy(l => l).Any(l => l.Count() > 1) == false;
         }
+
+        /// <summary>
+        /// Parse Decimal
+        /// </summary>
+        /// <param name="s"></param>
+        public decimal? PD(string s)
+        {
+            decimal r;
+
+            decimal.TryParse(s.Replace(".",","), out r);
+            return r;
+        }
     }
+
+
 
     public struct Outcome
     {

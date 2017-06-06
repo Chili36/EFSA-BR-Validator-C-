@@ -48,10 +48,18 @@ namespace ValidateEfsaXml
                 Console.WriteLine(error);
 
 
+                var samplesWithErrors = tests.Where(x => x.outcome.error == error);
+                var noOfSamples = samplesWithErrors.Select(x => x.El.Element("labSampCode").Value).Distinct().Count();
+
+
+                Console.WriteLine($"There are {noOfSamples} samples with this error");
+
+               
+
                 var e = tests.Where(x => x.outcome.error == error).First().El.Element("labSampCode").Value;
 
                 Console.WriteLine(e);
-
+                Console.WriteLine("----------------------");
 
             }
 
@@ -399,6 +407,116 @@ namespace ValidateEfsaXml
             {
                 utfall.Add(new BusinessRuleError { El = el, outcome = pest25 });
             }
+
+            var pest26 = validator.PEST26(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest26 });
+            }
+
+            var pest669_1 = validator.PEST669_1(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest669_1 });
+            }
+
+            var pest669_CN = validator.PEST669_CN(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest669_CN });
+            }
+
+            var pest669_DO = validator.PEST669_DO(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest669_DO });
+            }
+
+            var pest669_DO_a = validator.PEST669_DO_a(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest669_DO_a });
+            }
+
+            var pest669_EG = validator.PEST669_EG(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest669_EG });
+            }
+
+            var pest669_EG_a = validator.PEST669_EG_a(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest669_EG_a });
+            }
+            var pest669_KE = validator.PEST669_KE(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest669_KE });
+            }
+
+            var pest669_KH = validator.PEST669_KH(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest669_KH });
+            }
+
+            var pest669_KH_a = validator.PEST669_KH_a(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest669_KH_a });
+            }
+
+
+            var pest669_TH = validator.PEST669_TH(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest669_TH });
+            }
+            var pest669_TH_a = validator.PEST669_TH_a(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest669_TH_a });
+            }
+
+            var pest669_TR = validator.PEST669_TR(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest669_TR });
+            }
+
+            var pest669_TR_a = validator.PEST669_TR_a(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest669_TR_a });
+            }
+
+            var pest669_VN = validator.PEST669_VN(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest669_VN });
+            }
+
+            var pest669_VN_a = validator.PEST669_VN_a(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest669_VN_a });
+            }
+
+            var pest669_VN_b = validator.PEST669_VN_b(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest669_VN_b });
+            }
+
+            var pest669_VN_c = validator.PEST669_VN_c(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest669_VN_c });
+            }
+
+            var pest_sampInfo005 = validator.PEST_sampInfo005(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest_sampInfo005 });
+            }
+
+            var pest_sampInfo009 = validator.PEST_sampInfo009(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest_sampInfo009 });
+            }
+
+            var pest_sampInfo018 = validator.PEST_sampInfo018(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest_sampInfo018 });
+            }
+
+            var pest_sampInfo019 = validator.PEST_sampInfo019(el);
+            {
+                utfall.Add(new BusinessRuleError { El = el, outcome = pest_sampInfo019 });
+            }
+
 
 
             /*
