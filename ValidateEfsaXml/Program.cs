@@ -42,23 +42,40 @@ namespace ValidateEfsaXml
 
             Console.WriteLine($"Det fanns {tests.Count()} valideringsfel");
 
-            foreach (var error in tests.Select(x=> x.outcome.error).Distinct())
+
+            var errors = tests.Where(x => x.outcome.passed == false);
+            foreach (var error in errors.GroupBy(p=> p.outcome.error))
             {
-                Console.WriteLine(tests.Where(x => x.outcome.error == error).First().outcome.name);
-                Console.WriteLine(error);
+                Console.WriteLine(errors.Where(x => x.outcome.error == error.Key).First().outcome.name);
+                Console.WriteLine(error.Key);
 
 
-                var samplesWithErrors = tests.Where(x => x.outcome.error == error);
+                var samplesWithErrors = errors.Where(x => x.outcome.error == error.Key);
                 var noOfSamples = samplesWithErrors.Select(x => x.El.Element("labSampCode").Value).Distinct().Count();
 
 
                 Console.WriteLine($"There are {noOfSamples} samples with this error");
 
-               
 
-                var e = tests.Where(x => x.outcome.error == error).First().El.Element("labSampCode").Value;
+                XElement e = errors.Where(x => x.outcome.error == error.Key).First().El;
+                Outcome o = errors.Where(x => x.outcome.error == error.Key ).First().outcome;
 
-                Console.WriteLine(e);
+                Console.WriteLine($"Restype = {(string)e.Element("resType")}");
+                Console.WriteLine($"Restype = {(string)e.Element("labSampCode")}");
+                Console.WriteLine($"Restype = {(string)e.Element("resultCode")}");
+                foreach (var v in o.values)
+                {
+                    Console.WriteLine($"Value: {v.Item1}: {v.Item2}");
+
+                }
+
+
+
+                //    El.Element("labSampCode").Value;
+
+
+
+                // Console.WriteLine(e);
                 Console.WriteLine("----------------------");
 
             }

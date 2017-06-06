@@ -45,7 +45,7 @@ namespace EfsaBusinessRuleValidator
         public Outcome BR02A_01(XElement sample)
         {
             var outcome = new Outcome();
-            var name = "BR02A_01";
+            outcome.name= "BR02A_01";
 
             outcome.description = "If the value in 'Day of analysis' (analysisD) is reported, then a value in 'Month of analysis' (analysisM) must be reported;";
             outcome.error = "analysisM is missing, though analysisD is reported;";
@@ -1087,6 +1087,8 @@ namespace EfsaBusinessRuleValidator
             var prodTreat = (string)sample.Element("prodTreat");
 
             var outcome = new Outcome();
+            outcome.values.Add(Tuple.Create("prodCode", (string)sample.Element("prodCode")));
+            outcome.values.Add(Tuple.Create("prodTreat", (string)sample.Element("prodTreat")));
             outcome.name = "PEST05";
             outcome.lastupdate = "2017-04-11";
             outcome.description = "If the value in the data element 'Product code' (prodCode) is 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A), then the value in the data element 'Product treatment' (prodTreat) must be equal to 'Dehydration' (T131A), or 'Churning' (T134A), 'Churning - butter' (T152A), or 'Churning - cheese' (T153A), 'Churning - cream' (T154A), or 'Churning - yougurt' (T155A), or 'Milk pasteurisation' (T150A), or 'Freezing' (T998A), or 'Concentration' (T136A), or 'Unprocessed' (T999A);";
@@ -1511,6 +1513,10 @@ namespace EfsaBusinessRuleValidator
             var resType = (string)sample.Element("resType");
 
             var outcome = new Outcome();
+
+            outcome.values.Add(Tuple.Create("resEvaluation", (string)sample.Element("resEvaluation")));
+            outcome.values.Add(Tuple.Create("resType", (string)sample.Element("resType")));
+
             outcome.name = "PEST17";
             outcome.lastupdate = "2016-04-25";
             outcome.description = "If the value in the data element 'Evaluation of the result' (resEvaluation) is equal to 'greater than maximum permissible quantities' (J003A), or 'Compliant due to measurement uncertainty' (J031A), then the value in 'Type of result' (resType) must be equal to 'VAL';";
@@ -1522,7 +1528,7 @@ namespace EfsaBusinessRuleValidator
             var resEvaluations = new List<string>();
             resEvaluations.Add("J003A");
             resEvaluations.Add("J031A");
-            if (!resEvaluations.Contains(resEvaluation))
+            if (resEvaluations.Contains(resEvaluation))
             {
                 outcome.passed = resType == "VAL";
             }
@@ -1536,6 +1542,7 @@ namespace EfsaBusinessRuleValidator
             var resLegalLimitType = (string)sample.Element("resLegalLimitType");
 
             var outcome = new Outcome();
+            outcome.values.Add(Tuple.Create("resLegalLimitType", (string)sample.Element("resLegalLimitType")));
             outcome.name = "PEST18";
             outcome.lastupdate = "2016-04-25";
             outcome.description = "The value in the data element 'Type of legal limit' (resLegalLimitType) should be equal to 'Maximum Residue Level (MRL)' (W002A), or 'National or local limit' (W990A);";
@@ -1544,7 +1551,8 @@ namespace EfsaBusinessRuleValidator
             outcome.passed = true;
 
             //Logik (ignore null: yes);
-           
+           if (!string.IsNullOrEmpty(resLegalLimitType))
+            { 
                 var resLegalLimitTypes = new List<string>();
                 resLegalLimitTypes.Add("W002A");
                 resLegalLimitTypes.Add("W990A");
@@ -1552,7 +1560,7 @@ namespace EfsaBusinessRuleValidator
                 {
                     outcome.passed = false;
                 }
-
+            }
             return outcome;
         }
         ///If the value in the data element 'Evaluation of the result' (resEvaluation) is equal to 'greater than maximum permissible quantities' (J003A), or 'Compliant due to measurement uncertainty' (J031A), then the value in 'Result value' (resVal) must be greater than 'Legal Limit for the result' (resLegalLimit);
@@ -1615,6 +1623,9 @@ namespace EfsaBusinessRuleValidator
             var resVal = (string)sample.Element("resVal");
 
             var outcome = new Outcome();
+            outcome.values.Add(Tuple.Create("resType", (string)sample.Element("resType")));
+            outcome.values.Add(Tuple.Create("resLOQ", (string)sample.Element("resLOQ")));
+            outcome.values.Add(Tuple.Create("resVal", (string)sample.Element("resVal")));
             outcome.name = "PEST21";
             outcome.lastupdate = "2016-07-15";
             outcome.description = "If the value in the data element 'Result type' (resType) is equal to 'Non Quantified Value (below LOQ)' (LOQ), then the value in the data element 'Result value' (resVal) should not be greater than the value in the data element 'Result LOQ' (resLOQ);";
@@ -1625,7 +1636,10 @@ namespace EfsaBusinessRuleValidator
             //Logik (ignore null: yes);
             if (resType == "LOQ")
             {
-                outcome.passed = PD(resLOQ) > PD(resVal);
+                if (!String.IsNullOrEmpty(resVal))
+                {
+                    outcome.passed = PD(resLOQ) > PD(resVal);
+                }
             }
             
             return outcome;
@@ -1650,7 +1664,7 @@ namespace EfsaBusinessRuleValidator
             //Logik (ignore null: yes);
             if (resType == "VAL")
             {
-                outcome.passed = PD(resVal) > PD(resLOQ);
+                outcome.passed = PD(resVal) >= PD(resLOQ);
             }
            
             return outcome;
@@ -2258,10 +2272,12 @@ namespace EfsaBusinessRuleValidator
         public Outcome PEST26(XElement sample)
         {
             // <checkedDataElements>;
-            var paramCode = sample.Element("paramCode").Value;
+            var paramCode = (string) sample.Element("paramCode");
 
             var outcome = new Outcome();
+            outcome.values.Add(Tuple.Create("paramCode", (string)sample.Element("paramCode")));
             outcome.name = "PEST26";
+            outcome.lastupdate = "2017-04-17";
             outcome.description = "The value in the data element 'Parameter code' (paramCode) should be different from 'Not in list' (RF-XXXX-XXX-XXX);";
             outcome.error = "paramCode should be different from 'not in list'. Please contact catalogue@efsa.europa.eu to add the missing term;";
             outcome.type = "error";
@@ -2285,6 +2301,10 @@ namespace EfsaBusinessRuleValidator
 
             var outcome = new Outcome();
             outcome.name = "PEST_sampInfo005";
+            outcome.values.Add(Tuple.Create("progType", (string)sample.Element("progType")));
+            outcome.values.Add(Tuple.Create("progLegalRef", (string)sample.Element("progLegalRef")));
+            outcome.values.Add(Tuple.Create("progSampStrategy", (string)sample.Element("progSampStrategy")));
+            outcome.lastupdate = "2016-07-15";
             outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'Official (National) programme' (K005A), then the value in 'Programme legal reference' (progLegalRef) can only be equal to 'Regulation (EC) No 396/2005 (amended)' (N027A), or 'Commission Directive (EC) No 125/2006/EC and 2006/141/EC' (N028A), or 'Council Directive (EC) No 23/1996 (amended)' (N247A), or 'Regulation (EC) No 882/2004 (amended)' (N018A), and the value in 'Sampling strategy' (progSampStrategy) can only be equal to 'Objective sampling' (ST10A), or 'Selective sampling' (ST20A), or 'Suspect sampling' (ST30A);";
             outcome.error = "The combination of codes for progType, progLegalRef and progSampStrategy is not valid;";
             outcome.type = "error";
@@ -2310,7 +2330,7 @@ namespace EfsaBusinessRuleValidator
                 }
 
             
-                if (list2.Contains(progSampStrategy))
+                if (!list2.Contains(progSampStrategy))
                 {
                     outcome.passed = false;
                 }
@@ -3469,6 +3489,11 @@ namespace EfsaBusinessRuleValidator
         /// <param name="s"></param>
         public decimal? PD(string s)
         {
+            if (s == null)
+            {
+                return null;
+            }
+
             decimal r;
 
             decimal.TryParse(s.Replace(".",","), out r);
@@ -3478,7 +3503,7 @@ namespace EfsaBusinessRuleValidator
 
 
 
-    public struct Outcome
+    public class Outcome
     {
         public bool passed { get; set; }
         public string description { get; set; }
@@ -3487,6 +3512,7 @@ namespace EfsaBusinessRuleValidator
         public string name { get; set; }
         public string version { get; set; }
         public string lastupdate { get; set; }
+        public List<Tuple<string, string>> values { get; set; } = new List<Tuple<string, string>>();
     }
 
 }
