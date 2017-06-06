@@ -1819,7 +1819,7 @@ namespace EfsaBusinessRuleValidator
         }
 
         ///If the value in the data element 'Product code' (prodCode) is 'Food for infants and young children' (PX100000A), or 'Baby food for infants and young childern' (PX100001A), or 'Processed cereal-based baby foods (e.g. cereal and pastas to be reconstituted with milk or other liquids)' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A), then the value in the data element 'Programme legal  reference' (progLegalRef) must be 'Samples of food products falling under Directive 2006/125/EC or 2006/141/EC' (N028A);
-        public Outcome PEST13(XElement sample)
+        public Outcome PEST13_OLD(XElement sample)
         {
             // <checkedDataElements>;
             //progLegalRef;
@@ -1849,7 +1849,7 @@ namespace EfsaBusinessRuleValidator
         }
 
         ///If the value in the data element 'Expression of result' (exprRes) is 'Fat weight' (B003A), then a value in the data element 'Percentage of fat in the original sample' (fatPerc) must be reported;
-        public Outcome PEST14(XElement sample)
+        public Outcome PEST14_OLD(XElement sample)
         {
             // <checkedDataElements>;
             //exprRes;
@@ -1872,7 +1872,7 @@ namespace EfsaBusinessRuleValidator
         }
 
         ///If the value in the data element 'Expression of result' (exprRes) is 'Reconstituted product' (B007A), then the value in the data element 'Product code' (prodCode) should be 'Food for infants and young children' (PX100000A), or 'Baby food for infants and young childern' (PX100001A), or 'Processed cereal-based baby foods (e.g. cereal and pastas to be reconstituted with milk or other liquids)' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A);
-        public Outcome PEST15(XElement sample)
+        public Outcome PEST15_OLD(XElement sample)
         {
             // <checkedDataElements>;
             //exprRes;
@@ -1901,7 +1901,7 @@ namespace EfsaBusinessRuleValidator
         }
 
         ///If the value in the data element 'Product code' (prodCode) is 'Food for infants and young children' (PX100000A), or 'Baby food for infants and young childern' (PX100001A), or 'Processed cereal-based baby foods (e.g. cereal and pastas to be reconstituted with milk or other liquids)' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A), then the value in the data element 'Expression of result' (exprRes) should be 'Reconstituted product' (B007A);
-        public Outcome PEST16(XElement sample)
+        public Outcome PEST16_OLD(XElement sample)
         {
             // <checkedDataElements>;
             //exprRes;
@@ -1934,7 +1934,7 @@ namespace EfsaBusinessRuleValidator
         }
 
         ///If the value in the data element 'Expression of result' (exprRes) is 'Fat weight' (B003A), then the value in the data element 'Product code' (prodCode) must be 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A), or 'Bird eggs' (P1030000A), or 'Eggs Chicken' (P1030010A), or 'Eggs Duck' (P1030020A), or 'Eggs Goose' (P1030030A), or 'Eggs Quail' (P1030040A), or 'Eggs Others' (P1030990A);
-        public Outcome PEST17(XElement sample)
+        public Outcome PEST17_OLD(XElement sample)
         {
             // <checkedDataElements>;
             //exprRes;
@@ -1987,7 +1987,7 @@ namespace EfsaBusinessRuleValidator
         }
 
         ///If the value in the data element 'Product code' (prodCode) is 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A), or 'Bird eggs' (P1030000A), or 'Eggs Chicken' (P1030010A), or 'Eggs Duck' (P1030020A), or 'Eggs Goose' (P1030030A), or 'Eggs Quail' (P1030040A), or 'Eggs Others' (P1030990A), then the value in the data element 'Expression of result' (exprRes) should be 'Fat weight' (B003A);
-        public Outcome PEST18(XElement sample)
+        public Outcome PEST18_OLD(XElement sample)
         {
             // <checkedDataElements>;
             //exprRes;
@@ -2027,7 +2027,7 @@ namespace EfsaBusinessRuleValidator
 
 
         ///If the value in the data element 'Product code' (prodCode) is ''Bird eggs' (P1030000A), or 'Eggs Chicken' (P1030010A), or 'Eggs Duck' (P1030020A), or 'Eggs Goose' (P1030030A), or 'Eggs Quail' (P1030040A), or 'Eggs Others' (P1030990A), and the value in the data element 'Expression of result' (exprRes) is 'Whole weight' (B001A), and the value in 'Percentage of fat in the original sample' (fatPerc) is not reported, then EFSA will assume a fat content equal to 10%;
-        public Outcome PEST19(XElement sample)
+        public Outcome PEST19_OLD(XElement sample)
         {
             // <checkedDataElements>;
             //prodCode;
@@ -2181,7 +2181,7 @@ namespace EfsaBusinessRuleValidator
             return outcome;
         }
         ///The value in the data element 'Expression of result' (exprRes) must be equal to 'Whole weight' (B001A);
-        public Outcome PEST22(XElement sample)
+        public Outcome PEST22_OLD(XElement sample)
         {
             // <checkedDataElements>;
             //exprRes;
@@ -2199,7 +2199,7 @@ namespace EfsaBusinessRuleValidator
         }
 
         ///The value in the data element 'Result unit' (resUnit) must be equal to 'Milligram per kilogram' (G061A);
-        public Outcome PEST23(XElement sample)
+        public Outcome PEST23_OLD(XElement sample)
         {
             // <checkedDataElements>;
             //resUnit;
@@ -2217,7 +2217,7 @@ namespace EfsaBusinessRuleValidator
         }
 
         ///The value in the data element 'Type of legal limit' (resLegalLimitType) should be equal to 'Maximum Residue Level (MRL)' (W002A), or 'National or local limit' (W990A);
-        public Outcome PEST24(XElement sample)
+        public Outcome PEST24_OLD(XElement sample)
         {
             // <checkedDataElements>;
             //resLegalLimitType;
@@ -2235,7 +2235,7 @@ namespace EfsaBusinessRuleValidator
             return outcome;
         }
         ///The value in the data element 'Laboratory accreditation' (labAccred) must be equal to 'Accredited' (L001A), or 'None' (L003A);
-        public Outcome PEST25(XElement sample)
+        public Outcome PEST25_OLD(XElement sample)
         {
             // <checkedDataElements>;
             //labAccred;
