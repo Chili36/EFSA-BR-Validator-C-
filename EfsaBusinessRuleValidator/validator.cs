@@ -1096,29 +1096,28 @@ namespace EfsaBusinessRuleValidator
             outcome.type = "error";
             outcome.passed = true;
 
-
-
             //Logik
             var prodCodes = new List<string>();
-            prodCodes.Add("PX100000A");
-            prodCodes.Add("PX100001A");
-            prodCodes.Add("PX100003A");
-            prodCodes.Add("PX100004A");
-            prodCodes.Add("PX100005A");
+            prodCodes.Add("P1020000A");
+            prodCodes.Add("P1020010A");
+            prodCodes.Add("P1020020A");
+            prodCodes.Add("P1020030A");
+            prodCodes.Add("P1020040A");
+            prodCodes.Add("P1020990A");
             if (prodCodes.Contains(prodCode))
             {
-                var tillstand = new List<string>();
-                tillstand.Add("T131A");
-                tillstand.Add("T134A");
-                tillstand.Add("T136A");
-                tillstand.Add("T150A");
-                tillstand.Add("T152A");
-                tillstand.Add("T153A");
-                tillstand.Add("T154A");
-                tillstand.Add("T155A");
-                tillstand.Add("T998A");
-                tillstand.Add("T999A");
-                outcome.passed = tillstand.Contains(prodTreat);
+                var prodTreats = new List<string>();
+                prodTreats.Add("T131A");
+                prodTreats.Add("T134A");
+                prodTreats.Add("T136A");
+                prodTreats.Add("T150A");
+                prodTreats.Add("T152A");
+                prodTreats.Add("T153A");
+                prodTreats.Add("T154A");
+                prodTreats.Add("T155A");
+                prodTreats.Add("T998A");
+                prodTreats.Add("T999A");
+                outcome.passed = prodTreats.Contains(prodTreat);
 
             }
             return outcome;
@@ -1194,6 +1193,7 @@ namespace EfsaBusinessRuleValidator
             return outcome;
         }
 
+        /*
         ///If the value in the data element 'Product treatment' (prodTreat) is 'Milk pasteurisation' (T150A), then the value in the data element 'Product code' (prodCode) must be equal to 'Milk' (P1020000A), or  'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A);
         public Outcome PEST06(XElement sample)
         {
@@ -1224,6 +1224,50 @@ namespace EfsaBusinessRuleValidator
        
             return outcome;
         }
+        */
+
+        ///If the value in the data element 'Product treatment' (prodTreat) is 'Milk pasteurisation' (T150A), or 'Churning' (T134A), or 'Churning - butter' (T152A), or 'Churning - cheese' (T153A), or 'Churning - cream' (T154A), or 'Churning - yougurt' (T155A), then the value in the data element 'Product code' (prodCode) must be equal to 'Milk' (P1020000A), or 'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A);
+        public Outcome PEST06(XElement sample)
+        {
+            // <checkedDataElements>;
+            var prodCode = (string)sample.Element("prodCode");
+            var prodTreat = (string)sample.Element("prodTreat");
+     
+
+            var outcome = new Outcome();
+            outcome.name = "PEST06";
+            outcome.lastupdate = "2017-07-04";
+            outcome.description = "If the value in the data element 'Product treatment' (prodTreat) is 'Milk pasteurisation' (T150A), or 'Churning' (T134A), or 'Churning - butter' (T152A), or 'Churning - cheese' (T153A), or 'Churning - cream' (T154A), or 'Churning - yougurt' (T155A), then the value in the data element 'Product code' (prodCode) must be equal to 'Milk' (P1020000A), or 'Milk Cattle' (P1020010A), or 'Milk Sheep' (P1020020A), or 'Milk Goat' (P1020030A), or 'Milk Horse' (P1020040A), or 'Milk Others' (P1020990A);";
+            outcome.error = "prodCode is not milk of animal origin, though prodTreat is milk pasteurisation;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik
+
+            var prodtreats = new List<string>();
+            prodtreats.Add("T150A");
+            prodtreats.Add("T134A");
+            prodtreats.Add("T152A");
+            prodtreats.Add("T153A");
+            prodtreats.Add("T154A");
+            prodtreats.Add("T155A");
+
+
+            if (prodtreats.Contains(prodTreat))
+{
+                var produktkoder = new List<string>();
+                produktkoder.Add("P1020000A");
+                produktkoder.Add("P1020010A");
+                produktkoder.Add("P1020020A");
+                produktkoder.Add("P1020030A");
+                produktkoder.Add("P1020040A");
+                produktkoder.Add("P1020990A");
+
+                outcome.passed = produktkoder.Contains(prodCode);
+            }
+            return outcome;
+        }
+
 
         ///If the value in the data element 'Product code' (prodCode) is 'Food for infants and young children' (PX100000A), or 'Baby foods other than processed cereal-based foods' (PX100001A), or 'Processed cereal-based foods for infants and young children' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A), then the value in the data element 'Programme legal  reference' (progLegalRef) must be 'Samples of food products falling under Directive 2006/125/EC or 2006/141/EC' (N028A);
         public Outcome PEST09(XElement sample)
@@ -1234,6 +1278,8 @@ namespace EfsaBusinessRuleValidator
 
             var outcome = new Outcome();
             outcome.name = "PEST09";
+            outcome.values.Add(Tuple.Create("progLegalRef", (string)sample.Element("progLegalRef")));
+            outcome.values.Add(Tuple.Create("prodCode", (string)sample.Element("prodCode")));
             outcome.lastupdate = "2016-04-06";
             outcome.description = "If the value in the data element 'Product code' (prodCode) is 'Food for infants and young children' (PX100000A), or 'Baby foods other than processed cereal-based foods' (PX100001A), or 'Processed cereal-based foods for infants and young children' (PX100003A), or 'Infant formulae' (PX100004A), or 'Follow-on formulae' (PX100005A), then the value in the data element 'Programme legal  reference' (progLegalRef) must be 'Samples of food products falling under Directive 2006/125/EC or 2006/141/EC' (N028A);";
             outcome.error = "progLegalRef is not samples of food products falling under Directive 2006/125/EC or 2006/141/EC, though prodCode is a baby food;";
@@ -2348,6 +2394,9 @@ namespace EfsaBusinessRuleValidator
 
             var outcome = new Outcome();
             outcome.name = "PEST_sampInfo009";
+            outcome.values.Add(Tuple.Create("progType", (string)sample.Element("progType")));
+            outcome.values.Add(Tuple.Create("progLegalRef", (string)sample.Element("progLegalRef")));
+            outcome.values.Add(Tuple.Create("progSampStrategy", (string)sample.Element("progSampStrategy")));
             outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'Official (EU) programme' (K009A), then the value in 'Programme legal reference' (progLegalRef) can only be equal to 'Regulation (EC) No 396/2005 (amended)' (N027A), or 'Commission Directive (EC) No 125/2006/EC and 2006/141/EC' (N028A), and the value in 'Sampling strategy' (progSampStrategy) can only be equal to 'Objective sampling' (ST10A), or 'Selective sampling' (ST20A);";
             outcome.error = "The combination of codes for progType, progLegalRef and progSampStrategy is not valid;";
             outcome.type = "error";
@@ -2368,7 +2417,7 @@ namespace EfsaBusinessRuleValidator
                 {
                     outcome.passed = false;
                 }
-                if (list2.Contains(progSampStrategy))
+                if (!list2.Contains(progSampStrategy))
                 {
                     outcome.passed = false;
                 }
@@ -2480,6 +2529,9 @@ namespace EfsaBusinessRuleValidator
             var origCountry = sample.Element("origCountry").Value;
 
             var outcome = new Outcome();
+            outcome.values.Add(Tuple.Create("progType", (string)sample.Element("progType")));
+            outcome.values.Add(Tuple.Create("origCountry", (string)sample.Element("origCountry")));
+            outcome.lastupdate = "2017-06-16";
             outcome.name = "PEST669_1";
             outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), then the value in (origCountry) can only be equal to 'China' (CN), or 'Dominican Republic' (DO), or 'Egypt' (EG), or 'Kenya' (KE), or 'Cambodia' (KH), or 'Thailand' (TH), or 'Turkey' (TR), or 'Viet Nam' (VN);";
             outcome.error = "origCountry is not a valid country code when progType reported is EU increased control programme on imported food (Reg 669/2009);";
@@ -2498,6 +2550,7 @@ namespace EfsaBusinessRuleValidator
                 list.Add("TH");
                 list.Add("TR");
                 list.Add("VN");
+                list.Add("IN");
 
                 if (!list.Contains(origCountry))
                 {
@@ -2559,6 +2612,10 @@ namespace EfsaBusinessRuleValidator
             var outcome = new Outcome();
             outcome.name = "PEST669_DO";
             outcome.lastupdate = "2017-03-15";
+            outcome.values.Add(Tuple.Create("progType", (string)sample.Element("progType")));
+            outcome.values.Add(Tuple.Create("origCountry", (string)sample.Element("origCountry")));
+            outcome.values.Add(Tuple.Create("prodCode", (string)sample.Element("prodCode")));
+            outcome.values.Add(Tuple.Create("prodTreat", (string)sample.Element("prodTreat")));
             outcome.description = "If the value in the data element 'Programme type' (progType) is equal to 'EU increased control programme on imported food' (K019A), and the value in (origCountry) is 'Dominican Republic' (DO), then the value in 'Product code' (prodCode) can only be equal to 'Aubergines/egg plants'  (P0231030A), or 'Courgettes' (P0232030A), or 'Sweet peppers/bell peppers' (P0231020A), or 'Beans (with pods)' (P0260010A), and the value in 'Product treatment' (prodTreat) can only be equal to 'Unprocessed' (T999A), or 'Freezing' (T998A);";
             outcome.error = "The combination of codes for origCountry, prodCode and prodTreat is not valid for progType reported as EU increased control programme on imported food (Reg 669/2009);";
             outcome.type = "error";
@@ -2582,7 +2639,7 @@ namespace EfsaBusinessRuleValidator
                     outcome.passed = false;
                 }
                
-                if (tillstand.Contains(prodTreat))
+                if (!tillstand.Contains(prodTreat))
                 {
                     outcome.passed = false;
                 }
@@ -3441,6 +3498,112 @@ namespace EfsaBusinessRuleValidator
             return outcome;
         }
 
+
+        ///The value in the data element 'Programme Legal Reference' (progLegalRef) should be equal to 'Council Directive (EC) No 23/1996 (amended)' (N247A);
+        ///The value in the data element 'Programme Legal Reference' (progLegalRef) should be equal to 'Council Directive (EC) No 23/1996 (amended)' (N247A);
+        public Outcome VMPR001(XElement sample)
+        {
+            // <checkedDataElements>;
+            var progLegalRef = sample.Element("progLegalRef").Value;
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR001";
+            outcome.lastupdate = "2017-01-09";
+            outcome.description = "The value in the data element 'Programme Legal Reference' (progLegalRef) should be equal to 'Council Directive (EC) No 23/1996 (amended)' (N247A);";
+            outcome.error = "WARNING: progLegalRef is different from Council Directive (EC) No 23/1996;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik
+            if (progLegalRef != "N247A")
+            {
+                outcome.passed = false;
+            }
+            
+            return outcome;
+        }
+
+        ///The value in the data element 'Sampling Strategy' (sampStrategy) must be different from 'Census' (ST50A) and 'Not specified' (STXXA);
+        public Outcome VMPR002(XElement sample)
+        {
+            // <checkedDataElements>;
+            var sampStrategy = (string)sample.Element("sampStrategy");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR002";
+            outcome.lastupdate = "2017-01-10";
+            outcome.description = "The value in the data element 'Sampling Strategy' (sampStrategy) must be different from 'Census' (ST50A) and 'Not specified' (STXXA);";
+            outcome.error = "sampStrategy is not specified, or equal to census, though these values should not be reported;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik (ignore null: no);
+                var sampStrategys = new List<string>();
+                sampStrategys.Add("ST50A");
+                sampStrategys.Add("STXXA");
+                if (!sampStrategys.Contains(sampStrategy))
+                {
+                    outcome.passed = false;
+                }
+
+            return outcome;
+        }
+        ///The value in the data element 'Sampling Strategy' (sampStrategy) should be different from 'Objective sampling' (ST10A), and 'Convenient sampling' (ST40A);
+        public Outcome VMPR003(XElement sample)
+        {
+            // <checkedDataElements>;
+            var sampStrategy = (string)sample.Element("sampStrategy");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR003";
+            outcome.lastupdate = "2017-01-10";
+            outcome.description = "The value in the data element 'Sampling Strategy' (sampStrategy) should be different from 'Objective sampling' (ST10A), and 'Convenient sampling' (ST40A);";
+            outcome.error = "WARNING: sampStrategy is objective or conveniente sampling, though these values should not be reported;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            if (!String.IsNullOrEmpty(sampStrategy))
+            {
+                var sampStrategys = new List<string>();
+                sampStrategys.Add("ST10A");
+                sampStrategys.Add("ST40A");
+                if (!sampStrategys.Contains(sampStrategy))
+                {
+                    outcome.passed = false;
+                }
+            }
+            return outcome;
+        }
+
+        ///If the value in 'Link To Original Sample’ (sampInfo.origSampId) is reported, i.e. a follow-up sample, then the value in 'Sampling Strategy’ (sampStrategy) must be 'suspect sampling' (ST30A);
+        public Outcome VMPR004(XElement sample)
+        {
+            // <checkedDataElements>;
+            var sampStrategy = (string)sample.Element("sampStrategy");
+            var sampInforigSampId = (string)sample.Element("sampInfo.origSampId");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR004";
+            outcome.lastupdate = "2016-05-10";
+            outcome.description = "If the value in 'Link To Original Sample’ (sampInfo.origSampId) is reported, i.e. a follow-up sample, then the value in 'Sampling Strategy’ (sampStrategy) must be 'suspect sampling' (ST30A);";
+            outcome.error = "sampStrategy is not suspect sampling, though sampInfo.origSampId is reported;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+           
+            if (!String.IsNullOrEmpty(sampInforigSampId))
+            {
+                var sampStrategys = new List<string>();
+                sampStrategys.Add("ST30A");
+                if (!sampStrategys.Contains(sampStrategy))
+                {
+                    outcome.passed = false;
+                }
+
+            }
+            return outcome;
+        }
         public string GetCountryFromAreaCode(string code)
         {
 

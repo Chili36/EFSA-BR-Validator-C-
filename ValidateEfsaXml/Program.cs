@@ -12,10 +12,7 @@ namespace ValidateEfsaXml
     {
         static void Main(string[] args)
         {
-
-
-
-            var xmlfil = @"C:\Users\dafo\Downloads\Pesticidrapport_20170604-124312.xml";
+            var xmlfil = @"C:\Users\dafo\Downloads\Pesticidrapport_20170706-142715.xml";
 
             if (args.Length > 0)
             {
@@ -49,9 +46,16 @@ namespace ValidateEfsaXml
                 Console.WriteLine(errors.Where(x => x.outcome.error == error.Key).First().outcome.name);
                 Console.WriteLine(error.Key);
 
-
                 var samplesWithErrors = errors.Where(x => x.outcome.error == error.Key);
                 var noOfSamples = samplesWithErrors.Select(x => x.El.Element("labSampCode").Value).Distinct().Count();
+
+                //Skapa xmlfil med alla fel. 
+
+                var xmlDoc = new XDocument(new XElement("errors", samplesWithErrors.Select(x=> x.El)));
+
+                var filnamn = $"C:\\dev\\errors\\{errors.Where(x => x.outcome.error == error.Key).First().outcome.name}_q4.xml";
+
+                xmlDoc.Save(filnamn);
 
 
                 Console.WriteLine($"There are {noOfSamples} samples with this error");
@@ -61,8 +65,8 @@ namespace ValidateEfsaXml
                 Outcome o = errors.Where(x => x.outcome.error == error.Key ).First().outcome;
 
                 Console.WriteLine($"Restype = {(string)e.Element("resType")}");
-                Console.WriteLine($"Restype = {(string)e.Element("labSampCode")}");
-                Console.WriteLine($"Restype = {(string)e.Element("resultCode")}");
+                Console.WriteLine($"labSampCode = {(string)e.Element("labSampCode")}");
+                Console.WriteLine($"resultCode = {(string)e.Element("resultCode")}");
                 foreach (var v in o.values)
                 {
                     Console.WriteLine($"Value: {v.Item1}: {v.Item2}");
