@@ -87,8 +87,90 @@ namespace ValidateEfsaXml
             Console.ReadLine();
 
         }
-
        
+       
+        private static List<BusinessRuleError> ValidateVMPR(XElement el)
+        {
+            var validator = new VmprBusinessRules();
+            var utfall = new List<BusinessRuleError>();
+
+            var vmpr001 = validator.VMPR001(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr001 });
+            var vmpr002 = validator.VMPR002(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr002 });
+            var vmpr003 = validator.VMPR003(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr003 });
+            var vmpr004 = validator.VMPR004(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr004 });
+            var vmpr005 = validator.VMPR005(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr005 });
+            var vmpr006 = validator.VMPR006(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr006 });
+            var vmpr007 = validator.VMPR007(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr007 });
+            var vmpr008 = validator.VMPR008(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr008 });
+            var vmpr009 = validator.VMPR009(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr009 });
+            var vmpr010 = validator.VMPR010(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr010 });
+            var vmpr011 = validator.VMPR011(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr011 });
+            var vmpr012 = validator.VMPR012(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr012 });
+            var vmpr013 = validator.VMPR013(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr013 });
+            var vmpr014 = validator.VMPR014(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr014 });
+            var vmpr015 = validator.VMPR015(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr015 });
+            var vmpr016 = validator.VMPR016(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr016 });
+            var vmpr017 = validator.VMPR017(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr017 });
+            var vmpr018 = validator.VMPR018(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr018 });
+            var vmpr019 = validator.VMPR019(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr019 });
+            var vmpr020 = validator.VMPR020(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr020 });
+            var vmpr021 = validator.VMPR021(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr021 });
+            var vmpr022 = validator.VMPR022(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr022 });
+            var vmpr023 = validator.VMPR023(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr023 });
+            var vmpr024 = validator.VMPR024(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr024 });
+            var vmpr025 = validator.VMPR025(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr025 });
+            var vmpr026 = validator.VMPR026(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr026 });
+            var vmpr027 = validator.VMPR027(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr027 });
+            var vmpr028 = validator.VMPR028(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr028 });
+            var vmpr029 = validator.VMPR029(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr029 });
+            var vmpr030 = validator.VMPR030(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr030 });
+            var vmpr031 = validator.VMPR031(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr031 });
+            var vmpr032 = validator.VMPR032(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr032 });
+            var vmpr034 = validator.VMPR034(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr034 });
+            var vmpr035 = validator.VMPR035(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr035 });
+            var vmpr036 = validator.VMPR036(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr036 });
+            var vmpr037 = validator.VMPR037(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr037 });
+            var vmpr038 = validator.VMPR038(el);
+            utfall.Add(new BusinessRuleError { El = el, outcome = vmpr038 });
+            return utfall;
+
+        }
 
         private static List<BusinessRuleError> Validate(XElement el)
         {

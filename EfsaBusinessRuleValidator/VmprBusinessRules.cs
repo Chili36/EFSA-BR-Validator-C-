@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace EfsaBusinessRuleValidator
 {
-    class VmprBusinessRules
+    public class VmprBusinessRules
     {
         ///The value in the data element 'Programme Legal Reference' (progLegalRef) should be equal to 'Council Directive (EC) No 23/1996 (amended)' (N247A);
         ///The value in the data element 'Programme Legal Reference' (progLegalRef) should be equal to 'Council Directive (EC) No 23/1996 (amended)' (N247A);
@@ -838,6 +838,32 @@ namespace EfsaBusinessRuleValidator
             {
                 outcome.passed = !String.IsNullOrEmpty(evalLowLimit);
             }
+            return outcome;
+        }
+        ///If the value in the data element 'Evaluation of the result' (evalCode) is different from 'Not detected' (J040A) and 'Result not evaluated' (J029A), then a value in the data element 'Type of limit for the result evaluation' (evalLimitType) should be reported;
+        public Outcome VMPR028(XElement sample)
+        {
+            // <checkedDataElements>;
+            var evalCode = (string)sample.Element("evalCode");
+            var evalLimitType = (string)sample.Element("evalLimitType");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR028";
+            outcome.lastupdate = "2016-05-10";
+            outcome.description = "If the value in the data element 'Evaluation of the result' (evalCode) is different from 'Not detected' (J040A) and 'Result not evaluated' (J029A), then a value in the data element 'Type of limit for the result evaluation' (evalLimitType) should be reported;";
+            outcome.error = "WARNING: evalLimitType is missing, though recommended when evalCode is neither 'not detected' nor 'result not evaluated';";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+          
+                var evalCodes = new List<string>();
+                evalCodes.Add("J040A");
+                evalCodes.Add("J029A");
+                ///TESTING
+                if (evalCodes.Contains(evalCode))
+                {
+                    outcome.passed = !String.IsNullOrEmpty(evalLimitType);
+                }
             return outcome;
         }
         ///The value in the data element 'Evaluation of the result' (evalCode) must be equal to 'Detected' (J041A), or 'Not detected' (J040A), or 'Above maximum permissible quantities' (J003A), or 'Less than or equal to maximum permissible quantities' (J002A), or 'Compliant due to measurement uncertainty' (J031A), or 'Result not evaluated' (J029A);
