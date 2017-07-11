@@ -344,9 +344,7 @@ namespace EfsaBusinessRuleValidator
             outcome.passed = true;
 
             //Logik (ignore null: yes);
-            if (paramCode"RF-0108-003-PPP")
-{
-            }
+           
             if (!String.IsNullOrEmpty(paramCode))
             {
                 var paramCodes = new List<string>();
@@ -423,13 +421,659 @@ namespace EfsaBusinessRuleValidator
                 paramCodes.Add("RF-00002888-PAR");
                 paramCodes.Add("RF-00002889-PAR");
                
-                outcome.passed = paramCodes.Contains(paramCode);
-                var paramTypes = new List<string>();
-                paramTypes.Add("P002A");
-                outcome.passed = paramTypes.Contains(paramType);
+                if (paramCodes.Contains(paramCode))
+                {
+                    outcome.passed = paramType == "P002A";
+                }
 
             }
             return outcome;
         }
+        ///The value in the data element 'Analytical Method Type' (anMethType) must be equal to 'Screening' (AT06A), or 'Confirmation' (AT08A);
+        public Outcome VMPR012(XElement sample)
+        {
+            // <checkedDataElements>;
+            var anMethType = (string)sample.Element("anMethType");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR012";
+            outcome.lastupdate = "2016-05-10";
+            outcome.description = "The value in the data element 'Analytical Method Type' (anMethType) must be equal to 'Screening' (AT06A), or 'Confirmation' (AT08A);";
+            outcome.error = "anMethType is not screening or confirmation;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            if (!String.IsNullOrEmpty(anMethType))
+            {
+                var anMethTypes = new List<string>();
+                anMethTypes.Add("AT06A");
+                anMethTypes.Add("AT08A");
+                outcome.passed = anMethTypes.Contains(anMethType);
+            }
+            return outcome;
+        }
+        ///If the value in the data element 'Evaluation of the result' (evalCode) is 'Detected' (J041A) or 'Above maximum permissible quantities' (J003A), then the value in the data element 'Analytical Method Type' (anMethType) must be equal to 'Confirmation' (AT08A);
+        public Outcome VMPR013(XElement sample)
+        {
+            // <checkedDataElements>;
+            var anMethType = (string)sample.Element("anMethType");
+            var evalCode = (string)sample.Element("evalCode");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR013";
+            outcome.lastupdate = "2016-05-10";
+            outcome.description = "If the value in the data element 'Evaluation of the result' (evalCode) is 'Detected' (J041A) or 'Above maximum permissible quantities' (J003A), then the value in the data element 'Analytical Method Type' (anMethType) must be equal to 'Confirmation' (AT08A);";
+            outcome.error = "anMethType is not confirmation, though evalCode is detected or above maximum permissible quantities;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+           
+            if (!String.IsNullOrEmpty(anMethType))
+            {
+                var evalCodes = new List<string>();
+                evalCodes.Add("J041A");
+                evalCodes.Add("J003A");
+                ///TESTING
+
+                if (evalCodes.Contains(evalCode))
+                {
+                    var anMethTypes = new List<string>();
+                    anMethTypes.Add("AT08A");
+                    outcome.passed = anMethTypes.Contains(anMethType);
+                }
+            }
+            return outcome;
+        }
+        ///The value in the data element 'Accreditation procedure for the analytical method' (accredProc) should be equal to 'Accredited according to ISO/IEC17025' (V001A), or 'Accredited and validated according to Com.Dec. 2002/657/EC' (V007A), or 'Validated according to Commission Decision 2002/657/EC, but not accredited under ISO/IEC17025' (V005A);
+        public Outcome VMPR014(XElement sample)
+        {
+            // <checkedDataElements>;
+            var accredProc = (string)sample.Element("accredProc");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR014";
+            outcome.lastupdate = "2017-03-16";
+            outcome.description = "The value in the data element 'Accreditation procedure for the analytical method' (accredProc) should be equal to 'Accredited according to ISO/IEC17025' (V001A), or 'Accredited and validated according to Com.Dec. 2002/657/EC' (V007A), or 'Validated according to Commission Decision 2002/657/EC, but not accredited under ISO/IEC17025' (V005A);";
+            outcome.error = "WARNING: accredProc is not one of the recommended procedure;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            if (!String.IsNullOrEmpty(accredProc))
+            {
+                var accredProcs = new List<string>();
+                accredProcs.Add("V001A");
+                accredProcs.Add("V007A");
+                accredProcs.Add("V005A");
+                outcome.passed = accredProcs.Contains(accredProc);
+            }
+            return outcome;
+        }
+        ///If a value is reported in 'Result LOD' (resLOD), or 'Result LOQ' (resLOQ), or 'Result value' (resVal), or 'CC alpha' (CCalpha), or 'CC beta' (CCbeta), then the value in the data element 'Result unit' (resUnit) should be equal to 'Microgram/kilogram' (G050A) or 'Microgram/litre' (G051A) to ensure that values are comparable;
+        public Outcome VMPR015(XElement sample)
+        {
+            // <checkedDataElements>;
+            var resLOD = (string)sample.Element("resLOD");
+            var resLOQ = (string)sample.Element("resLOQ");
+            var resVal = (string)sample.Element("resVal");
+            var CCalpha = (string)sample.Element("CCalpha");
+            var CCbeta = (string)sample.Element("CCbeta");
+            var resUnit = (string)sample.Element("resUnit");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR015";
+            outcome.lastupdate = "2017-03-16";
+            outcome.description = "If a value is reported in 'Result LOD' (resLOD), or 'Result LOQ' (resLOQ), or 'Result value' (resVal), or 'CC alpha' (CCalpha), or 'CC beta' (CCbeta), then the value in the data element 'Result unit' (resUnit) should be equal to 'Microgram/kilogram' (G050A) or 'Microgram/litre' (G051A) to ensure that values are comparable;";
+            outcome.error = "WARNING: resUnit is not microgram/kilogram or microgram/litre, though a numerical value is reported;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            if (string.IsNullOrEmpty(resLOD) && string.IsNullOrEmpty(resLOQ) && string.IsNullOrEmpty(resVal) && string.IsNullOrEmpty(CCbeta) && string.IsNullOrEmpty(CCalpha))
+            {
+                return outcome;
+            }
+                var resUnits = new List<string>();
+                resUnits.Add("G050A");
+                resUnits.Add("G051A");
+                outcome.passed = resUnits.Contains(resUnit);
+            return outcome;
+        }
+        ///If the value in 'Parameter code' (paramCode) belongs to the group B3c (chemical elements used in vmpr), then a value in the data element 'Result LOQ' (resLOQ) should be reported;
+        public Outcome VMPR016(XElement sample)
+        {
+            // <checkedDataElements>;
+            var resLOQ = (string)sample.Element("resLOQ");
+            var paramCode = (string)sample.Element("paramCode");
+            string[] grupp = { "RF-00000001-RAD", "RF-00000002-CHE", "RF-00000006-CHE", "RF-00000013-CHE", "RF-00000020-CHE", "RF-00000025-CHE", "RF-00000029-CHE", "RF-00000048-CHE", "RF-00000052-CHE", "RF-00000059-CHE", "RF-00000066-CHE", "RF-00000071-CHE", "RF-00000080-CHE", "RF-00000103-CHE", "RF-00000110-CHE", "RF-00000123-CHE", "RF-00000125-CHE", "RF-00000127-CHE", "RF-00000142-CHE", "RF-00000144-CHE", "RF-00000146-CHE", "RF-00000149-CHE", "RF-00000151-CHE", "RF-00000160-CHE", "RF-00000163-CHE", "RF-00000166-CHE", "RF-00000169-CHE", "RF-00000171-CHE", "RF-00000173-CHE", "RF-00000175-CHE", "RF-00000178-CHE", "RF-00000181-CHE", "RF-00000183-CHE", "RF-00000188-CHE", "RF-00000190-CHE", "RF-00000192-CHE", "RF-00000194-CHE", "RF-00000196-CHE", "RF-00000198-CHE", "RF-00000200-CHE", "RF-00000202-CHE", "RF-00000204-CHE", "RF-00001449-PAR" };
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR016";
+            outcome.lastupdate = "2017-03-16";
+            outcome.description = "If the value in 'Parameter code' (paramCode) belongs to the group B3c (chemical elements used in vmpr), then a value in the data element 'Result LOQ' (resLOQ) should be reported;";
+            outcome.error = "WARNING: resLOQ is missing, though paramCode belongs to the group B3c (chemical elements used in vmpr);";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+
+            if (grupp.Contains(paramCode))
+            {
+                outcome.passed = !string.IsNullOrEmpty(resLOQ);
+
+            }
+            
+            return outcome;
+        }
+        ///A value in at least one of the following data elements must be reported: 'Result LOQ' (resLOQ) or 'CC beta' (CCbeta) or 'CC alpha' (CCalpha);
+        public Outcome VMPR017(XElement sample)
+        {
+            // <checkedDataElements>;
+            var resLOQ = (string)sample.Element("resLOQ");
+            var CCbeta = (string)sample.Element("CCbeta");
+            var CCalpha = (string)sample.Element("CCalpha");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR017";
+            outcome.lastupdate = "2017-03-16";
+            outcome.description = "A value in at least one of the following data elements must be reported: 'Result LOQ' (resLOQ) or 'CC beta' (CCbeta) or 'CC alpha' (CCalpha);";
+            outcome.error = "WARNING: None of the following data elements is reported, though at least one is mandatory: resLOQ, or CCbeta, or CCalpha;";
+            outcome.type = "warning";
+            outcome.passed = !(string.IsNullOrEmpty(resLOQ) && string.IsNullOrEmpty(CCalpha) &&string.IsNullOrEmpty(CCbeta));
+            return outcome;
+        }
+        ///If the value in the data element 'Accreditation procedure for the analytical method' (accredProc) is 'Accredited and validated according to Com. Dec. 2002/657/EC' (V007A) and the value in the data element 'Analytical method type' (anMethType) is 'Confirmation' (AT08A) and the value in 'Typer of parameter' (paramType) is not equal to 'Part of a sum' (P002A), and the value in 'Parameter code' (paramCode) doesn't belong to group B3c (chemical elements used in vmpr), then a value in the data element 'CC alpha' (CCalpha) must be reported;
+        public Outcome VMPR018(XElement sample)
+        {
+            // <checkedDataElements>;
+            var paramCode = (string)sample.Element("paramCode");
+            var accredProc = (string)sample.Element("accredProc");
+            var anMethType = (string)sample.Element("anMethType");
+            var paramType = (string)sample.Element("paramType");
+            var CCalpha = (string)sample.Element("CCalpha");
+
+            string[] b3c = { "RF-00000001-RAD", "RF-00000002-CHE", "RF-00000006-CHE", "RF-00000013-CHE", "RF-00000020-CHE", "RF-00000025-CHE", "RF-00000029-CHE", "RF-00000048-CHE", "RF-00000052-CHE", "RF-00000059-CHE", "RF-00000066-CHE", "RF-00000071-CHE", "RF-00000080-CHE", "RF-00000103-CHE", "RF-00000110-CHE", "RF-00000123-CHE", "RF-00000125-CHE", "RF-00000127-CHE", "RF-00000142-CHE", "RF-00000144-CHE", "RF-00000146-CHE", "RF-00000149-CHE", "RF-00000151-CHE", "RF-00000160-CHE", "RF-00000163-CHE", "RF-00000166-CHE", "RF-00000169-CHE", "RF-00000171-CHE", "RF-00000173-CHE", "RF-00000175-CHE", "RF-00000178-CHE", "RF-00000181-CHE", "RF-00000183-CHE", "RF-00000188-CHE", "RF-00000190-CHE", "RF-00000192-CHE", "RF-00000194-CHE", "RF-00000196-CHE", "RF-00000198-CHE", "RF-00000200-CHE", "RF-00000202-CHE", "RF-00000204-CHE", "RF-00001449-PAR" };
+            var outcome = new Outcome();
+            outcome.name = "VMPR018";
+            outcome.lastupdate = "2017-03-16";
+            outcome.description = "If the value in the data element 'Accreditation procedure for the analytical method' (accredProc) is 'Accredited and validated according to Com. Dec. 2002/657/EC' (V007A) and the value in the data element 'Analytical method type' (anMethType) is 'Confirmation' (AT08A) and the value in 'Typer of parameter' (paramType) is not equal to 'Part of a sum' (P002A), and the value in 'Parameter code' (paramCode) doesn't belong to group B3c (chemical elements used in vmpr), then a value in the data element 'CC alpha' (CCalpha) must be reported;";
+            outcome.error = "CCalpha is missing, though mandatory if accredProc is accredited and validated according to Com. Dec. 2002/657/EC and anMethType is confirmation and paramType is not part of a sum and paramCode is not in group B3c (chemical elements used in vmpr);";
+            outcome.type = "error";
+            outcome.passed = true;
+            if (accredProc == "V007A" && anMethType == "AT08A" && paramType != "P002A" && b3c.Contains(paramCode) == false)
+            {
+                outcome.passed = string.IsNullOrEmpty(CCalpha);
+            }
+            return outcome;
+        }
+        ///If the value in the data element 'Accreditation procedure for the analytical method' (accredProc) is 'Accredited and validated according to Com. Dec. 2002/657/EC' (V007A) and the value in the data element 'Analytical method type' (anMethType) is 'Screening' (AT06A), and the value in 'Parameter code' (paramCode) doesn't belong to group B3c (chemical elements used in vmpr), then a value in the data element 'CC beta' (CCbeta) must be reported
+        public Outcome VMPR019(XElement sample)
+        {
+            // <checkedDataElements>;
+            var paramCode = (string)sample.Element("paramCode");
+            var accredProc = (string)sample.Element("accredProc");
+            var anMethType = (string)sample.Element("anMethType");
+            var CCbeta = (string)sample.Element("CCbeta");
+            string[] b3c = { "RF-00000001-RAD", "RF-00000002-CHE", "RF-00000006-CHE", "RF-00000013-CHE", "RF-00000020-CHE", "RF-00000025-CHE", "RF-00000029-CHE", "RF-00000048-CHE", "RF-00000052-CHE", "RF-00000059-CHE", "RF-00000066-CHE", "RF-00000071-CHE", "RF-00000080-CHE", "RF-00000103-CHE", "RF-00000110-CHE", "RF-00000123-CHE", "RF-00000125-CHE", "RF-00000127-CHE", "RF-00000142-CHE", "RF-00000144-CHE", "RF-00000146-CHE", "RF-00000149-CHE", "RF-00000151-CHE", "RF-00000160-CHE", "RF-00000163-CHE", "RF-00000166-CHE", "RF-00000169-CHE", "RF-00000171-CHE", "RF-00000173-CHE", "RF-00000175-CHE", "RF-00000178-CHE", "RF-00000181-CHE", "RF-00000183-CHE", "RF-00000188-CHE", "RF-00000190-CHE", "RF-00000192-CHE", "RF-00000194-CHE", "RF-00000196-CHE", "RF-00000198-CHE", "RF-00000200-CHE", "RF-00000202-CHE", "RF-00000204-CHE", "RF-00001449-PAR" };
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR019";
+            outcome.lastupdate = "2016-05-10";
+            outcome.description = "If the value in the data element 'Accreditation procedure for the analytical method' (accredProc) is 'Accredited and validated according to Com. Dec. 2002/657/EC' (V007A) and the value in the data element 'Analytical method type' (anMethType) is 'Screening' (AT06A), and the value in 'Parameter code' (paramCode) doesn't belong to group B3c (chemical elements used in vmpr), then a value in the data element 'CC beta' (CCbeta) must be reported";
+            outcome.error = "CCbeta is missing, though mandatory if accredProc is accredited and validated according to Com. Dec. 2002/657/EC and anMethType is screening and paramCode is not in group B3c (chemical elements used in vmpr);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            if (accredProc == "V007A" && anMethType == "AT06A"  && b3c.Contains(paramCode) == false)
+            {
+                outcome.passed = string.IsNullOrEmpty(CCbeta);
+            }
+          
+            return outcome;
+        }
+
+        ///If the value in the data element 'Accreditation procedure for the analytical method' (accredProc) is 'Accredited and validated according to Com. Dec. 2002/657/EC' (V007A), then the value in the data element 'CC beta' (CCbeta) should be reported;
+        public Outcome VMPR020(XElement sample)
+        {
+            // <checkedDataElements>;
+            var accredProc = (string)sample.Element("accredProc");
+            var CCbeta = (string)sample.Element("CCbeta");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR020";
+            outcome.lastupdate = "2016-05-10";
+            outcome.description = "If the value in the data element 'Accreditation procedure for the analytical method' (accredProc) is 'Accredited and validated according to Com. Dec. 2002/657/EC' (V007A), then the value in the data element 'CC beta' (CCbeta) should be reported;";
+            outcome.error = "WARNING: CCbeta is missing, though recommended if accredProc is accredited and validated according to Com. Dec. 2002/657/E;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik (ignore null: no);
+            if (accredProc == "V007A")
+            {
+                outcome.passed = !String.IsNullOrEmpty(CCbeta);
+            }
+             return outcome;
+        }
+        ///The value in the data element 'Result qualitative value' (resQualValue) must be equal to 'negative/absent' (NEG), because neither positive screening results nor qualitative confirmation results should be reported;
+        public Outcome VMPR021(XElement sample)
+        {
+            // <checkedDataElements>;
+            var resQualValue = (string)sample.Element("resQualValue");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR021";
+            outcome.lastupdate = "2016-05-10";
+            outcome.description = "The value in the data element 'Result qualitative value' (resQualValue) must be equal to 'negative/absent' (NEG), because neither positive screening results nor qualitative confirmation results should be reported;";
+            outcome.error = "resQualValue is different from negative/absent;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            if (!String.IsNullOrEmpty(resQualValue))
+            {
+                var resQualValues = new List<string>();
+                resQualValues.Add("NEG");
+                outcome.passed = resQualValues.Contains(resQualValue);
+
+            }
+            return outcome;
+        }
+        ///If the value in the data element 'Analytical method type' (anMethType) is 'Screening' (AT06A), then the value in 'Type of results' (resType) should be equal to 'Qualitative value (binary)' (BIN) and the value in 'Result value' (resVal) should not be reported;
+        public Outcome VMPR022(XElement sample)
+        {
+            // <checkedDataElements>;
+            var anMethType = (string)sample.Element("anMethType");
+            var resType = (string)sample.Element("resType");
+            var resVal = (string)sample.Element("resVal");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR022";
+            outcome.lastupdate = "2017-03-16";
+            outcome.description = "If the value in the data element 'Analytical method type' (anMethType) is 'Screening' (AT06A), then the value in 'Type of results' (resType) should be equal to 'Qualitative value (binary)' (BIN) and the value in 'Result value' (resVal) should not be reported;";
+            outcome.error = "WARNING: resType is different from binary or resVal is reported, though anMethType is screening;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik (ignore null: no);
+            if (anMethType == "AT06A")
+            {
+                var resTypes = new List<string>();
+                resTypes.Add("BIN");
+                outcome.passed = resTypes.Contains(resType) && string.IsNullOrEmpty(resVal);
+            }
+            
+            return outcome;
+        }
+        ///If the value in the data element 'Analytical method type' (anMethType) is  'Confirmation' (AT08A), then the value in 'Type of results' (resType) should be equal to 'non detected value (below LOD)' (LOD), or 'non quantified value (below LOQ)' (LOQ), or 'numerical value' (VAL), or 'value below CCalpha (below CC alpha)' (CCA), and the value in 'Result qualitative value' (resQualValue) should not be reported;
+        public Outcome VMPR023(XElement sample)
+        {
+            // <checkedDataElements>;
+            var anMethType = (string)sample.Element("anMethType");
+            var resType = (string)sample.Element("resType");
+            var resQualValue = (string)sample.Element("resQualValue");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR023";
+            outcome.lastupdate = "2017-03-16";
+            outcome.description = "If the value in the data element 'Analytical method type' (anMethType) is  'Confirmation' (AT08A), then the value in 'Type of results' (resType) should be equal to 'non detected value (below LOD)' (LOD), or 'non quantified value (below LOQ)' (LOQ), or 'numerical value' (VAL), or 'value below CCalpha (below CC alpha)' (CCA), and the value in 'Result qualitative value' (resQualValue) should not be reported;";
+            outcome.error = "WARNING: resType is different from LOD, LOQ, VAL, CCA or resQualValue is reported, though anMethType is confirmation;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik (ignore null: no);
+            if (anMethType == "AT08A")
+            {
+                var resTypes = new List<string>();
+                resTypes.Add("LOD");
+                resTypes.Add("LOQ");
+                resTypes.Add("VAL");
+                resTypes.Add("CCA");
+                outcome.passed = resTypes.Contains(resType) && String.IsNullOrEmpty(resQualValue);
+            }
+            
+            return outcome;
+        }
+        ///The value in the data element 'Type of result' (resType), must be equal to 'non detected value (below LOD)' (LOD), or 'non quantified value (below LOQ)' (LOQ), or 'numerical value' (VAL), or 'value below CCalpha (below CC alpha)' (CCA), or 'value below CCbeta (below CC beta)' (CCB), or 'qualitative value (Binary)' (BIN), or 'Value above the upper limit of the working range' (AWR);
+        public Outcome VMPR024(XElement sample)
+        {
+            // <checkedDataElements>;
+            var resType = (string)sample.Element("resType");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR024";
+            outcome.lastupdate = "2017-03-16";
+            outcome.description = "The value in the data element 'Type of result' (resType), must be equal to 'non detected value (below LOD)' (LOD), or 'non quantified value (below LOQ)' (LOQ), or 'numerical value' (VAL), or 'value below CCalpha (below CC alpha)' (CCA), or 'value below CCbeta (below CC beta)' (CCB), or 'qualitative value (Binary)' (BIN), or 'Value above the upper limit of the working range' (AWR);";
+            outcome.error = "resType is different from LOD, LOQ, VAL, CCA, CCB, BIN, and AWR;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            if (!String.IsNullOrEmpty(resType))
+            {
+                var resTypes = new List<string>();
+                resTypes.Add("LOD");
+                resTypes.Add("LOQ");
+                resTypes.Add("VAL");
+                resTypes.Add("CCA");
+                resTypes.Add("CCB");
+                resTypes.Add("BIN");
+                resTypes.Add("AWR");
+                outcome.passed = resTypes.Contains(resType);
+
+            }
+            return outcome;
+        }
+        ///If a value in the data element 'Result value' (resVal) is reported and 'CC alpha' (CCalpha) is not reported, then a value in at least one of the following data elements should be reported: 'Result value uncertainty' (resValUncert) or 'Result value uncertainty Standard deviation' (resValUncertSD), i.e. precision must be determined for quantitative results;
+        public Outcome VMPR025(XElement sample)
+        {
+            // <checkedDataElements>;
+            var resVal = (string)sample.Element("resVal");
+            var CCalpha = (string)sample.Element("CCalpha");
+            var resValUncert = (string)sample.Element("resValUncert");
+            var resValUncertSD = (string)sample.Element("resValUncertSD");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR025";
+            outcome.lastupdate = "2017-03-16";
+            outcome.description = "If a value in the data element 'Result value' (resVal) is reported and 'CC alpha' (CCalpha) is not reported, then a value in at least one of the following data elements should be reported: 'Result value uncertainty' (resValUncert) or 'Result value uncertainty Standard deviation' (resValUncertSD), i.e. precision must be determined for quantitative results;";
+            outcome.error = "WARNING: resValUncert and resValUncertSD are missing, though at least one is recommended when resVal is reported and CCalpha is missing;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik (ignore null: no);
+            if (string.IsNullOrEmpty(CCalpha) && !string.IsNullOrEmpty(resVal))
+            {
+                var resVals = new List<string>();
+                ///TESTING
+                outcome.passed = !string.IsNullOrEmpty(resValUncert) || !string.IsNullOrEmpty(resValUncertSD);
+            }
+            return outcome;
+        }
+        ///The value in the data element 'Type of limit for the result evaluation' (evalLimitType) should be equal to 'Maximum Residue Level (MRL)' (W002A), or 'Minimum Required Performance Limit (MRPL)' (W005A), or 'Reference point of action (RPA)' (W006A), or 'Presence' (W012A), or 'Maximum Limit' (W001A);
+        public Outcome VMPR026(XElement sample)
+        {
+            // <checkedDataElements>;
+            var evalLimitType = (string)sample.Element("evalLimitType");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR026";
+            outcome.lastupdate = "2017-03-16";
+            outcome.description = "The value in the data element 'Type of limit for the result evaluation' (evalLimitType) should be equal to 'Maximum Residue Level (MRL)' (W002A), or 'Minimum Required Performance Limit (MRPL)' (W005A), or 'Reference point of action (RPA)' (W006A), or 'Presence' (W012A), or 'Maximum Limit' (W001A);";
+            outcome.error = "WARNING: evalLimitType is not in the list of recommended codes;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            if (!String.IsNullOrEmpty(evalLimitType))
+            {
+                var evalLimitTypes = new List<string>();
+                evalLimitTypes.Add("W002A");
+                evalLimitTypes.Add("W005A");
+                evalLimitTypes.Add("W006A");
+                evalLimitTypes.Add("W012A");
+                evalLimitTypes.Add("W001A");
+                outcome.passed = evalLimitTypes.Contains(evalLimitType);
+
+            }
+            return outcome;
+        }
+        ///If a value in the data element 'Result value' (resVal) is reported and the value in the data element 'Type of limit for the result evaluation' (evalLimitType) is different from 'Presence' (W012A), then a a value in the data element 'Limit for the result evaluation' (evalLowLimit) should be reported;
+        public Outcome VMPR027(XElement sample)
+        {
+            // <checkedDataElements>;
+            var resVal = (string)sample.Element("resVal");
+            var evalLimitType = (string)sample.Element("evalLimitType");
+            var evalLowLimit = (string)sample.Element("evalLowLimit");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR027";
+            outcome.lastupdate = "2016-05-10";
+            outcome.description = "If a value in the data element 'Result value' (resVal) is reported and the value in the data element 'Type of limit for the result evaluation' (evalLimitType) is different from 'Presence' (W012A), then a a value in the data element 'Limit for the result evaluation' (evalLowLimit) should be reported;";
+            outcome.error = "WARNING: evalLowLimit is missing, though recommended when resVal is reported and evalLimitType is different from presence;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik (ignore null: no);
+            if (!string.IsNullOrEmpty(resVal) && evalLimitType == "W012A")
+            {
+                outcome.passed = !String.IsNullOrEmpty(evalLowLimit);
+            }
+            return outcome;
+        }
+        ///The value in the data element 'Evaluation of the result' (evalCode) must be equal to 'Detected' (J041A), or 'Not detected' (J040A), or 'Above maximum permissible quantities' (J003A), or 'Less than or equal to maximum permissible quantities' (J002A), or 'Compliant due to measurement uncertainty' (J031A), or 'Result not evaluated' (J029A);
+        public Outcome VMPR029(XElement sample)
+        {
+            // <checkedDataElements>;
+            var evalCode = (string)sample.Element("evalCode");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR029";
+            outcome.lastupdate = "2016-05-10";
+            outcome.description = "The value in the data element 'Evaluation of the result' (evalCode) must be equal to 'Detected' (J041A), or 'Not detected' (J040A), or 'Above maximum permissible quantities' (J003A), or 'Less than or equal to maximum permissible quantities' (J002A), or 'Compliant due to measurement uncertainty' (J031A), or 'Result not evaluated' (J029A);";
+            outcome.error = "evalCode is not in the allowed list of codes;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            if (!String.IsNullOrEmpty(evalCode))
+            {
+                var evalCodes = new List<string>();
+                evalCodes.Add("J041A");
+                evalCodes.Add("J040A");
+                evalCodes.Add("J003A");
+                evalCodes.Add("J002A");
+                evalCodes.Add("J031A");
+                evalCodes.Add("J029A");
+                outcome.passed = evalCodes.Contains(evalCode);
+
+            }
+            return outcome;
+        }
+        ///If the value in the data element 'Type of limit for the result evaluation' (evalLimitType) is equal to 'Maximum Residue Level (MRL)' (W002A), then the value in 'Evaluation of the result' (evalCode) should be equal to 'Less than or equal to maximum permissible quantities' (J002A), or 'Greater than maximum permissible quantities' (J003A), or 'Compliant due to measurement uncertainty' (J031A), or 'result not evaluated' (J029A);
+        public Outcome VMPR030(XElement sample)
+        {
+            // <checkedDataElements>;
+            var evalLimitType = (string)sample.Element("evalLimitType");
+            var evalCode = (string)sample.Element("evalCode");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR030";
+            outcome.lastupdate = "2017-03-17";
+            outcome.description = "If the value in the data element 'Type of limit for the result evaluation' (evalLimitType) is equal to 'Maximum Residue Level (MRL)' (W002A), then the value in 'Evaluation of the result' (evalCode) should be equal to 'Less than or equal to maximum permissible quantities' (J002A), or 'Greater than maximum permissible quantities' (J003A), or 'Compliant due to measurement uncertainty' (J031A), or 'result not evaluated' (J029A);";
+            outcome.error = "WARNING: evalCode is not in the recommended list of codes when evalLimitType is MRL;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            if (evalLimitType == "W002A")
+            {
+                var evalCodes = new List<string>();
+                evalCodes.Add("J002A");
+                evalCodes.Add("J003A");
+                evalCodes.Add("J031A");
+                evalCodes.Add("J029A");
+                outcome.passed = evalCodes.Contains(evalCode);
+
+            }
+           
+            return outcome;
+        }
+        ///If the value in the data element 'Type of limit for the result evaluation' (evalLimitType) is equal to 'Presence' (W012A), then the value in 'Evaluation of the result' (evalCode) should be equal to 'Not detected' (J040A), or 'Detected' (J041A);
+        public Outcome VMPR031(XElement sample)
+        {
+            // <checkedDataElements>;
+            var evalLimitType = (string)sample.Element("evalLimitType");
+            var evalCode = (string)sample.Element("evalCode");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR031";
+            outcome.lastupdate = "2017-03-17";
+            outcome.description = "If the value in the data element 'Type of limit for the result evaluation' (evalLimitType) is equal to 'Presence' (W012A), then the value in 'Evaluation of the result' (evalCode) should be equal to 'Not detected' (J040A), or 'Detected' (J041A);";
+            outcome.error = "WARNING: evalCode is not in the recommended list of codes when evalLimitType is presence;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            if (evalLimitType == "W012A")
+            {
+                var evalCodes = new List<string>();
+                evalCodes.Add("J040A");
+                evalCodes.Add("J041A");
+                outcome.passed = evalCodes.Contains(evalCode);
+            }
+            
+            return outcome;
+        }
+        ///A value in 'Sample taken assessment' (evalInfo.sampTkAsses) must be reported;
+        public Outcome VMPR032(XElement sample)
+        {
+            // <checkedDataElements>;
+            var evalInfosampTkAsses = (string)sample.Element("evalInfo.sampTkAsses");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR032";
+            outcome.lastupdate = "2017-03-16";
+            outcome.description = "A value in 'Sample taken assessment' (evalInfo.sampTkAsses) must be reported;";
+            outcome.error = "evalInfo.sampTkAsses and evalInfo.sampEventAsses are missing, though at least one is mandatory;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik (ignore null: no);
+            if (1 == 1)
+            {
+
+                outcome.passed = !String.IsNullOrEmpty(evalInfosampTkAsses);
+
+            }
+            return outcome;
+        }
+        ///If the value in the data elements 'Sample taken assessment' (evalInfo.sampTkAsses) or 'Sampling event assessment' (evalInfo.sampEventAsses) is equal to 'Non-compliant' (J038A), then a value in the data element 'Action taken' (actTakenCode) must be reported;
+        public Outcome VMPR034(XElement sample)
+        {
+            // <checkedDataElements>;
+            var evalInfosampTkAsses = (string)sample.Element("evalInfo.sampTkAsses");
+            var evalInfosampEventAsses = (string)sample.Element("evalInfo.sampEventAsses");
+            var actTakenCode = (string)sample.Element("actTakenCode");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR034";
+            outcome.lastupdate = "2016-05-10";
+            outcome.description = "If the value in the data elements 'Sample taken assessment' (evalInfo.sampTkAsses) or 'Sampling event assessment' (evalInfo.sampEventAsses) is equal to 'Non-compliant' (J038A), then a value in the data element 'Action taken' (actTakenCode) must be reported;";
+            outcome.error = "actTakenCode is missing, though mandatory when evalInfo.sampTkAsses or evalInfo.sampEventAsses are non-compliant;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik (ignore null: no);
+            if (evalInfosampTkAsses == "J038A" || evalInfosampEventAsses == "J038A")
+            {
+               
+                outcome.passed = !String.IsNullOrEmpty(actTakenCode);
+
+            }
+            return outcome;
+        }
+        ///The value in the data element 'Sample taken assessment' (evalInfo.sampTkAsses) and the value in the data element 'Sampling event assessment' (evalInfo.sampEventAsses) must be equal to 'Compliant' (J037A), or 'Non-compliant' (J038A);
+        public Outcome VMPR035(XElement sample)
+        {
+            // <checkedDataElements>;
+            var evalInfosampTkAsses = (string)sample.Element("evalInfo.sampTkAsses");
+            var evalInfosampEventAsses = (string)sample.Element("evalInfo.sampEventAsses");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR035";
+            outcome.lastupdate = "2016-05-10";
+            outcome.description = "The value in the data element 'Sample taken assessment' (evalInfo.sampTkAsses) and the value in the data element 'Sampling event assessment' (evalInfo.sampEventAsses) must be equal to 'Compliant' (J037A), or 'Non-compliant' (J038A);";
+            outcome.error = "Neither evalInfo.sampTkAsses nor evalInfo.sampEventAsses are compliant or non-compliant;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            if (!String.IsNullOrEmpty(evalInfosampTkAsses) || !String.IsNullOrEmpty(evalInfosampEventAsses))
+            {
+                var evalInfosampTkAssess = new List<string>();
+                evalInfosampTkAssess.Add("J037A");
+                evalInfosampTkAssess.Add("J038A");
+                outcome.passed = evalInfosampTkAssess.Contains(evalInfosampTkAsses);
+
+                var evalInfosampEventAssess = new List<string>();
+                evalInfosampEventAssess.Add("J037A");
+                evalInfosampEventAssess.Add("J038A");
+                outcome.passed = evalInfosampEventAssess.Contains(evalInfosampEventAsses);
+
+            }
+            return outcome;
+        }
+        ///If the value in the data elemente 'Action Taken' (actTakenCode) is equal to 'Follow-up investigation' (I), then a value in the data element 'Conclusion of follow-up investigation' (evalInfo.conclusion) must be reported;
+        public Outcome VMPR036(XElement sample)
+        {
+            // <checkedDataElements>;
+            var actTakenCode = (string)sample.Element("actTakenCode");
+            var evalInfoconclusion = (string)sample.Element("evalInfo.conclusion");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR036";
+            outcome.lastupdate = "2016-05-10";
+            outcome.description = "If the value in the data elemente 'Action Taken' (actTakenCode) is equal to 'Follow-up investigation' (I), then a value in the data element 'Conclusion of follow-up investigation' (evalInfo.conclusion) must be reported;";
+            outcome.error = "evalInfo.conclusion is missing, though actTakenCode is follow-up investigation;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik (ignore null: no);
+            if (actTakenCode == "I")
+            {
+                outcome.passed = !String.IsNullOrEmpty(evalInfoconclusion);
+            }
+            
+            return outcome;
+        }
+        ///The value in the data element 'Sampling point' (sampPoint) should be different from 'Unspecified', 'Others' and 'Unknown';
+        public Outcome VMPR037(XElement sample)
+        {
+            // <checkedDataElements>;
+            var sampPoint = (string)sample.Element("sampPoint");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR037";
+            outcome.lastupdate = "2016-05-10";
+            outcome.description = "The value in the data element 'Sampling point' (sampPoint) should be different from 'Unspecified', 'Others' and 'Unknown';";
+            outcome.error = "WARNING: sampPoint is reported as unspecified, or others, or unknown, though these values should not be reported;";
+            outcome.type = "warning";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            if (!String.IsNullOrEmpty(sampPoint))
+            {
+                var sampPoints = new List<string>();
+                sampPoints.Add("E098A");
+                sampPoints.Add("E099A");
+                sampPoints.Add("E980A");
+                outcome.passed = sampPoints.Contains(sampPoint);
+
+            }
+            return outcome;
+        }
+        ///The value in 'Coded description of the matrix of the sample taken' (sampMatCode) should be equal to the value in 'Coded description of the analysed matrix' (anMatCode);
+        public Outcome VMPR038(XElement sample)
+        {
+            // <checkedDataElements>;
+            var sampMatCode = (string)sample.Element("sampMatCode");
+            var anMatCode = (string)sample.Element("anMatCode");
+
+            var outcome = new Outcome();
+            outcome.name = "VMPR038";
+            outcome.lastupdate = "2017-04-20";
+            outcome.description = "The value in 'Coded description of the matrix of the sample taken' (sampMatCode) should be equal to the value in 'Coded description of the analysed matrix' (anMatCode);";
+            outcome.error = "anMatCode is different from sampMatCode, though the matrix sampled should be equal to the analysed matrix;";
+            outcome.type = "error";
+            outcome.passed = true;
+
+            //Logik (ignore null: yes);
+            outcome.passed = sampMatCode == anMatCode;
+
+            return outcome;
+        }
     }
+   
+
+
 }
