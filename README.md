@@ -2,7 +2,7 @@
 Validator for EFSA Datacollection Business rules
 
 
-WARNING: This is a work in progress. Very much in progress. It was born out of necessity to solve specifics problems and as such it is highly likely it will not solve your specific problem, but perhaps it will serve as an starting point. 
+# WARNING: This is a work in progress. it does not even contain all current EFSA business rules. the project was born out of necessity to solve specifics problems with the Swedish SSD reporting, therefore is is highly unlikely this project will solve your specific problem, but perhaps it will serve as an starting point. 
 
 
 This solution contains two projects, Efsas Business Rules Validator and ValidateXML. The rules are contained in the project EFSAS Business Rules Validator while the ValidateXML is a small consoleapplication used for verifying an XML-document. 
