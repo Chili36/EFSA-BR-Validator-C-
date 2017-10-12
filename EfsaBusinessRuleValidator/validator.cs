@@ -3676,6 +3676,7 @@ namespace EfsaBusinessRuleValidator
         public string version { get; set; }
         public string lastupdate { get; set; }
         public List<Tuple<string, string>> values { get; set; } = new List<Tuple<string, string>>();
+        
     }
 
 }

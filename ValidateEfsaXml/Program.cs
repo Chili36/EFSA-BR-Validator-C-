@@ -12,7 +12,11 @@ namespace ValidateEfsaXml
     {
         static void Main(string[] args)
         {
-            var xmlfil = @"C:\Users\dafo\Downloads\Pesticidrapport_20170706-142715.xml";
+
+            
+            //var xmlfil = @"C:\Users\dafo\Downloads\Pesticidrapport_2016-01-01_2016-01-31.xml";
+            var xmlfil = @"C:\Dev\REST_latest.xml";
+
 
             if (args.Length > 0)
             {
@@ -27,6 +31,16 @@ namespace ValidateEfsaXml
                 Console.ReadLine();
             }
 
+
+            ValidateVMPR(XDocument.Load(@xmlfil));
+            //ValideDatePest(xmlfil);
+            Console.WriteLine("DONE!");
+            Console.ReadLine();
+
+        }
+
+        private static void ValideDatePest(string xmlfil)
+        {
             var xml = XDocument.Load(xmlfil);
             var samples = XDocument.Load(@xmlfil).Descendants("result"); //Använder Workflow 2
             var tests = new List<BusinessRuleError>();
@@ -34,14 +48,16 @@ namespace ValidateEfsaXml
 
             foreach (var el in samples)
             {
-                 tests.AddRange(Validate(el));
+                tests.AddRange(Validate(el));
             }
 
-            Console.WriteLine($"Det fanns {tests.Count()} valideringsfel");
+          
 
 
             var errors = tests.Where(x => x.outcome.passed == false);
-            foreach (var error in errors.GroupBy(p=> p.outcome.error))
+            Console.WriteLine($"Det fanns {errors.Count()} valideringsfel");
+
+            foreach (var error in errors.GroupBy(p => p.outcome.error))
             {
                 Console.WriteLine(errors.Where(x => x.outcome.error == error.Key).First().outcome.name);
                 Console.WriteLine(error.Key);
@@ -51,7 +67,7 @@ namespace ValidateEfsaXml
 
                 //Skapa xmlfil med alla fel. 
 
-                var xmlDoc = new XDocument(new XElement("errors", samplesWithErrors.Select(x=> x.El)));
+                var xmlDoc = new XDocument(new XElement("errors", samplesWithErrors.Select(x => x.El)));
 
                 var filnamn = $"C:\\dev\\errors\\{errors.Where(x => x.outcome.error == error.Key).First().outcome.name}_q4.xml";
 
@@ -62,7 +78,7 @@ namespace ValidateEfsaXml
 
 
                 XElement e = errors.Where(x => x.outcome.error == error.Key).First().El;
-                Outcome o = errors.Where(x => x.outcome.error == error.Key ).First().outcome;
+                Outcome o = errors.Where(x => x.outcome.error == error.Key).First().outcome;
 
                 Console.WriteLine($"Restype = {(string)e.Element("resType")}");
                 Console.WriteLine($"labSampCode = {(string)e.Element("labSampCode")}");
@@ -83,11 +99,64 @@ namespace ValidateEfsaXml
                 Console.WriteLine("----------------------");
 
             }
+        }
 
-            Console.ReadLine();
+        static void ValidateVMPR(XDocument xml)
+        {
+            var results = xml.Descendants("result");
+
+            var tests = new List<BusinessRuleError>();
+            var validator = new Validator();
+
+            foreach (var el in results)
+            {
+                tests.AddRange(ValidateVMPR(el));
+            }
+
+            var errors = tests.Where(x => x.outcome.passed == false);
+            foreach (var error in errors.Where(q=> q.outcome.type == "error").GroupBy(p => p.outcome.error))
+            {
+                Console.WriteLine(errors.Where(x => x.outcome.error == error.Key).First().outcome.name);
+                Console.WriteLine(error.Key);
+
+                var samplesWithErrors = errors.Where(x => x.outcome.error == error.Key);
+                var noOfSamples = samplesWithErrors.Select(x => x.El.Element("sampId").Value).Distinct().Count();
+
+                //Skapa xmlfil med alla fel. 
+
+                var xmlDoc = new XDocument(new XElement("errors", samplesWithErrors.Select(x => x.El)));
+
+                var filnamn = $"C:\\dev\\errors\\{errors.Where(x => x.outcome.error == error.Key).First().outcome.name}_q4.xml";
+
+                xmlDoc.Save(filnamn);
+
+
+                Console.WriteLine($"There are {noOfSamples} samples with this error");
+
+
+                XElement e = errors.Where(x => x.outcome.error == error.Key).First().El;
+                Outcome o = errors.Where(x => x.outcome.error == error.Key).First().outcome;
+
+                Console.WriteLine($"sampId = {(string)e.Element("sampId")}");
+                Console.WriteLine($"resId = {(string)e.Element("resId")}");
+                foreach (var v in o.values)
+                {
+                    Console.WriteLine($"Value: {v.Item1}: {v.Item2}");
+
+                }
+
+
+
+                //    El.Element("labSampCode").Value;
+
+
+
+                // Console.WriteLine(e);
+                Console.WriteLine("----------------------");
+
+            }
 
         }
-       
        
         private static List<BusinessRuleError> ValidateVMPR(XElement el)
         {
@@ -196,7 +265,7 @@ namespace ValidateEfsaXml
                 utfall.Add(new BusinessRuleError { El = el, outcome = br02a_02 });
             }
 
-
+        
             var br02a_03 = validator.BR02A_03(el);
             if (!br02a_03.passed)
             {
