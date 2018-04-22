@@ -7,11 +7,10 @@ using System.Xml.Linq;
 
 namespace EfsaBusinessRuleValidator
 {
-    public class VmprBusinessRules
+     public class VmprBusinessRules
     {
-        
-        
-        ///The value in the data element 'Programme Legal Reference' (progLegalRef) should be equal to 'Council Directive (EC) No 23/1996 (amended)' (N247A);
+
+
         ///The value in the data element 'Programme Legal Reference' (progLegalRef) should be equal to 'Council Directive (EC) No 23/1996 (amended)' (N247A);
         public Outcome VMPR001(XElement sample)
         {
@@ -20,17 +19,14 @@ namespace EfsaBusinessRuleValidator
 
             var outcome = new Outcome();
             outcome.name = "VMPR001";
-            outcome.lastupdate = "2017-01-09";
+            outcome.lastupdate = "2017-12-06";
             outcome.description = "The value in the data element 'Programme Legal Reference' (progLegalRef) should be equal to 'Council Directive (EC) No 23/1996 (amended)' (N247A);";
             outcome.error = "WARNING: progLegalRef is different from Council Directive (EC) No 23/1996;";
             outcome.type = "warning";
             outcome.passed = true;
 
             //Logik
-            if (progLegalRef != "N247A")
-            {
-                outcome.passed = false;
-            }
+            outcome.passed = progLegalRef == "N247A";
 
             return outcome;
         }
@@ -116,31 +112,28 @@ namespace EfsaBusinessRuleValidator
             }
             return outcome;
         }
+
+
         ///The value in the data element 'Programme type' (progType) should be equal to 'Official (National and EU) programme' (K018A);
         public Outcome VMPR005(XElement sample)
         {
             // <checkedDataElements>;
-            var progType = (string)sample.Element("progType");
+            var progType = sample.Element("progType").Value;
 
             var outcome = new Outcome();
             outcome.name = "VMPR005";
-            outcome.lastupdate = "2017-01-10";
+            outcome.lastupdate = "2017-12-06";
             outcome.description = "The value in the data element 'Programme type' (progType) should be equal to 'Official (National and EU) programme' (K018A);";
             outcome.error = "WARNING: progType is not Official (National and EU) programme;";
             outcome.type = "warning";
             outcome.passed = true;
 
-            //Logik (ignore null: yes);
-            if (!String.IsNullOrEmpty(progType))
+            //Logik
+            if (!string.IsNullOrEmpty(progType))
             {
-                var progTypes = new List<string>();
-                progTypes.Add("K018A");
-                if (!progTypes.Contains(progType))
-                {
-                    outcome.passed = false;
-                }
-
+                outcome.passed = progType == "K018A";
             }
+
             return outcome;
         }
         ///The value in the data element 'Sampling method' (sampMethod) should be equal to 'According to Dir. 2002/63/EC' (N009A), or 'According to 97/747/EC' (N010A), or 'According to Reg 1883/2006' (N015A), or 'According to 98/179/EC' (N021A), or 'Individual' (N030A), or 'According to Commission Regulation (EU) No 589/201' (N039A);
@@ -202,95 +195,49 @@ namespace EfsaBusinessRuleValidator
             }
             return outcome;
         }
-        ///Only recommended combinations of 'Sampling point' (sampPoint) and 'Sampling unit type' (sampUnitType) should be reported;
+
+        ///Only recommended 'Sampling point' (sampPoint) codes should be reported;
         public Outcome VMPR008(XElement sample)
         {
             // <checkedDataElements>;
-            var sampPoint = (string)sample.Element("sampPoint");
-            var sampUnitType = (string)sample.Element("sampUnitType");
-
-        
+            var sampPoint = sample.Element("sampPoint").Value;
 
             var outcome = new Outcome();
             outcome.name = "VMPR008";
-            outcome.lastupdate = "2017-01-10";
-            outcome.description = "Only recommended combinations of 'Sampling point' (sampPoint) and 'Sampling unit type' (sampUnitType) should be reported;";
-            outcome.error = "WARNING: the combinations of sampPoint and sampUnitType are not among the recommended when reporting VMPR results;";
+            outcome.lastupdate = "2017-12-06";
+            outcome.description = "Only recommended 'Sampling point' (sampPoint) codes should be reported;";
+            outcome.error = "WARNING: sampPoint is not in the recommended list of codes;";
             outcome.type = "warning";
             outcome.passed = true;
-            outcome.values.Add(Tuple.Create<string, string>(nameof(sampPoint), sampPoint));
-            outcome.values.Add(Tuple.Create<string, string>(nameof(sampUnitType), sampUnitType));
 
-            //Logik (ignore null: yes);
-            if (!String.IsNullOrEmpty(sampPoint) && !String.IsNullOrEmpty(sampUnitType))
+            //Logik
+            if (!string.IsNullOrEmpty(sampPoint))
             {
-                var sampPoints = new List<string>();
+                var list = new List<string>();
+                list.Add("E010A");
+                list.Add("E100A");
+                list.Add("E101A");
+                list.Add("E112A");
+                list.Add("E150A");
+                list.Add("E152A");
+                list.Add("E170A");
+                list.Add("E180A");
+                list.Add("E300A");
+                list.Add("E311A");
+                list.Add("E310A");
+                list.Add("E301A");
+                list.Add("E320A");
+                list.Add("E510A");
+                list.Add("E520A");
+                list.Add("E600A");
+                list.Add("E700A");
 
-                if (sampPoint == "E10A")
-                {
-                    var sampUnitTypes = new List<string>();
-                    sampUnitTypes.Add("G198A");
-                    sampUnitTypes.Add("G199A");
-                    sampUnitTypes.Add("G202A");
-                    if (!sampUnitTypes.Contains(sampUnitType))
-                    {
-                        outcome.passed = false;
-                    }
-                }
-                if (sampPoint == "E112A")
-                {
-                    var sampUnitTypes = new List<string>();
-                    sampUnitTypes.Add("G204A");
-                    sampUnitTypes.Add("G203A");
-                    outcome.passed = sampUnitTypes.Contains(sampUnitType);
-                }
-                if (sampPoint == "E152A")
-                {
-                    var sampUnitTypes = new List<string>();
-                    sampUnitTypes.Add("G198A");
-                    sampUnitTypes.Add("G199A");
-                    sampUnitTypes.Add("G202A");
-                    outcome.passed = sampUnitTypes.Contains(sampUnitType);
-                }
-
-                sampPoints = new List<string>();
-                sampPoints.Add("E180A");
-                sampPoints.Add("E170A");
-                if (!sampPoints.Contains(sampPoint))
-                {
-                    outcome.passed = sampUnitType == "G199A";
-                }
-                sampPoints = new List<string>();
-                sampPoints.Add("E300A");
-                sampPoints.Add("E301A");
-                sampPoints.Add("E510A");
-                sampPoints.Add("E520A");
-                if (!sampPoints.Contains(sampPoint))
-                {
-                    var sampUnitTypes = new List<string>();
-                    sampUnitTypes.Add("G204A");
-                    sampUnitTypes.Add("G203A");
-                    outcome.passed = sampUnitTypes.Contains(sampUnitType);
-                }
-                if (sampPoint == "E311A")
-                {
-                    var sampUnitTypes = new List<string>();
-                    sampUnitTypes.Add("G200A");
-                    sampUnitTypes.Add("G199A");
-                    outcome.passed = sampUnitTypes.Contains(sampUnitType);
-                }
-                if (sampPoint == "E010A")
-                {
-                    var sampUnitTypes = new List<string>();
-                    sampUnitTypes.Add("G199A");
-                    sampUnitTypes.Add("G202A");
-                    sampUnitTypes.Add("G203A");
-                    outcome.passed = sampUnitTypes.Contains(sampUnitType);
-                }
+                outcome.passed = list.Contains(sampPoint);
             }
+
             return outcome;
         }
-        ///A value in the data element 'Text description of the matrix of the sample taken' (sampMatText) should be reported;
+
         public Outcome VMPR009(XElement sample)
         {
             // <checkedDataElements>;
@@ -311,31 +258,38 @@ namespace EfsaBusinessRuleValidator
             outcome.passed = !String.IsNullOrEmpty(sampMatText);
             return outcome;
         }
-        ///The value in the data element 'Type of parameter' (paramType) should be equal to 'Full legal marker residue definition analysed' (P005A), or 'Sum based on a subset' (P004A), or 'Part of a sum' (P002A);
-        public Outcome VMPR010(XElement sample)
-        {
-            // <checkedDataElements>;
-            var paramType = (string)sample.Element("paramType");
+       
+///If the value in 'Parameter code' (paramCode) doesn't belong to the group B3c (chemical elements used in vmpr), then the value in the data element 'Type of parameter' (paramType) should be equal to 'Full legal marker residue definition analysed' (P005A), or 'Sum based on a subset' (P004A), or 'Part of a sum' (P002A);
+public Outcome VMPR010(XElement sample)
+{
+	// <checkedDataElements>;
+	var paramType = (string)sample.Element("paramType");
+	var paramCode = (string)sample.Element("paramCode");
 
-            var outcome = new Outcome();
-            outcome.name = "VMPR010";
-            outcome.lastupdate = "2017-03-16";
-            outcome.description = "The value in the data element 'Type of parameter' (paramType) should be equal to 'Full legal marker residue definition analysed' (P005A), or 'Sum based on a subset' (P004A), or 'Part of a sum' (P002A);";
-            outcome.error = "WARNING: paramType is not in the recommended list of codes;";
-            outcome.type = "warning";
-            outcome.passed = true;
+	var outcome = new Outcome();
+	outcome.name = "VMPR010";
+	outcome.lastupdate = "2018-01-03";
+	outcome.description = "If the value in 'Parameter code' (paramCode) doesn't belong to the group B3c (chemical elements used in vmpr), then the value in the data element 'Type of parameter' (paramType) should be equal to 'Full legal marker residue definition analysed' (P005A), or 'Sum based on a subset' (P004A), or 'Part of a sum' (P002A);";
+	outcome.error = "WARNING: paramType is not in the recommended list of codes;";
+	outcome.type = "warning";
+	outcome.passed = true;
 
-            //Logik (ignore null: yes);
-            if (!String.IsNullOrEmpty(paramType))
-            {
-                var paramTypes = new List<string>();
-                paramTypes.Add("P005A");
-                paramTypes.Add("P004A");
-                paramTypes.Add("P002A");
-                outcome.passed = paramTypes.Contains(paramType);
-            }
-            return outcome;
-        }
+	//Logik (ignore null: yes);
+
+	var b3c = new List<string> { "RF-00000124-CHE", "RF-00000128-CHE", "RF-00000150-CHE", "RF-00000170-CHE", "RF-00000191-CHE", "RF-00000126-CHE", "RF-00000203-CHE", "RF-00000168-CHE", "RF-00000067-CHE", "RF-00000185-CHE", "RF-00000176-CHE", "RF-00000179-CHE", "RF-00000182-CHE", "RF-00000152-CHE", "RF-00000161-CHE", "RF-00000174-CHE", "RF-00000193-CHE", "RF-00000205-CHE", "RF-00000060-CHE", "RF-00000135-CHE", "RF-00000167-CHE", "RF-00000250-CHE", "RF-00000143-CHE", "RF-00000189-CHE", "RF-00000007-CHE", "RF-00000147-CHE", "RF-00000186-CHE", "RF-00000164-CHE", "RF-00000184-CHE", "RF-00000053-CHE", "RF-00000251-CHE", };
+
+	if (!b3c.Any(b => b == paramCode))
+	{
+		var paramTypes = new List<string>();
+		paramTypes.Add("P005A");
+		paramTypes.Add("P004A");
+		paramTypes.Add("P002A");
+		outcome.passed = paramTypes.Contains(paramType);
+
+	}
+	return outcome;
+}
+
         ///Only recommended values of 'Parameter code' (paramCode) should be combined with 'Type of parameter' (paramType) equal to 'Part of a sum' (P002A);
         public Outcome VMPR011(XElement sample)
         {
@@ -498,60 +452,75 @@ namespace EfsaBusinessRuleValidator
             }
             return outcome;
         }
-        ///The value in the data element 'Accreditation procedure for the analytical method' (accredProc) should be equal to 'Accredited according to ISO/IEC17025' (V001A), or 'Accredited and validated according to Com.Dec. 2002/657/EC' (V007A), or 'Validated according to Commission Decision 2002/657/EC, but not accredited under ISO/IEC17025' (V005A);
+        ///The value in the data element 'Accreditation procedure for the analytical method' (accredProc) should be equal to 'Accredited according to ISO/IEC17025' (V001A), or 'Accredited and validated according to Com.Dec. 2002/657/EC' (V007A), or 'Validated according to Commission Decision 2002/657/EC, but not accredited under ISO/IEC17025' (V008A);
         public Outcome VMPR014(XElement sample)
         {
             // <checkedDataElements>;
-            var accredProc = (string)sample.Element("accredProc");
+            var accredProc = sample.Element("accredProc").Value;
 
             var outcome = new Outcome();
             outcome.name = "VMPR014";
-            outcome.lastupdate = "2017-03-16";
-            outcome.description = "The value in the data element 'Accreditation procedure for the analytical method' (accredProc) should be equal to 'Accredited according to ISO/IEC17025' (V001A), or 'Accredited and validated according to Com.Dec. 2002/657/EC' (V007A), or 'Validated according to Commission Decision 2002/657/EC, but not accredited under ISO/IEC17025' (V005A);";
-            outcome.error = "WARNING: accredProc is not one of the recommended procedure;";
+            outcome.lastupdate = "2017-12-06";
+            outcome.description = "The value in the data element 'Accreditation procedure for the analytical method' (accredProc) should be equal to 'Accredited according to ISO/IEC17025' (V001A), or 'Accredited and validated according to Com.Dec. 2002/657/EC' (V007A), or 'Validated according to Commission Decision 2002/657/EC, but not accredited under ISO/IEC17025' (V008A);";
+            outcome.error = "WARNING: accredProc is not one of the recommended procedures;";
             outcome.type = "warning";
             outcome.passed = true;
 
-            //Logik (ignore null: yes);
+            //Logik
             if (!String.IsNullOrEmpty(accredProc))
             {
-                var accredProcs = new List<string>();
-                accredProcs.Add("V001A");
-                accredProcs.Add("V007A");
-                accredProcs.Add("V005A");
-                outcome.passed = accredProcs.Contains(accredProc);
+                var list = new List<String>();
+                list.Add("V001A");
+                list.Add("V007A");
+                list.Add("V008A");
+                list.Add("V999A");
+                outcome.passed = list.Contains(accredProc);
             }
             return outcome;
         }
-        ///If a value is reported in 'Result LOD' (resLOD), or 'Result LOQ' (resLOQ), or 'Result value' (resVal), or 'CC alpha' (CCalpha), or 'CC beta' (CCbeta), then the value in the data element 'Result unit' (resUnit) should be equal to 'Microgram/kilogram' (G050A) or 'Microgram/litre' (G051A) to ensure that values are comparable;
-        public Outcome VMPR015(XElement sample)
-        {
-            // <checkedDataElements>;
-            var resLOD = (string)sample.Element("resLOD");
-            var resLOQ = (string)sample.Element("resLOQ");
-            var resVal = (string)sample.Element("resVal");
-            var CCalpha = (string)sample.Element("CCalpha");
-            var CCbeta = (string)sample.Element("CCbeta");
-            var resUnit = (string)sample.Element("resUnit");
+   
+///If a value is reported in 'Result LOD' (resLOD), or 'Result LOQ' (resLOQ), or 'Result value' (resVal), or 'CC alpha' (CCalpha), or 'CC beta' (CCbeta), and the value in 'Parameter code' (paramCode) is not in the groups B2c, B3a, B3B, B3c or B3f  then the value in the data element 'Result unit' (resUnit) must be equal to 'Microgram/kilogram' (G050A) or 'Microgram/litre' (G051A) to ensure that values are comparable;
+public Outcome VMPR015(XElement sample)
+{
+	// <checkedDataElements>;
+	var resLOD = (string)sample.Element("resLOD");
+	var resLOQ = (string)sample.Element("resLOQ");
+	var resVal = (string)sample.Element("resVal");
+	var CCalpha = (string)sample.Element("CCalpha");
+	var CCbeta = (string)sample.Element("CCbeta");
+	var paramCode = (string)sample.Element("paramCode");
+	var resUnit = (string)sample.Element("resUnit");
 
-            var outcome = new Outcome();
-            outcome.name = "VMPR015";
-            outcome.lastupdate = "2017-03-16";
-            outcome.description = "If a value is reported in 'Result LOD' (resLOD), or 'Result LOQ' (resLOQ), or 'Result value' (resVal), or 'CC alpha' (CCalpha), or 'CC beta' (CCbeta), then the value in the data element 'Result unit' (resUnit) should be equal to 'Microgram/kilogram' (G050A) or 'Microgram/litre' (G051A) to ensure that values are comparable;";
-            outcome.error = "WARNING: resUnit is not microgram/kilogram or microgram/litre, though a numerical value is reported;";
-            outcome.type = "warning";
-            outcome.passed = true;
+	var outcome = new Outcome();
+	outcome.name = "VMPR015";
+	outcome.lastupdate = "2017-11-27";
+	outcome.description = "If a value is reported in 'Result LOD' (resLOD), or 'Result LOQ' (resLOQ), or 'Result value' (resVal), or 'CC alpha' (CCalpha), or 'CC beta' (CCbeta), and the value in 'Parameter code' (paramCode) is not in the groups B2c, B3a, B3B, B3c or B3f  then the value in the data element 'Result unit' (resUnit) must be equal to 'Microgram/kilogram' (G050A) or 'Microgram/litre' (G051A) to ensure that values are comparable;";
+	outcome.error = "resUnit is not microgram/kilogram or microgram/litre, though a numerical value is reported;";
+	outcome.type = "error";
+	outcome.passed = true;
 
-            if (string.IsNullOrEmpty(resLOD) && string.IsNullOrEmpty(resLOQ) && string.IsNullOrEmpty(resVal) && string.IsNullOrEmpty(CCbeta) && string.IsNullOrEmpty(CCalpha))
-            {
-                return outcome;
-            }
-                var resUnits = new List<string>();
-                resUnits.Add("G050A");
-                resUnits.Add("G051A");
-                outcome.passed = resUnits.Contains(resUnit);
-            return outcome;
-        }
+	
+	//Logik (ignore null: no);
+	if (String.IsNullOrEmpty(resLOD) && String.IsNullOrEmpty(resLOQ) && String.IsNullOrEmpty(resVal) && String.IsNullOrEmpty(CCalpha) && String.IsNullOrEmpty(CCbeta))
+	{
+		//Nothing reported which surely is an error
+	}
+	else
+	{
+		var allGroups = new List<string> { "RF-0605-001-PPP", "RF-0684-001-PPP", "RF-0061-001-PPP", "RF-0084-001-PPP", "RF-0156-001-PPP", "RF-0237-001-PPP", "RF-0246-001-PPP", "RF-0311-001-PPP", "RF-0406-001-PPP", "RF-0128-003-PPP", "RF-0383-003-PPP", "RF-00000460-ORG", "RF-00000337-ORG", "RF-00000339-ORG", "RF-00000342-ORG", "RF-00000343-ORG", "RF-00000182-ORG", "RF-00000201-ORG", "RF-00000243-ORG", "RF-00000251-ORG", "RF-00000328-ORG", "RF-00002896-PAR", "RF-00000143-ORG", "RF-00000169-ORG", "RF-00000211-ORG", "RF-00000212-ORG", "RF-00000327-ORG", "RF-0453-001-PPP", "RF-0060-001-PPP", "RF-0329-001-PPP", "RF-0410-001-PPP", "RF-0010-003-PPP", "RF-0130-002-PPP", "RF-00000470-ORG", "RF-0075-001-PPP", "RF-0653-001-PPP", "RF-0819-001-PPP", "RF-0052-001-PPP", "RF-0082-001-PPP", "RF-0093-001-PPP", "RF-0130-003-PPP", "RF-00000338-ORG", "RF-00000119-ORG", "RF-00000124-ORG", "RF-00000126-ORG", "RF-00000128-ORG", "RF-00000158-ORG", "RF-00000253-ORG", "RF-00000072-TOX", "RF-0001-001-PPP", "RF-0240-004-PPP", "RF-0349-002-PPP", "RF-0515-001-PPP", "RF-0603-001-PPP", "RF-0736-001-PPP", "RF-0755-001-PPP", "RF-0878-001-PPP", "RF-0923-001-PPP", "RF-0997-001-PPP", "RF-0999-001-PPP", "RF-0090-001-PPP", "RF-0295-001-PPP", "RF-0364-001-PPP", "RF-0187-002-PPP", "RF-0383-002-PPP", "RF-00000330-ORG", "RF-00000333-ORG", "RF-00000334-ORG", "RF-00000346-ORG", "RF-00000117-ORG", "RF-00000226-ORG", "RF-00000307-ORG", "RF-0119-001-PPP", "RF-0155-001-PPP", "RF-00000020-ORG", "RF-00000341-ORG", "RF-00000345-ORG", "RF-00000134-ORG", "RF-00000147-ORG", "RF-00000255-ORG", "RF-0559-001-PPP", "RF-0889-001-PPP", "RF-0998-001-PPP", "RF-1008-001-PPP", "RF-0008-001-PPP", "RF-0214-001-PPP", "RF-0221-001-PPP", "RF-0355-001-PPP", "RF-00002898-PAR", "RF-00000030-ORG", "RF-0837-001-PPP", "RF-0045-001-PPP", "RF-0078-001-PPP", "RF-0174-001-PPP", "RF-0255-001-PPP", "RF-0350-001-PPP", "RF-00000336-ORG", "RF-00000347-ORG", "RF-00000121-ORG", "RF-00000127-ORG", "RF-00000173-ORG", "RF-00000178-ORG", "RF-00000181-ORG", "RF-00000208-ORG", "RF-00000472-ORG", "RF-00000006-PAR", "RF-00002897-PAR", "RF-00000186-ORG", "RF-00000215-ORG", "RF-00000219-ORG", "RF-00000278-ORG", "RF-00000323-ORG", "RF-0557-001-PPP", "RF-0600-001-PPP", "RF-0838-001-PPP", "RF-0994-001-PPP", "RF-0995-001-PPP", "RF-0073-001-PPP", "RF-0129-001-PPP", "RF-0264-001-PPP", "RF-0450-003-PPP", "RF-0236-001-PPP", "RF-0059-003-PPP", "RF-0548-001-PPP", "RF-0556-001-PPP", "RF-0797-001-PPP", "RF-0996-001-PPP", "RF-00000331-ORG", "RF-00000332-ORG", "RF-00000335-ORG", "RF-00000344-ORG", "RF-00000118-ORG", "RF-00000120-ORG", "RF-00000122-ORG", "RF-00000123-ORG", "RF-00000129-ORG", "RF-00000131-ORG", "RF-00000184-ORG", "RF-0059-001-PPP", "RF-0021-001-PPP", "RF-00000471-ORG", "RF-0633-001-PPP", "RF-0801-001-PPP", "RF-0260-001-PPP", "RF-0428-003-PPP", "RF-00000104-ORG", "RF-00000005-ORG", "RF-00002920-PAR", "RF-00000052-ORG", "RF-00000006-ORG", "RF-00000079-ORG", "RF-00000080-ORG", "RF-00000075-ORG", "RF-00000362-ORG", "RF-0952-001-PPP", "RF-00002890-PAR", "RF-00002891-PAR", "RF-00002930-PAR", "RF-00002957-PAR", "RF-0133-001-PPP", "RF-0281-002-PPP", "RF-00000099-ORG", "RF-00000100-ORG", "RF-00000046-ORG", "RF-00000360-ORG", "RF-0194-002-PPP", "RF-00002864-PAR", "RF-00002866-PAR", "RF-00002933-PAR", "RF-00002949-PAR", "RF-0810-001-PPP", "RF-0029-001-PPP", "RF-0241-001-PPP", "RF-00000098-ORG", "RF-00000102-ORG", "RF-00000050-ORG", "RF-00000004-ORG", "RF-00000078-ORG", "RF-00000354-ORG", "RF-00000358-ORG", "RF-0422-001-PPP", "RF-00002863-PAR", "RF-00002931-PAR", "RF-00000097-ORG", "RF-00000047-ORG", "RF-00000009-ORG", "RF-0616-001-PPP", "RF-0035-001-PPP", "RF-0113-001-PPP", "RF-00000401-ORG", "RF-00002929-PAR", "RF-0014-001-PPP", "RF-0539-001-PPP", "RF-0101-001-PPP", "RF-0390-001-PPP", "RF-00000005-RAD", "RF-00000101-ORG", "RF-00000003-ORG", "RF-00000008-ORG", "RF-00000357-ORG", "RF-00000359-ORG", "RF-00000361-ORG", "RF-0049-001-PPP", "RF-00000461-ORG", "RF-00002860-PAR", "RF-00002892-PAR", "RF-00002932-PAR", "RF-00000004-RAD", "RF-00000103-ORG", "RF-00000045-ORG", "RF-00000056-ORG", "RF-00000007-ORG", "RF-0250-001-PPP", "RF-0285-001-PPP", "RF-0358-001-PPP", "RF-0415-001-PPP", "RF-0417-001-PPP", "RF-0418-001-PPP", "RF-0439-001-PPP", "RF-00000049-ORG", "RF-00000061-ORG", "RF-0048-001-PPP", "RF-0165-001-PPP", "RF-0218-001-PPP", "RF-0403-001-PPP", "RF-0425-002-PPP", "RF-00000124-CHE", "RF-00000128-CHE", "RF-00000150-CHE", "RF-00000170-CHE", "RF-00000191-CHE", "RF-00000126-CHE", "RF-00000203-CHE", "RF-00000168-CHE", "RF-00000067-CHE", "RF-00000185-CHE", "RF-00000176-CHE", "RF-00000179-CHE", "RF-00000182-CHE", "RF-00000152-CHE", "RF-00000161-CHE", "RF-00000174-CHE", "RF-00000193-CHE", "RF-00000205-CHE", "RF-00000060-CHE", "RF-00000135-CHE", "RF-00000167-CHE", "RF-00000250-CHE", "RF-00000143-CHE", "RF-00000189-CHE", "RF-00000007-CHE", "RF-00000147-CHE", "RF-00000186-CHE", "RF-00000164-CHE", "RF-00000184-CHE", "RF-00000053-CHE", "RF-00000251-CHE", "RF-0517-001-PPP", "RF-0724-001-PPP", "RF-0828-001-PPP", "RF-0844-001-PPP", "RF-0911-001-PPP", "RF-0032-001-PPP", "RF-0127-001-PPP", "RF-0146-001-PPP", "RF-0224-001-PPP", "RF-0290-001-PPP", "RF-0139-003-PPP", "RF-0328-002-PPP", "RF-0336-002-PPP", "RF-0178-002-PPP", "RF-0187-007-PPP", "RF-00002952-PAR", "RF-0528-001-PPP", "RF-0851-001-PPP", "RF-0877-001-PPP", "RF-0903-001-PPP", "RF-0985-001-PPP", "RF-0051-001-PPP", "RF-0302-001-PPP", "RF-0337-001-PPP", "RF-0339-001-PPP", "RF-0351-001-PPP", "RF-0149-003-PPP", "RF-0640-001-PPP", "RF-0756-001-PPP", "RF-0846-001-PPP", "RF-0920-001-PPP", "RF-0957-001-PPP", "RF-0305-001-PPP", "RF-0342-001-PPP", "RF-0373-001-PPP", "RF-0149-002-PPP", "RF-0266-002-PPP", "RF-0435-001-PPP", "RF-0599-001-PPP", "RF-0612-001-PPP", "RF-0647-001-PPP", "RF-0670-001-PPP", "RF-0936-001-PPP", "RF-0937-001-PPP", "RF-0946-001-PPP", "RF-0012-001-PPP", "RF-0079-001-PPP", "RF-0088-001-PPP", "RF-0272-001-PPP", "RF-0331-001-PPP", "RF-0348-001-PPP", "RF-0139-002-PPP", "RF-0187-004-PPP", "RF-0432-001-PPP", "RF-0535-001-PPP", "RF-0560-001-PPP", "RF-0575-001-PPP", "RF-0668-001-PPP", "RF-0768-001-PPP", "RF-0161-001-PPP", "RF-0380-001-PPP", "RF-0187-005-PPP", "RF-0338-002-PPP", "RF-0561-001-PPP", "RF-0597-001-PPP", "RF-0737-001-PPP", "RF-0781-001-PPP", "RF-0800-001-PPP", "RF-0866-001-PPP", "RF-0905-001-PPP", "RF-0685-002-PPP", "RF-0160-001-PPP", "RF-0327-001-PPP", "RF-0419-001-PPP", "RF-0187-006-PPP", "RF-0266-003-PPP", "RF-0328-003-PPP", "RF-0412-002-PPP", "RF-00002887-PAR", "RF-0484-001-PPP", "RF-0554-001-PPP", "RF-0571-001-PPP", "RF-0574-001-PPP", "RF-0654-001-PPP", "RF-0759-001-PPP", "RF-0087-001-PPP", "RF-0123-001-PPP", "RF-0125-001-PPP", "RF-0164-001-PPP", "RF-0289-001-PPP", "RF-0149-004-PPP", "RF-0173-004-PPP", "RF-0187-003-PPP", "RF-0323-004-PPP", "RF-0336-005-PPP", "RF-0424-001-PPP", "RF-0442-001-PPP", "RF-0577-001-PPP", "RF-0578-001-PPP", "RF-0821-001-PPP", "RF-0869-001-PPP", "RF-0033-001-PPP", "RF-0594-002-PPP", "RF-0180-001-PPP", "RF-0288-001-PPP", "RF-0336-003-PPP", "RF-0525-001-PPP", "RF-0587-001-PPP", "RF-0677-001-PPP", "RF-0705-001-PPP", "RF-0721-001-PPP", "RF-0040-001-PPP", "RF-0068-001-PPP", "RF-0261-001-PPP", "RF-0374-001-PPP", "RF-0402-001-PPP", "RF-0065-003-PPP", "RF-0690-006-PPP", "RF-1025-001-PPP", "RF-0522-001-PPP", "RF-0046-001-PPP", "RF-0132-001-PPP", "RF-0201-001-PPP", "RF-0251-001-PPP", "RF-0256-001-PPP", "RF-0366-001-PPP", "RF-0660-001-PPP", "RF-0762-001-PPP", "RF-0824-001-PPP", "RF-0028-001-PPP", "RF-0182-001-PPP", "RF-0228-001-PPP", "RF-0335-001-PPP", "RF-0408-001-PPP", "RF-0041-002-PPP", "RF-0347-003-PPP", "RF-00000161-VET", "RF-00003017-PAR", "RF-0690-002-PPP", "RF-0464-001-PPP", "RF-0489-001-PPP", "RF-0860-001-PPP", "RF-0320-001-PPP", "RF-0361-001-PPP", "RF-0291-002-PPP", "RF-0043-003-PPP", "RF-0792-001-PPP", "RF-0304-001-PPP", "RF-0334-001-PPP", "RF-0347-002-PPP", "RF-0354-002-PPP", "RF-0636-001-PPP", "RF-0835-001-PPP", "RF-0922-001-PPP", "RF-0933-001-PPP", "RF-0975-001-PPP", "RF-0018-001-PPP", "RF-0183-001-PPP", "RF-0385-001-PPP", "RF-0020-003-PPP", "RF-0065-002-PPP", "RF-0112-001-PPP", "RF-0293-003-PPP", "RF-0962-002-PPP", "RF-00000132-VET", "RF-00000067-ORG", "RF-0524-001-PPP", "RF-0586-001-PPP", "RF-00000141-VET", "RF-0062-001-PPP", "RF-0120-001-PPP", "RF-0291-004-PPP", "RF-0842-002-PPP", "RF-0430-001-PPP", "RF-0469-001-PPP", "RF-0584-001-PPP", "RF-0662-001-PPP", "RF-0663-001-PPP", "RF-0842-001-PPP", "RF-0122-001-PPP", "RF-0420-001-PPP", "RF-0020-002-PPP", "RF-0020-004-PPP", "RF-0108-001-PPP", "RF-0112-004-PPP", "RF-0291-003-PPP", "RF-0293-002-PPP", "RF-0690-003-PPP", };
+
+		if (!allGroups.Any(g => g == paramCode))
+		{
+			var resUnits = new List<string>();
+			resUnits.Add("G050A");
+			resUnits.Add("G051A");
+			outcome.passed = resUnits.Contains(resUnit);
+		}
+	}
+	return outcome;
+}
+
+
         ///If the value in 'Parameter code' (paramCode) belongs to the group B3c (chemical elements used in vmpr), then a value in the data element 'Result LOQ' (resLOQ) should be reported;
         public Outcome VMPR016(XElement sample)
         {
@@ -580,26 +549,48 @@ namespace EfsaBusinessRuleValidator
             
             return outcome;
         }
-        ///A value in at least one of the following data elements must be reported: 'Result LOQ' (resLOQ) or 'CC beta' (CCbeta) or 'CC alpha' (CCalpha);
+        ///A value in at least one of the following data elements must be reported: 'Result LOQ' (resLOQ) or 'Result LOD' (resLOD) or 'CC beta' (CCbeta) or 'CC alpha' (CCalpha) if it is not in the groups B3a, B3f or an inhibitor;
         public Outcome VMPR017(XElement sample)
         {
             // <checkedDataElements>;
             var resLOQ = (string)sample.Element("resLOQ");
+            var resLOD = (string)sample.Element("resLOD");
             var CCbeta = (string)sample.Element("CCbeta");
             var CCalpha = (string)sample.Element("CCalpha");
+            var paramCode = (string)sample.Element("paramCode");
 
             var outcome = new Outcome();
             outcome.name = "VMPR017";
-            outcome.lastupdate = "2017-03-16";
-            outcome.description = "A value in at least one of the following data elements must be reported: 'Result LOQ' (resLOQ) or 'CC beta' (CCbeta) or 'CC alpha' (CCalpha);";
-            outcome.error = "WARNING: None of the following data elements is reported, though at least one is mandatory: resLOQ, or CCbeta, or CCalpha;";
-            outcome.type = "warning";
-            outcome.passed = !(string.IsNullOrEmpty(resLOQ) && string.IsNullOrEmpty(CCalpha) &&string.IsNullOrEmpty(CCbeta));
-            outcome.values.Add(Tuple.Create<string, string>(nameof(resLOQ), resLOQ));
-            outcome.values.Add(Tuple.Create<string, string>(nameof(CCbeta), CCbeta));
-            outcome.values.Add(Tuple.Create<string, string>(nameof(CCalpha), CCalpha));
+            outcome.lastupdate = "2018-01-08";
+            outcome.description = "A value in at least one of the following data elements must be reported: 'Result LOQ' (resLOQ) or 'Result LOD' (resLOD) or 'CC beta' (CCbeta) or 'CC alpha' (CCalpha) if it is not in the groups B3a, B3f or an inhibitor;";
+            outcome.error = "One of resLOQ, resLOD, CCbeta or CCalpha must be reported (excluding B3a, B3f substances or inhibitors);";
+            outcome.type = "error";
+            outcome.passed = true;
+
+
+            //Logik
+
+            var b3a = new List<string> { "RF-0605-001-PPP", "RF-0684-001-PPP", "RF-0061-001-PPP", "RF-0084-001-PPP", "RF-0156-001-PPP", "RF-0237-001-PPP", "RF-0246-001-PPP", "RF-0311-001-PPP", "RF-0406-001-PPP", "RF-0128-003-PPP", "RF-0383-003-PPP", "RF-00000460-ORG", "RF-00000337-ORG", "RF-00000339-ORG", "RF-00000342-ORG", "RF-00000343-ORG", "RF-00000182-ORG", "RF-00000201-ORG", "RF-00000243-ORG", "RF-00000251-ORG", "RF-00000328-ORG", "RF-00002896-PAR", "RF-00000143-ORG", "RF-00000169-ORG", "RF-00000211-ORG", "RF-00000212-ORG", "RF-00000327-ORG", "RF-0453-001-PPP", "RF-0060-001-PPP", "RF-0329-001-PPP", "RF-0410-001-PPP", "RF-0010-003-PPP", "RF-0130-002-PPP", "RF-00000470-ORG", "RF-0075-001-PPP", "RF-0653-001-PPP", "RF-0819-001-PPP", "RF-0052-001-PPP", "RF-0082-001-PPP", "RF-0093-001-PPP", "RF-0130-003-PPP", "RF-00000338-ORG", "RF-00000119-ORG", "RF-00000124-ORG", "RF-00000126-ORG", "RF-00000128-ORG", "RF-00000158-ORG", "RF-00000253-ORG", "RF-00000072-TOX", "RF-0001-001-PPP", "RF-0240-004-PPP", "RF-0349-002-PPP", "RF-0515-001-PPP", "RF-0603-001-PPP", "RF-0736-001-PPP", "RF-0755-001-PPP", "RF-0878-001-PPP", "RF-0923-001-PPP", "RF-0997-001-PPP", "RF-0999-001-PPP", "RF-0090-001-PPP", "RF-0295-001-PPP", "RF-0364-001-PPP", "RF-0187-002-PPP", "RF-0383-002-PPP", "RF-00000330-ORG", "RF-00000333-ORG", "RF-00000334-ORG", "RF-00000346-ORG", "RF-00000117-ORG", "RF-00000226-ORG", "RF-00000307-ORG", "RF-0119-001-PPP", "RF-0155-001-PPP", "RF-00000020-ORG", "RF-00000341-ORG", "RF-00000345-ORG", "RF-00000134-ORG", "RF-00000147-ORG", "RF-00000255-ORG", "RF-0559-001-PPP", "RF-0889-001-PPP", "RF-0998-001-PPP", "RF-1008-001-PPP", "RF-0008-001-PPP", "RF-0214-001-PPP", "RF-0221-001-PPP", "RF-0355-001-PPP", "RF-00002898-PAR", "RF-00000030-ORG", "RF-0837-001-PPP", "RF-0045-001-PPP", "RF-0078-001-PPP", "RF-0174-001-PPP", "RF-0255-001-PPP", "RF-0350-001-PPP", "RF-00000336-ORG", "RF-00000347-ORG", "RF-00000121-ORG", "RF-00000127-ORG", "RF-00000173-ORG", "RF-00000178-ORG", "RF-00000181-ORG", "RF-00000208-ORG", "RF-00000472-ORG", "RF-00000006-PAR", "RF-00002897-PAR", "RF-00000186-ORG", "RF-00000215-ORG", "RF-00000219-ORG", "RF-00000278-ORG", "RF-00000323-ORG", "RF-0557-001-PPP", "RF-0600-001-PPP", "RF-0838-001-PPP", "RF-0994-001-PPP", "RF-0995-001-PPP", "RF-0073-001-PPP", "RF-0129-001-PPP", "RF-0264-001-PPP", "RF-0450-003-PPP", "RF-0236-001-PPP", "RF-0059-003-PPP", "RF-0548-001-PPP", "RF-0556-001-PPP", "RF-0797-001-PPP", "RF-0996-001-PPP", "RF-00000331-ORG", "RF-00000332-ORG", "RF-00000335-ORG", "RF-00000344-ORG", "RF-00000118-ORG", "RF-00000120-ORG", "RF-00000122-ORG", "RF-00000123-ORG", "RF-00000129-ORG", "RF-00000131-ORG", "RF-00000184-ORG", "RF-0059-001-PPP", "RF-0021-001-PPP", "RF-00000471-ORG", };
+            var b3f = new List<string> { "RF-0633-001-PPP", "RF-0801-001-PPP", "RF-0260-001-PPP", "RF-0428-003-PPP", "RF-00000104-ORG", "RF-00000005-ORG", "RF-00002920-PAR", "RF-00000052-ORG", "RF-00000006-ORG", "RF-00000079-ORG", "RF-00000080-ORG", "RF-00000075-ORG", "RF-00000362-ORG", "RF-0952-001-PPP", "RF-00002890-PAR", "RF-00002891-PAR", "RF-00002930-PAR", "RF-00002957-PAR", "RF-0133-001-PPP", "RF-0281-002-PPP", "RF-00000099-ORG", "RF-00000100-ORG", "RF-00000046-ORG", "RF-00000360-ORG", "RF-0194-002-PPP", "RF-00002864-PAR", "RF-00002866-PAR", "RF-00002933-PAR", "RF-00002949-PAR", "RF-0810-001-PPP", "RF-0029-001-PPP", "RF-0241-001-PPP", "RF-00000098-ORG", "RF-00000102-ORG", "RF-00000050-ORG", "RF-00000004-ORG", "RF-00000078-ORG", "RF-00000354-ORG", "RF-00000358-ORG", "RF-0422-001-PPP", "RF-00002863-PAR", "RF-00002931-PAR", "RF-00000097-ORG", "RF-00000047-ORG", "RF-00000009-ORG", "RF-0616-001-PPP", "RF-0035-001-PPP", "RF-0113-001-PPP", "RF-00000401-ORG", "RF-00002929-PAR", "RF-0014-001-PPP", "RF-0539-001-PPP", "RF-0101-001-PPP", "RF-0390-001-PPP", "RF-00000005-RAD", "RF-00000101-ORG", "RF-00000003-ORG", "RF-00000008-ORG", "RF-00000357-ORG", "RF-00000359-ORG", "RF-00000361-ORG", "RF-0049-001-PPP", "RF-00000461-ORG", "RF-00002860-PAR", "RF-00002892-PAR", "RF-00002932-PAR", "RF-00000004-RAD", "RF-00000103-ORG", "RF-00000045-ORG", "RF-00000056-ORG", "RF-00000007-ORG", "RF-0250-001-PPP", "RF-0285-001-PPP", "RF-0358-001-PPP", "RF-0415-001-PPP", "RF-0417-001-PPP", "RF-0418-001-PPP", "RF-0439-001-PPP", "RF-00000049-ORG", "RF-00000061-ORG", "RF-0048-001-PPP", "RF-0165-001-PPP", "RF-0218-001-PPP", "RF-0403-001-PPP", "RF-0425-002-PPP", };
+
+            if (!b3a.Union(b3f).Any(b => b == paramCode) && paramCode != "RF-00000585-VET")
+            {
+                outcome.passed = !String.IsNullOrEmpty(resLOD) || !String.IsNullOrEmpty(resLOD) || !String.IsNullOrEmpty(CCalpha) || !String.IsNullOrEmpty(CCbeta);
+            }
 
             return outcome;
+        }
+        public class Outcome
+        {
+            public bool passed { get; set; }
+            public string description { get; set; }
+            public string error { get; set; }
+            public string type { get; set; }
+            public string name { get; set; }
+            public string version { get; set; }
+            public string lastupdate { get; set; }
+            public List<Tuple<string, string>> values { get; set; } = new List<Tuple<string, string>>();
+
         }
         ///If the value in the data element 'Accreditation procedure for the analytical method' (accredProc) is 'Accredited and validated according to Com. Dec. 2002/657/EC' (V007A) and the value in the data element 'Analytical method type' (anMethType) is 'Confirmation' (AT08A) and the value in 'Typer of parameter' (paramType) is not equal to 'Part of a sum' (P002A), and the value in 'Parameter code' (paramCode) doesn't belong to group B3c (chemical elements used in vmpr), then a value in the data element 'CC alpha' (CCalpha) must be reported;
         public Outcome VMPR018(XElement sample)
@@ -697,36 +688,32 @@ namespace EfsaBusinessRuleValidator
             }
             return outcome;
         }
-        ///If the value in the data element 'Analytical method type' (anMethType) is 'Screening' (AT06A), then the value in 'Type of results' (resType) should be equal to 'Qualitative value (binary)' (BIN) and the value in 'Result value' (resVal) should not be reported;
+
+        ///If the value in 'Type of results' (resType) is equal to 'Qualitative value (binary)' (BIN), then the value in the data element 'Analytical method type' (anMethType) should be equal to 'Screening' (AT06A), and the value 'Result qualitative value' (resQualValue) should be equal to 'Negative' (NEG);
         public Outcome VMPR022(XElement sample)
         {
             // <checkedDataElements>;
-            var anMethType = (string)sample.Element("anMethType");
-            var resType = (string)sample.Element("resType");
-            var resVal = (string)sample.Element("resVal");
+            var anMethType = sample.Element("anMethType").Value;
+            var resType = sample.Element("resType").Value;
+            var resQualValue = sample.Element("resQualValue").Value;
 
             var outcome = new Outcome();
             outcome.name = "VMPR022";
-            outcome.lastupdate = "2017-03-16";
-            outcome.description = "If the value in the data element 'Analytical method type' (anMethType) is 'Screening' (AT06A), then the value in 'Type of results' (resType) should be equal to 'Qualitative value (binary)' (BIN) and the value in 'Result value' (resVal) should not be reported;";
-            outcome.error = "WARNING: resType is different from binary or resVal is reported, though anMethType is screening;";
-            outcome.type = "warning";
-            outcome.values.Add(Tuple.Create<string, string>(nameof(anMethType), anMethType));
-            outcome.values.Add(Tuple.Create<string, string>(nameof(resType), resType));
-            outcome.values.Add(Tuple.Create<string, string>(nameof(resVal), resVal));
-
+            outcome.lastupdate = "2017-11-27";
+            outcome.description = "If the value in 'Type of results' (resType) is equal to 'Qualitative value (binary)' (BIN), then the value in the data element 'Analytical method type' (anMethType) should be equal to 'Screening' (AT06A), and the value 'Result qualitative value' (resQualValue) should be equal to 'Negative' (NEG);";
+            outcome.error = "resType is BIN and anMethType is  screening or resQualValue is not NEG;";
+            outcome.type = "error";
             outcome.passed = true;
 
-            //Logik (ignore null: no);
-            if (anMethType == "AT06A")
+            //Logik
+            if (resType == "BIN")
             {
-                var resTypes = new List<string>();
-                resTypes.Add("BIN");
-                outcome.passed = resTypes.Contains(resType) && string.IsNullOrEmpty(resVal);
+                outcome.passed = anMethType == "AT06A" && resQualValue == "NEG";
             }
-            
+
             return outcome;
         }
+
         ///If the value in the data element 'Analytical method type' (anMethType) is  'Confirmation' (AT08A), then the value in 'Type of results' (resType) should be equal to 'non detected value (below LOD)' (LOD), or 'non quantified value (below LOQ)' (LOQ), or 'numerical value' (VAL), or 'value below CCalpha (below CC alpha)' (CCA), and the value in 'Result qualitative value' (resQualValue) should not be reported;
         public Outcome VMPR023(XElement sample)
         {
@@ -1016,31 +1003,36 @@ namespace EfsaBusinessRuleValidator
             }
             return outcome;
         }
-        ///If the value in the data elements 'Sample taken assessment' (evalInfo.sampTkAsses) or 'Sampling event assessment' (evalInfo.sampEventAsses) is equal to 'Non-compliant' (J038A), then a value in the data element 'Action taken' (actTakenCode) must be reported;
+        ///If the value in 'Evaluation of the result' (evalCode) is equal to 'Detected' (J041A), or 'greater than maximum permissible quantities' (J003A), and the values in 'Sample taken assessment' (evalInfo.sampTkAsses) and 'Sampling event assessment' (evalInfo.sampEventAsses) are not equal to 'Compliant' (J037A), then a value in the data element 'Action taken' (actTakenCode) must be reported;
         public Outcome VMPR034(XElement sample)
         {
-            // <checkedDataElements>;
-            var evalInfosampTkAsses = (string)sample.Element("evalInfo.sampTkAsses");
-            var evalInfosampEventAsses = (string)sample.Element("evalInfo.sampEventAsses");
-            var actTakenCode = (string)sample.Element("actTakenCode");
+            var evalInfosampTkAsses = sample.Element("evalInfo.sampTkAsses").Value;
+            var evalInfosampEventAsses = sample.Element("evalInfo.sampEventAsses").Value;
+            var evalCode = sample.Element("evalCode").Value;
+            var actTakenCode = sample.Element("actTakenCode").Value;
 
             var outcome = new Outcome();
             outcome.name = "VMPR034";
-            outcome.lastupdate = "2016-05-10";
-            outcome.description = "If the value in the data elements 'Sample taken assessment' (evalInfo.sampTkAsses) or 'Sampling event assessment' (evalInfo.sampEventAsses) is equal to 'Non-compliant' (J038A), then a value in the data element 'Action taken' (actTakenCode) must be reported;";
-            outcome.error = "actTakenCode is missing, though mandatory when evalInfo.sampTkAsses or evalInfo.sampEventAsses are non-compliant;";
+            outcome.lastupdate = "2018-01-22";
+            outcome.description = "If the value in 'Evaluation of the result' (evalCode) is equal to 'Detected' (J041A), or 'greater than maximum permissible quantities' (J003A), and the values in 'Sample taken assessment' (evalInfo.sampTkAsses) and 'Sampling event assessment' (evalInfo.sampEventAsses) are not equal to 'Compliant' (J037A), then a value in the data element 'Action taken' (actTakenCode) must be reported;";
+            outcome.error = "actTakenCode is missing, though mandatory when evalCode is detected or greater than maximum permissible quantities and evalInfo.sampTkAsses and evalInfo.sampEventAsses are non-compliant;";
             outcome.type = "error";
             outcome.passed = true;
 
-            //Logik (ignore null: no);
-            if (evalInfosampTkAsses == "J038A" || evalInfosampEventAsses == "J038A")
-            {
-               
-                outcome.passed = !String.IsNullOrEmpty(actTakenCode);
+            //Logik
+            var list = new List<string> { "J041A", "J003A" };
 
+            if (evalInfosampTkAsses != "J037A" && evalInfosampEventAsses != "J037A" && list.Contains(evalCode))
+            {
+                outcome.passed = actTakenCode != null;
             }
+
             return outcome;
         }
+
+
+      
+
         ///The value in the data element 'Sample taken assessment' (evalInfo.sampTkAsses) and the value in the data element 'Sampling event assessment' (evalInfo.sampEventAsses) must be equal to 'Compliant' (J037A), or 'Non-compliant' (J038A);
         public Outcome VMPR035(XElement sample)
         {
@@ -1148,6 +1140,31 @@ namespace EfsaBusinessRuleValidator
 
             return outcome;
         }
+
+        ///If the value in 'Coded description of the analysed matrix' (anMatCode) is reported, then the value in sampAnId should be reported;
+public Outcome VMPR039(XElement sample)
+{
+	// <checkedDataElements>;
+	var sampAnId = (string)sample.Element("sampAnId");
+	var anMatCode = (string)sample.Element("anMatCode");
+
+	var outcome = new Outcome();
+	outcome.name = "VMPR039";
+	outcome.lastupdate = "2018-01-09";
+	outcome.description = "If the value in 'Coded description of the analysed matrix' (anMatCode) is reported, then the value in sampAnId should be reported;";
+	outcome.error = "sampAnId is missing, though anMatCode is reported;";
+	outcome.type = "error";
+	outcome.passed = true;
+
+	//Logik (ignore null: no);
+
+	if (!String.IsNullOrEmpty(anMatCode))
+	{
+		outcome.passed = !String.IsNullOrEmpty(sampAnId);
+	}
+	return outcome;
+}
+
     }
    
 
