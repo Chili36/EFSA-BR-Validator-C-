@@ -874,7 +874,7 @@ namespace EfsaBusinessRuleValidator
 
 
 
-
+        #region PestRules
         ///If the value in the data element 'Product code' (prodCode) is equal to 'Honey and other apicultural products' (P1040000A) and a sample different from 'Honey' is analysed, then a value in the data element 'Product text' (prodText) should be reported;
         public Outcome PEST01(XElement sample)
         {
@@ -3230,6 +3230,8 @@ namespace EfsaBusinessRuleValidator
             return outcome;
         }
 
+
+        #endregion
         ///A value in the data element 'Product full text description' (prodText) must be reported;
         public Outcome CHEM03(XElement sample)
         {
